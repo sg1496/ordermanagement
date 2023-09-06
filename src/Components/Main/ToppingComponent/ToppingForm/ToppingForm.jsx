@@ -42,7 +42,7 @@ const ToppingForm = (props) => {
             {
                 toppingCombinationId: 2,
                 combinationToppingId: 4,
-                quantity: "",
+                quantity: 1,
                 variantId: 9
             }
         ]
@@ -54,7 +54,7 @@ const ToppingForm = (props) => {
     const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
     const toppingPrice = useSelector((state) => state.variantSlices.data)
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
-    // console.log("single ", singleEditTopping.toppingsPrices);
+    console.log("single ",toppingPrice);
 
 
     // dispatch useEffect
@@ -65,7 +65,7 @@ const ToppingForm = (props) => {
     }, [])
 
     useEffect(() => {
-        if (edit != undefined) {
+        if (edit.id != undefined) {
             dispatch(fetchEditTopping(edit.id))
         }
     }, [edit]);
@@ -77,17 +77,6 @@ const ToppingForm = (props) => {
     // }, [singleEditTopping])
 
     useEffect(() => {
-        const editdata = singleEditTopping && singleEditTopping.toppingsPrices.map(obj => {
-            return {
-                price: (obj.price),
-                variantId: (obj.variantId),
-                quantity: (obj.quantity)
-            }
-        })
-        
-
-        
-
         !singleEditTopping ? setData({
             ...data
         }) : setData({
@@ -97,12 +86,12 @@ const ToppingForm = (props) => {
             isCombination: singleEditTopping.singleTopping[0].isCombination,
             isToppingAllowed: singleEditTopping.singleTopping[0].isToppingAllowed,
             measurementTypeId: singleEditTopping.singleTopping[0].measurementTypeId,
-            toppingsPrices: editdata,
+            toppingsPrices: singleEditTopping.toppingsPrices,
             toppingCombinatiomQuantityList: [
                 {
                     toppingCombinationId: 2,
                     combinationToppingId: 4,
-                    quantity: "",
+                    quantity: 1,
                     variantId: 9
                 }
             ]
@@ -120,13 +109,7 @@ const ToppingForm = (props) => {
         // }
     }, [singleEditTopping])
 
-    useEffect(() => {
-        if (toppingPrice) {
-            toppingPrice.map((item, index) => {
-                data.toppingsPrices && data.toppingsPrices.push({ price: 0.00, quantity: 0, VariantId: (item.variantId) });
-            })
-        }
-    }, [toppingPrice])
+   
 
 
     // Events Handler
@@ -150,18 +133,13 @@ const ToppingForm = (props) => {
         })
     }
 
-    const toppingPriceHandler = (e, i,) => {
-        if (id) {
-
-        } else {
-
-            let toppingsPrices = ([...data.toppingsPrices]);
-
-            toppingsPrices[i][e.target.name] = e.target.value;
-
-            setData({ ...data, toppingsPrices });
-            console.log(toppingsPrices)
-        }
+    const toppingPriceHandler = (toppingPriseListData) => {
+        const toppingPriceDatafromList=[]
+        toppingPriseListData.map((topping)=>{
+            toppingPriceDatafromList.push(topping.seletedTopping)
+        })
+        setData({ ...data, toppingsPrices:toppingPriceDatafromList })
+        
     }
     const DiningChangeHandler = (value, checked) => {
         if (checked) {
@@ -173,49 +151,44 @@ const ToppingForm = (props) => {
 
     const submitHandler = async (event) => {
         event.preventDefault();
-
+        console.log("submit data shivam",data)
+        //shivam comment start
         let ToppingSaveUpdateData
-
+        
         if (Object.keys(edit).length < 1) {
-            const newArr = data.toppingsPrices.map(obj => {
-                console.log("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", obj)
-                return {
-                    price: parseInt(obj.price),
-                    quantity: parseInt(obj.quantity),
-                    VariantId: parseInt(obj.VariantId)
-                }
-            })
+            console.log("edit")
+            // const newArr = data.toppingsPrices.map(obj => {
+            //     console.log("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", obj)
+            //     return {
+            //         price: parseInt(obj.price),
+            //         quantity: parseInt(obj.quantity),
+            //         VariantId: parseInt(obj.VariantId)
+            //     }
+            // })
             ToppingSaveUpdateData = {
                 ...data,
-                loginUserID: parseInt(data.loginUserID),
-                foodTypeId: parseInt(data.foodTypeId),
-                measurementTypeId: parseInt(data.measurementTypeId),
-                toppingsPrices: newArr,
-                toppingCombinatiomQuantityList: [
-                    {
-                        toppingCombinationId: 2,
-                        combinationToppingId: 4,
-                        quantity: 0,
-                        variantId: 9
-                    }
-                ]
+                loginUserID: parseInt(data.loginUserID)
             }
         } else {
+            // const newArrs = data.toppingsPrices.map(obj => {
+            //     console.log("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", obj)
+            //     return {
+            //         price: parseInt(obj.price),
+            //         quantity: parseInt(obj.quantity),
+            //         VariantId: parseInt(obj.VariantId)
+            //     }
+            // })
             ToppingSaveUpdateData = {
                 ...data,
-                loginUserID: parseInt(data.loginUserID),
-                foodTypeId: parseInt(data.foodTypeId),
-                measurementTypeId: parseInt(data.measurementTypeId),
+                loginUserID: 2,
                 toppingId: parseInt(edit.id),
-                toppingsPrices: newArr,
-
             }
         }
         dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
         dispatch(resetStates())
 
         Navigate(`/toppings`)
-
+        //shivam comment end
         // setData({
         //     toppingName: "",
         //     toppingAbbr: "",
@@ -249,9 +222,6 @@ const ToppingForm = (props) => {
 
 
     }
-
-
-
 
     const cancelHandler = () => {
         Navigate(`/toppings`)
@@ -401,7 +371,7 @@ const ToppingForm = (props) => {
                     </div>
 
                     {data.isToppingAllowed && <div className='w-50'><ToppingPriceList
-                        toppingPriceHandler={toppingPriceHandler}
+                        toppingPriceHandler={toppingPriceHandler} allToppingData={data}
                     /></div>}
 
                     <div className="col-12 mt-4 mb-4">
