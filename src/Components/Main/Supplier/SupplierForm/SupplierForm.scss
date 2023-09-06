@@ -1,0 +1,12 @@
+$lightPrimaryColor: #FDC886;
+$primaryColor: #C53705;
+
+.addProduct__basicForms {
+    gap: 180px;
+}
+
+.addProduct__basicTabs {
+    border: 20px solid transparent;
+    background-color: $lightPrimaryColor;
+    border-radius: 10px 10px 10px 10px;
+}

@@ -1,0 +1,52 @@
+@import "../../../../../assets/css/untilities.scss";
+
+.table>:not(caption)>*>* {
+    border: none;
+    border-bottom-width: 0px;
+}
+
+.addProduct__variants {
+
+    table {
+        @include Noto();
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 22px;
+
+        thead {
+            tr {
+                th {
+                    text-align: center;
+                    background: $primaryColor !important;
+                    color: $white;
+                    @include Noto();
+                    font-style: normal;
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 22px;
+
+                    &:not(:last-child) {
+                        border-right: 1px solid $white;
+                    }
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                &:nth-child(2n+2) {
+                    background-color: #EDAD83;
+                    padding: 22px 1px !important;
+                }
+
+                th,
+                td {
+                    text-align: center;
+                    padding: 22px 1px !important;
+                }
+            }
+
+        }
+    }
+}

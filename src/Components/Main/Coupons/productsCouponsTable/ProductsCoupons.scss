@@ -1,0 +1,59 @@
+@import "../../../../assets/css/untilities.scss";
+
+.coupons_table{
+    border: 1px solid black;
+    height: 200px ;
+    overflow-y: scroll;
+    
+    
+    
+    .table {
+        
+        
+        thead {
+            
+            
+            
+            tr {
+                th {
+                    background: $primaryColor !important;
+                    color: $white;
+                    @include Noto();
+                    font-style: normal;
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 22px;
+                    position: sticky;
+
+                    &:not(:last-child) {
+                        border-right: 1px solid $white;
+                    }
+                }
+            }
+        }
+
+        tbody {
+           
+            tr {
+                &:nth-child(2n+2) {
+                    background-color: #EDAD83;
+                }
+
+
+                td {
+                    @include Noto();
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 16px;
+                    
+                    color: $black;
+
+                    .productAction__buttons {
+                        gap: 10px;
+                    }
+                }
+            }
+
+        }
+    }
+}

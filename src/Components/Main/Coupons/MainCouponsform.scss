@@ -1,0 +1,75 @@
+$primaryColor: #C53705;
+
+.addProduct__productNames {
+    width: 25%;
+}
+
+.tag {
+    background-color: $primaryColor ;
+
+
+    .tag_content {
+        padding: 15px 5px 15px 15px;
+    }
+
+    p {
+
+        color: white;
+        font-size: 25px;
+    }
+}
+
+
+// .form-switch, .form-check-input {
+//     margin-left: 0;
+//     display: inline-block;
+//     border: none;
+//     width: 3em;
+//     height: 20px;
+//     float: none;
+//     background-image: url("../../../assets/svg/circleRed.svg");
+
+//     &:checked {
+//         background-position: right center;
+//         background-color: white;
+//         background-image: url("../../../assets/svg/circleGreen.svg");
+//     }
+
+//     &:active {
+//         filter: none;
+//     }
+
+//     &:focus {
+//         border-color: transparent;
+//         box-shadow: none;
+//     }
+
+// }
+.form-switch .form-check-input {
+    width: 3em;
+    height: 1.5em;
+    margin-right: 15px;
+    background-position: left center;
+    background-color: white;
+    background-image: url("../../../assets/svg/circleRed.svg");
+    
+
+
+    &:checked {
+        background-position: right center;
+        background-color: white;
+        background-image: url("../../../assets/svg/circleGreen.svg");
+        border: none;
+    }
+
+
+    &:active {
+        filter: none;
+    }
+
+    &:focus {
+        border-color: transparent;
+        box-shadow: none;
+    }
+
+}

@@ -1,0 +1,64 @@
+
+.form-switchs {
+    padding-left: 0em !important;
+
+    .form-check-input {
+        border-radius: 15px;
+        margin-left: 0;
+        display: block;
+        border: none;
+        width: 43px;
+        height: 20px;
+        float: none;
+        background-position: left center;
+        background-image: url("../../../assets/svg/circleRed.svg");
+
+        &:checked {
+            background-position: right center;
+            background-color: white;
+            background-image: url("../../../assets/svg/circleGreen.svg");
+        }
+
+        &:active {
+            filter: none;
+        }
+
+        &:focus {
+            border-color: transparent;
+            box-shadow: none;
+        }
+    }
+}
+
+
+
+.form-switched {
+    padding-left: 0em !important;
+
+    .form-check-input {
+        border-radius: 15px;
+        margin-left: 0;
+        display: block;
+        border: none;
+        width: 43px;
+        height: 20px;
+        float: none;
+        background-position: left center;
+        background-image: url("../../../assets/svg/circleGreen.svg");
+
+        &:checked {
+            background-position: right center;
+            background-color: white;
+            background-image: url("../../../assets/svg/circleRed.svg");
+        }
+
+        &:active {
+            filter: none;
+        }
+
+        &:focus {
+            border-color: transparent;
+            box-shadow: none;
+        }
+    }
+}

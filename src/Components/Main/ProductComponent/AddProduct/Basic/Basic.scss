@@ -1,0 +1,77 @@
+@import "../../../../../assets/css/untilities.scss";
+
+.addProduct__navtab {
+    a {
+
+        padding: 10px 20px;
+        text-decoration: none;
+        @include Noto();
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 19px;
+        color: $black;
+        background-color: $lightPrimaryColor;
+
+        &:not(:last-child) {
+            border-right: 1px solid $white;
+        }
+
+        &.active {
+            background: $primaryColor;
+            color: $white;
+        }
+    }
+
+
+}
+
+.navTabs__content {
+
+    .form-switch {
+        padding-left: 0em !important;
+
+        .form-check-input {
+            margin-left: 0;
+            display: block;
+            border: none;
+            width: 73px;
+            height: 30px;
+            float: none;
+            background-image: url("../../../../../assets/svg/circleRed.svg");
+
+            &:checked {
+                background-position: right center;
+                background-color: white;
+                background-image: url("../../../../../assets/svg/circleGreen.svg");
+            }
+
+            &:active {
+                filter: none;
+            }
+
+            &:focus {
+                border-color: transparent;
+                box-shadow: none;
+            }
+        }
+    }
+
+    .form-control,
+    .form-select {
+        &:focus {
+            border-color: transparent;
+            box-shadow: 0 0 0 2px rgb(169 63 30 / 29%);
+        }
+    }
+
+    .inputForm__inputField {
+        width: 191px;
+        height: 36px;
+        align-items: text;
+    }
+
+    .addProduct__basicForm {
+        gap: 80px;
+    }
+}

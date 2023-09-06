@@ -1,0 +1,46 @@
+$lightPrimaryColor: #FDC886;
+$primaryColor: #C53705;
+
+.addProduct__basicForm {
+    gap: 80px;
+}
+
+.addProduct__basicTabs {
+    border: 20px solid transparent;
+    background-color: $lightPrimaryColor;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.form-switch {
+    padding-left: 0em !important;
+
+    .form-check-input {
+        margin-left: 0;
+        display: block;
+        border: none;
+        width: 73px;
+        height: 30px;
+        float: none;
+        background-image: url("../../../assets/svg/circleRed.svg");
+
+        &:checked {
+            background-position: right center;
+            background-color: white;
+            background-image: url("../../../assets/svg/circleGreen.svg");
+        }
+
+        &:active {
+            filter: none;
+        }
+
+        &:focus {
+            border-color: transparent;
+            box-shadow: none;
+        }
+    }
+}
+
+.inputForm__inputField {
+    width: 191px;
+    height: 36px;
+}

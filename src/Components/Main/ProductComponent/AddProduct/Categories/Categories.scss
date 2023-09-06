@@ -1,0 +1,26 @@
+@import "../../../../../assets/css/untilities.scss";
+
+.addProduct__subcategoryCheckboxes {
+    max-width: 200px;
+    width: 100%;
+    gap: 15px;
+
+    input[type='checkbox'] {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #D9D9D9;
+        border-radius: 4px;
+        margin: 0;
+    }
+
+    .form-check-input {
+        &:checked {
+            background-color: #a93f1e;
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+}

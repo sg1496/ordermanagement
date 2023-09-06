@@ -1,0 +1,66 @@
+$primaryColor: #C53705;
+$primaryDark: #7B2E16;
+$secondaryColor: #FFE0BA;
+$lightPrimaryColor: #FDC886;
+$white: #FFFFFF;
+$black: #000000;
+
+//Styles For All Inputs
+@mixin Noto {
+    font-family: 'Noto Sans';
+}
+
+.addproduct__submitButtons {
+    gap: 24px;
+
+    .saveButton {
+        max-width: auto;
+        width: auto;
+        padding: 0 30px;
+        height: 40px;
+        background: $primaryDark;
+        border-radius: 10px;
+        border: none;
+        @include Noto();
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 25px;
+        color: $white;
+    }
+
+    .cancelButton {
+        max-width: 100px;
+        width: 100%;
+        padding: 0 20px;
+        height: 40px;
+        background: $primaryColor;
+        border-radius: 10px;
+        border: none;
+        @include Noto();
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 25px;
+        color: $white;
+    }
+}
+
+.inputForm__label {
+    @include Noto();
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    color: $black;
+    margin-bottom: 10px;
+}
+
+.inputFormCheckbox__label {
+    @include Noto();
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 25px;
+    color: $black;
+}

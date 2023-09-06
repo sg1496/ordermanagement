@@ -1,0 +1,53 @@
+@import "../../../../assets/css/untilities.scss";
+
+.sidebar_listItems {
+    text-decoration: none;
+    cursor: pointer;
+
+    .sidebar_listItemsInner {
+        gap: 20px;
+        justify-content: center;
+
+        img {
+            max-width: 20px;
+            max-height: 20px;
+            width: 100%;
+        }
+
+        p {
+            color: black;
+            font-family: Noto Sans;
+            font-weight: 400;
+            font-size: 18px;
+        }
+    }
+
+    .accordion-item {
+        background: transparent;
+        border: none;
+
+        .accordion-button:not(.collapsed) {
+            background-color: transparent;
+            color: $black;
+            box-shadow: none;
+        }
+    }
+}
+
+.sidebar_listItemsInner {
+    background: transparent;
+}
+
+.sidebar__innerSubmenu {
+    ul {
+        gap: 10px;
+
+        a {
+            color: $black;
+            @include Noto();
+            font-weight: 400;
+            font-size: 16px;
+            text-decoration: none;
+        }
+    }
+}

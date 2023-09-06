@@ -1,0 +1,59 @@
+@import "../../../../assets/css/untilities.scss";
+
+.product_searchField {
+    gap: 24px;
+
+    .product__innerSearchInput {
+        input {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid $black;
+            height: 32px;
+            padding-left: 30px;
+            color: $white;
+
+            &::placeholder {
+                @include Noto();
+                font-style: normal;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 22px;
+                color: $white;
+            }
+
+            &:focus {
+                outline: none;
+            }
+
+
+        }
+
+        .product__innerSearchInputIcon {
+            top: 50%;
+            left: 0.4%;
+            transform: translateY(-50%);
+        }
+    }
+
+    .product__innerAddnewButtons {
+        a {
+            display: block;
+            width: 115px;
+            padding: 6px 18px;
+            background-color: $primaryColor;
+            border-radius: 5px;
+            border: none;
+            @include Noto();
+            font-style: normal;
+            font-weight: 300;
+            font-size: 14px;
+            line-height: 19px;
+            color: $white;
+            text-decoration: none;
+
+            &:hover {
+                color: $white;
+            }
+        }
+    }
+}
