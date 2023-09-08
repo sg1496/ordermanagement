@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useState, useEffect, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings } from '../../../../Store/Slice/ToppingSlices';
 
@@ -8,12 +7,27 @@ import { fetchApiDataToppings } from '../../../../Store/Slice/ToppingSlices';
 function ToppingNames(props) {
     const dispatch = useDispatch()
 
+    const [checkid, setcheckid] = useState([])
+    console.log("checkiiiiiiiid",checkid);
+
+    // selector
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
     console.log("ToppingNames", ToppingData);
 
     useEffect(() => {
         dispatch(fetchApiDataToppings())
     }, [])
+
+    const toppingNameChangeHandler = (e, check,id, index) => {
+        console.log( id);
+        if(check){
+            checkid.push( id)
+        }
+
+        
+
+        props.showcheck(index)
+    }
 
 
 
@@ -34,8 +48,7 @@ function ToppingNames(props) {
                         {ToppingData && ToppingData.map((item, index) => {
                             return <tr key={index}>
                                 <td className='text-center'>
-                                    <input className="form-check-input " type="checkbox"  onClick={() =>(props.showcheck(index))} />
-                                    {/* <input className="form-check-input " type="checkbox"  onClick={() =>console.log(index)} /> */}
+                                    <input className="form-check-input " type="checkbox"  onClick={(e) =>toppingNameChangeHandler(e,e.target.checked, item.toppingId,index)} />
                                 </td>
                                 <td>{item.toppingName}</td>
                                 <td className='text-center'>

@@ -18,6 +18,8 @@ const ToppingForm = (props) => {
     const edit = useParams();
     const { id } = useParams();
 
+
+
     // useState
     const [Showselection, setShowselection] = useState(false)
 
@@ -28,7 +30,7 @@ const ToppingForm = (props) => {
         isActive: false,
         isToppingAllowed: false,
         foodTypeId: "",
-        loginUserID: 2,
+        loginUserID: Number(5),
         measurementTypeId: "",
         isCombination: false,
         categoryId: 9,
@@ -36,25 +38,24 @@ const ToppingForm = (props) => {
         orderTypes: [
         ],
         toppingsPrices: [
-
         ],
         toppingCombinatiomQuantityList: [
             {
-                toppingCombinationId: 2,
-                combinationToppingId: 4,
-                quantity: "",
-                variantId: 9
+              toppingCombinationId: 1,
+              combinationToppingId: 2,
+              quantity: 2,
+              variantId: 4
             }
-        ]
+          ]
     }
     )
-
+    console.log(data);
 
     // useSelector
     const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
     const toppingPrice = useSelector((state) => state.variantSlices.data)
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
-    // console.log("single ", singleEditTopping.toppingsPrices);
+    console.log("single ", toppingPrice);
 
 
     // dispatch useEffect
@@ -65,29 +66,12 @@ const ToppingForm = (props) => {
     }, [])
 
     useEffect(() => {
-        if (edit != undefined) {
+        if (edit.id != undefined) {
             dispatch(fetchEditTopping(edit.id))
         }
     }, [edit]);
 
-    // useEffect(() => {
-    //     if (toppingEdit && singleEditTopping.toppingsPrices.length > 0) {
-    //         setData(singleEditTopping.toppingsPrices)
-    //     }
-    // }, [singleEditTopping])
-
     useEffect(() => {
-        const editdata = singleEditTopping && singleEditTopping.toppingsPrices.map(obj => {
-            return {
-                price: (obj.price),
-                variantId: (obj.variantId),
-                quantity: (obj.quantity)
-            }
-        })
-        
-
-        
-
         !singleEditTopping ? setData({
             ...data
         }) : setData({
@@ -97,36 +81,44 @@ const ToppingForm = (props) => {
             isCombination: singleEditTopping.singleTopping[0].isCombination,
             isToppingAllowed: singleEditTopping.singleTopping[0].isToppingAllowed,
             measurementTypeId: singleEditTopping.singleTopping[0].measurementTypeId,
-            toppingsPrices: editdata,
+             categoryId: 9,
+            toppingsPrices: singleEditTopping.toppingsPrices,
+             orderTypes: [
+        ],
             toppingCombinatiomQuantityList: [
                 {
-                    toppingCombinationId: 2,
-                    combinationToppingId: 4,
-                    quantity: "",
-                    variantId: 9
+                    toppingCombinationId: 1,
+                    combinationToppingId: 2,
+                    quantity: 2,
+                    variantId: 4
                 }
             ]
+
         })
-        // if (!edit.id) {
-        //     setData({
-        //         toppingName: "",
-        //         toppingAbbr: "",
-        //         measurementTypeId: "",
-        //         isToppingAllowed: false,
-        //         isCombination:false,
-        //         foodTypeId:"",
+        if (!edit.id) {
+            setData({
+                toppingName: "",
+                toppingAbbr: "",
+                measurementTypeId: "",
+                isToppingAllowed: false,
+                isCombination: false,
+                foodTypeId: "",
+                orderTypes: [
+                    
+                ],
+                toppingsPrices: [
+                   
+                ],
+                toppingCombinatiomQuantityList: [
+                   
+                  ]
 
-        //     })
-        // }
-    }, [singleEditTopping])
-
-    useEffect(() => {
-        if (toppingPrice) {
-            toppingPrice.map((item, index) => {
-                data.toppingsPrices && data.toppingsPrices.push({ price: 0.00, quantity: 0, VariantId: (item.variantId) });
             })
         }
-    }, [toppingPrice])
+    }, [singleEditTopping])
+
+
+
 
 
     // Events Handler
@@ -150,22 +142,19 @@ const ToppingForm = (props) => {
         })
     }
 
-    const toppingPriceHandler = (e, i,) => {
-        if (id) {
+    const toppingPriceHandler = (toppingPriseListData) => {
+        const toppingPriceDatafromList = []
+        toppingPriseListData.map((topping) => {
+            toppingPriceDatafromList.push(topping.seletedTopping)
+        })
+        setData({ ...data, toppingsPrices: toppingPriceDatafromList })
 
-        } else {
-
-            let toppingsPrices = ([...data.toppingsPrices]);
-
-            toppingsPrices[i][e.target.name] = e.target.value;
-
-            setData({ ...data, toppingsPrices });
-            console.log(toppingsPrices)
-        }
     }
+
     const DiningChangeHandler = (value, checked) => {
-        if (checked) {
+        if (checked) {            
             setData({ ...data, orderTypes: [...data.orderTypes, value] })
+            console.log("data", data,);
         } else {
             setData({ ...data, orderTypes: data.orderTypes.filter((item) => item !== value) })
         }
@@ -173,85 +162,69 @@ const ToppingForm = (props) => {
 
     const submitHandler = async (event) => {
         event.preventDefault();
-
+        console.log("submit data shivam", data)
+        //shivam comment start
         let ToppingSaveUpdateData
 
         if (Object.keys(edit).length < 1) {
-            const newArr = data.toppingsPrices.map(obj => {
-                console.log("ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", obj)
-                return {
-                    price: parseInt(obj.price),
-                    quantity: parseInt(obj.quantity),
-                    VariantId: parseInt(obj.VariantId)
-                }
-            })
+            console.log("edit")
+
             ToppingSaveUpdateData = {
                 ...data,
                 loginUserID: parseInt(data.loginUserID),
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
-                toppingsPrices: newArr,
-                toppingCombinatiomQuantityList: [
-                    {
-                        toppingCombinationId: 2,
-                        combinationToppingId: 4,
-                        quantity: 0,
-                        variantId: 9
-                    }
-                ]
+
             }
         } else {
+
             ToppingSaveUpdateData = {
                 ...data,
-                loginUserID: parseInt(data.loginUserID),
+                // loginUserID: 2,
+                toppingId: parseInt(edit.id),
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
-                toppingId: parseInt(edit.id),
-                toppingsPrices: newArr,
-
+                loginUserID: parseInt(data.loginUserID),
             }
         }
         dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
         dispatch(resetStates())
 
         Navigate(`/toppings`)
+        //shivam comment end
+            setData({
+                toppingName: "",
+                toppingAbbr: "",
+                isActive: false,
+                isToppingAllowed: false,
+                foodTypeId: "",
+                loginUserID: 2,
+                measurementTypeId: "",
+                isCombination: false,
+                categoryId: 9,
+                franchiseID: 0,
+                orderTypes: [
 
-        // setData({
-        //     toppingName: "",
-        //     toppingAbbr: "",
-        //     isActive: false,
-        //     isToppingAllowed: false,
-        //     foodTypeId: "",
-        //     loginUserID: 2,
-        //     measurementTypeId: "",
-        //     isCombination: false,
-        //     categoryId: 9,
-        //     franchiseID: 0,
-        //     orderTypes: [
+                ],
+                toppingsPrices: [
+                    {
+                        price: "",
+                        variantId: "",
+                        quantity: "",
+                    }
+                ],
+                toppingCombinatiomQuantityList: [
+                    {
+                        toppingCombinationId: "",
+                        quantity: "",
+                        variantId: ""
+                    }
+                ]
 
-        //     ],
-        //     toppingsPrices: [
-        //         {
-        //             price: "",
-        //             variantId: "",
-        //             quantity: "",
-        //         }
-        //     ],
-        //     toppingCombinatiomQuantityList: [
-        //         {
-        //             toppingCombinationId: "",
-        //             quantity: "",
-        //             variantId: ""
-        //         }
-        //     ]
-
-        // })
+            })
 
 
     }
-
-
-
 
     const cancelHandler = () => {
         Navigate(`/toppings`)
@@ -401,7 +374,7 @@ const ToppingForm = (props) => {
                     </div>
 
                     {data.isToppingAllowed && <div className='w-50'><ToppingPriceList
-                        toppingPriceHandler={toppingPriceHandler}
+                        toppingPriceHandler={toppingPriceHandler} allToppingData={data}
                     /></div>}
 
                     <div className="col-12 mt-4 mb-4">
