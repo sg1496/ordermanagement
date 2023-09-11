@@ -9,6 +9,7 @@ import { faCommentsDollar } from '@fortawesome/free-solid-svg-icons';
 
 
 function ToppingPriceList(props) {
+   
     console.log("propssss=====>",props)
     const { id } = useParams()
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
@@ -16,7 +17,8 @@ function ToppingPriceList(props) {
     const [toppingData, setToppingData] = useState([])
 
 
-    console.log("toppingPriceokokokokok===>",toppingPrice)
+
+    console.log("toppingPriceokokokokok===>",toppingData)
 
     const dispatch = useDispatch()
 
@@ -32,7 +34,9 @@ function ToppingPriceList(props) {
 
     useEffect(() => {
         const finalToppingData=[]
+        console.log(finalToppingData);
         if(toppingPrice && props.allToppingData.toppingsPrices.length>0){
+
             toppingPrice.map((item)=>{
                 props.allToppingData.toppingsPrices.filter((seletedTopping)=>{
                     if(seletedTopping.variantId==item.variantId){

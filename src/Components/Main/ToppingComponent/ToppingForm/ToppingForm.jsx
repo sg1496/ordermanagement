@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import './ToppingForm.scss'
 import ToppingPriceList from '../ToppingPriceTable/ToppingPriceList';
 import ToppingNames from '../ToppingRequiredTable/ToppingNames';
-import ToppingSelectionTable from '../ToppingRequiredTable/ToppingSelectionTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
 import Buttons from '../../ProductComponent/Buttons/NewButtons';
@@ -22,6 +21,7 @@ const ToppingForm = (props) => {
 
     // useState
     const [Showselection, setShowselection] = useState(false)
+    const [toppingNameData, setnewToppingNameData] = useState(null)
 
     // Send Data Api
     const [data, setData] = useState({
@@ -41,23 +41,22 @@ const ToppingForm = (props) => {
         ],
         toppingCombinatiomQuantityList: [
             {
-              toppingCombinationId: 1,
-              combinationToppingId: 2,
-              quantity: 2,
+                toppingCombinationId: 1,
+                combinationToppingId: 2,
+                quantity: 2,
               variantId: 4
             }
-          ]
+        ]
     }
     )
-    console.log(data);
+
+
 
     // useSelector
     const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
     const toppingPrice = useSelector((state) => state.variantSlices.data)
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
-    console.log("single ", toppingPrice);
-
-
+    
     // dispatch useEffect
     // dispatch(navTitle("Toppings"));
 
@@ -81,10 +80,10 @@ const ToppingForm = (props) => {
             isCombination: singleEditTopping.singleTopping[0].isCombination,
             isToppingAllowed: singleEditTopping.singleTopping[0].isToppingAllowed,
             measurementTypeId: singleEditTopping.singleTopping[0].measurementTypeId,
-             categoryId: 9,
+            categoryId: 9,
             toppingsPrices: singleEditTopping.toppingsPrices,
-             orderTypes: [
-        ],
+            orderTypes: [
+            ],
             toppingCombinatiomQuantityList: [
                 {
                     toppingCombinationId: 1,
@@ -104,14 +103,14 @@ const ToppingForm = (props) => {
                 isCombination: false,
                 foodTypeId: "",
                 orderTypes: [
-                    
+
                 ],
                 toppingsPrices: [
-                   
+
                 ],
                 toppingCombinatiomQuantityList: [
-                   
-                  ]
+
+                ]
 
             })
         }
@@ -131,10 +130,6 @@ const ToppingForm = (props) => {
         setData({ ...data, isCombination: !data.isCombination })
     }
 
-    const showcheck = (data) => {
-        setShowselection(!Showselection)
-    }
-
     const changeHandler = (e) => {
         setData({
             ...data,
@@ -152,9 +147,8 @@ const ToppingForm = (props) => {
     }
 
     const DiningChangeHandler = (value, checked) => {
-        if (checked) {            
+        if (checked) {
             setData({ ...data, orderTypes: [...data.orderTypes, value] })
-            console.log("data", data,);
         } else {
             setData({ ...data, orderTypes: data.orderTypes.filter((item) => item !== value) })
         }
@@ -162,13 +156,10 @@ const ToppingForm = (props) => {
 
     const submitHandler = async (event) => {
         event.preventDefault();
-        console.log("submit data shivam", data)
         //shivam comment start
         let ToppingSaveUpdateData
 
         if (Object.keys(edit).length < 1) {
-            console.log("edit")
-
             ToppingSaveUpdateData = {
                 ...data,
                 loginUserID: parseInt(data.loginUserID),
@@ -192,36 +183,36 @@ const ToppingForm = (props) => {
 
         Navigate(`/toppings`)
         //shivam comment end
-            setData({
-                toppingName: "",
-                toppingAbbr: "",
-                isActive: false,
-                isToppingAllowed: false,
-                foodTypeId: "",
-                loginUserID: 2,
-                measurementTypeId: "",
-                isCombination: false,
-                categoryId: 9,
-                franchiseID: 0,
-                orderTypes: [
+        setData({
+            toppingName: "",
+            toppingAbbr: "",
+            isActive: false,
+            isToppingAllowed: false,
+            foodTypeId: "",
+            loginUserID: 2,
+            measurementTypeId: "",
+            isCombination: false,
+            categoryId: 9,
+            franchiseID: 0,
+            orderTypes: [
 
-                ],
-                toppingsPrices: [
-                    {
-                        price: "",
-                        variantId: "",
-                        quantity: "",
-                    }
-                ],
-                toppingCombinatiomQuantityList: [
-                    {
-                        toppingCombinationId: "",
-                        quantity: "",
-                        variantId: ""
-                    }
-                ]
+            ],
+            toppingsPrices: [
+                {
+                    price: "",
+                    variantId: "",
+                    quantity: "",
+                }
+            ],
+            toppingCombinatiomQuantityList: [
+                {
+                    toppingCombinationId: "",
+                    quantity: "",
+                    variantId: ""
+                }
+            ]
 
-            })
+        })
 
 
     }
@@ -419,14 +410,14 @@ const ToppingForm = (props) => {
 
                     </div>
 
-                    {data.isCombination && <div className=''>
+                    {data.isCombination && <div >
                         <div>
                             <h3>Select Toppings: *</h3>
                         </div>
-                        <div className='d-flex aligns-item-center w-100'>
-                            <div className='ToppingName_table me-5 ' style={{ width: "30%" }}><ToppingNames showcheck={showcheck} /></div>
-                            {Showselection && <div className='ToppingSelect_table ' style={{ width: "50%" }}><ToppingSelectionTable /></div>}
-                        </div>
+                    
+                            <div className='ToppingName_table me-5 ' ><ToppingNames/></div>
+                            
+                        
                     </div>}
 
                     <div>

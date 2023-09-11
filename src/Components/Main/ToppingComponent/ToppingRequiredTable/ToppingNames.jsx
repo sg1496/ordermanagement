@@ -1,6 +1,7 @@
 import { useState, useEffect, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings } from '../../../../Store/Slice/ToppingSlices';
+import ToppingSelectionTable from "../ToppingRequiredTable/ToppingSelectionTable";
 
 
 
@@ -8,32 +9,36 @@ function ToppingNames(props) {
     const dispatch = useDispatch()
 
     const [checkid, setcheckid] = useState([])
-    console.log("checkiiiiiiiid",checkid);
+    
 
     // selector
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
-    console.log("ToppingNames", ToppingData);
+   
 
     useEffect(() => {
         dispatch(fetchApiDataToppings())
     }, [])
 
-    const toppingNameChangeHandler = (e, check,id, index) => {
-        console.log( id);
-        if(check){
-            checkid.push( id)
-        }
-
+    const toppingNameChangeHandler = (check, id, item) => {
+        let itemselected = [...checkid]
         
-
-        props.showcheck(index)
+        if (check) {
+            itemselected.push( item )
+            setcheckid(itemselected)
+        }
+        else {
+            const filteredData = checkid.filter((item) => id != item.toppingId );
+           
+            setcheckid(filteredData);
+        }
     }
+    
 
 
 
     return (
-        <>
-            <div className='productSection__table mt-3'>
+        <div className=' d-flex aligns-item-center w-100'>
+            <div className='productSection__table mt-3' style={{ width: "30%" }}>
                 <table className='table m-0 '>
                     <thead>
                         <tr>
@@ -48,11 +53,11 @@ function ToppingNames(props) {
                         {ToppingData && ToppingData.map((item, index) => {
                             return <tr key={index}>
                                 <td className='text-center'>
-                                    <input className="form-check-input " type="checkbox"  onClick={(e) =>toppingNameChangeHandler(e,e.target.checked, item.toppingId,index)} />
+                                    <input className="form-check-input " type="checkbox" onClick={(e) => toppingNameChangeHandler(e.target.checked, item.toppingId, item)} />
                                 </td>
                                 <td>{item.toppingName}</td>
                                 <td className='text-center'>
-                                    {item.foodTypeId === 1?"veg":"non-veg"}
+                                    {item.foodTypeId === 1 ? "veg" : "non-veg"}
                                 </td>
                             </tr>
                         }
@@ -61,7 +66,10 @@ function ToppingNames(props) {
                     </tbody>
                 </table>
             </div >
-        </>
+            <div className='ToppingSelect_table mx-5' style={{ width: "50%" }} >
+                <ToppingSelectionTable toppingNameData={checkid} />
+            </div>
+        </div>
     )
 }
 
