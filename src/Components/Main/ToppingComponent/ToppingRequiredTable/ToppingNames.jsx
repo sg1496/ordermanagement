@@ -9,17 +9,21 @@ function ToppingNames(props) {
     const dispatch = useDispatch()
 
     const [checkid, setcheckid] = useState([])
+    console.log(checkid);
     
 
     // selector
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
+    const message = useSelector((state) => state.ToppingSlices.message)
    
 
     useEffect(() => {
         dispatch(fetchApiDataToppings())
-    }, [])
+    }, [checkid])
 
     const toppingNameChangeHandler = (check, id, item) => {
+
+
         let itemselected = [...checkid]
         
         if (check) {
@@ -27,11 +31,25 @@ function ToppingNames(props) {
             setcheckid(itemselected)
         }
         else {
-            const filteredData = checkid.filter((item) => id != item.toppingId );
-           
+            const filteredData = checkid.filter((item) => id != item.toppingId );           
             setcheckid(filteredData);
         }
+        
     }
+    
+    const unCheckHandler = (id)=> {
+        console.log("-------------------------------------------------------------------------", id);
+
+        document.getElementById(id).checked = false;
+
+        const uncheck =  checkid.filter((item)=> id != item.toppingId)
+        console.log(uncheck);
+        setcheckid(uncheck )
+
+    }
+
+
+    console.log(checkid);
     
 
 
@@ -53,7 +71,7 @@ function ToppingNames(props) {
                         {ToppingData && ToppingData.map((item, index) => {
                             return <tr key={index}>
                                 <td className='text-center'>
-                                    <input className="form-check-input " type="checkbox" onClick={(e) => toppingNameChangeHandler(e.target.checked, item.toppingId, item)} />
+                                    <input   className="form-check-input " id = {item.toppingId} type="checkbox" onClick={(e) => toppingNameChangeHandler(e.target.checked, item.toppingId, item)} />
                                 </td>
                                 <td>{item.toppingName}</td>
                                 <td className='text-center'>
@@ -67,7 +85,10 @@ function ToppingNames(props) {
                 </table>
             </div >
             <div className='ToppingSelect_table mx-5' style={{ width: "50%" }} >
-                <ToppingSelectionTable toppingNameData={checkid} />
+                <ToppingSelectionTable
+                 toppingNameData={checkid}
+                 unCheckHandler={unCheckHandler}
+                 />
             </div>
         </div>
     )

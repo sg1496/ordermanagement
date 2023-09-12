@@ -41,22 +41,21 @@ const ToppingForm = (props) => {
         ],
         toppingCombinatiomQuantityList: [
             {
-                toppingCombinationId: 1,
-                combinationToppingId: 2,
-                quantity: 2,
+              toppingCombinationId: 1,
+              combinationToppingId: 2,
+              quantity: 2,
               variantId: 4
             }
-        ]
+          ]
     }
     )
-
-
+    console.log(data);
 
     // useSelector
     const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
     const toppingPrice = useSelector((state) => state.variantSlices.data)
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
-    
+
     // dispatch useEffect
     // dispatch(navTitle("Toppings"));
 
@@ -80,10 +79,10 @@ const ToppingForm = (props) => {
             isCombination: singleEditTopping.singleTopping[0].isCombination,
             isToppingAllowed: singleEditTopping.singleTopping[0].isToppingAllowed,
             measurementTypeId: singleEditTopping.singleTopping[0].measurementTypeId,
-            categoryId: 9,
+             categoryId: 9,
             toppingsPrices: singleEditTopping.toppingsPrices,
-            orderTypes: [
-            ],
+             orderTypes: [
+        ],
             toppingCombinatiomQuantityList: [
                 {
                     toppingCombinationId: 1,
@@ -103,14 +102,14 @@ const ToppingForm = (props) => {
                 isCombination: false,
                 foodTypeId: "",
                 orderTypes: [
-
+                    
                 ],
                 toppingsPrices: [
-
+                   
                 ],
                 toppingCombinatiomQuantityList: [
-
-                ]
+                   
+                  ]
 
             })
         }

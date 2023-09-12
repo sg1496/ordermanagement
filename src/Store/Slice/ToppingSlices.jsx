@@ -123,6 +123,7 @@ const ToppingSlices = createSlice({
 });
 export const fetchApiDataToppings = createAsyncThunk('api/fetchDataToppings', async () => {
     try {
+        console.log("555555555555555555555555555555555555555555555555555555555555555555555555555555555555555");
         const response = await axios.get(`${url}/topping/GetAllToppings`);
         return response.data;
     } catch (error) {
@@ -132,6 +133,7 @@ export const fetchApiDataToppings = createAsyncThunk('api/fetchDataToppings', as
 });
 
 export const fetchDelApiDataToppings = createAsyncThunk('api.fetchDelData', async (id) => {
+    console.log(id);
     let data = JSON.stringify({
         "ToppingId": id
     });
@@ -151,6 +153,7 @@ export const fetchDelApiDataToppings = createAsyncThunk('api.fetchDelData', asyn
 
 export const fetchSaveUpdateToppings = createAsyncThunk('api.fetchUpdateSave', async (data) => {
     try {
+        data.CategoryId=4;
         data.loginUserID = 9;
         const response = await axios.post(`${url}/topping/SaveupdateTopping`, data);
         console.log("response saveupdate", response.data);
