@@ -15,13 +15,6 @@ const ToppingForm = (props) => {
     const dispatch = useDispatch();
     const Navigate = useNavigate();
     const edit = useParams();
-    const { id } = useParams();
-
-
-
-    // useState
-    const [Showselection, setShowselection] = useState(false)
-    const [toppingNameData, setnewToppingNameData] = useState(null)
 
     // Send Data Api
     const [data, setData] = useState({
@@ -40,16 +33,13 @@ const ToppingForm = (props) => {
         toppingsPrices: [
         ],
         toppingCombinatiomQuantityList: [
-            {
-              toppingCombinationId: 1,
-              combinationToppingId: 2,
-              quantity: 2,
-              variantId: 4
-            }
-          ]
+
+        ]
     }
     )
-    console.log(data);
+
+
+
 
     // useSelector
     const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
@@ -64,7 +54,7 @@ const ToppingForm = (props) => {
     }, [])
 
     useEffect(() => {
-        if (edit.id != undefined) {
+        if (edit.id) {
             dispatch(fetchEditTopping(edit.id))
         }
     }, [edit]);
@@ -79,19 +69,10 @@ const ToppingForm = (props) => {
             isCombination: singleEditTopping.singleTopping[0].isCombination,
             isToppingAllowed: singleEditTopping.singleTopping[0].isToppingAllowed,
             measurementTypeId: singleEditTopping.singleTopping[0].measurementTypeId,
-             categoryId: 9,
+            orderTypes: [
+            ],
             toppingsPrices: singleEditTopping.toppingsPrices,
-             orderTypes: [
-        ],
-            toppingCombinatiomQuantityList: [
-                {
-                    toppingCombinationId: 1,
-                    combinationToppingId: 2,
-                    quantity: 2,
-                    variantId: 4
-                }
-            ]
-
+            toppingCombinatiomQuantityList: singleEditTopping.toppingCombinatiomQuantityList,
         })
         if (!edit.id) {
             setData({
@@ -102,25 +83,20 @@ const ToppingForm = (props) => {
                 isCombination: false,
                 foodTypeId: "",
                 orderTypes: [
-                    
+
                 ],
                 toppingsPrices: [
-                   
+
                 ],
                 toppingCombinatiomQuantityList: [
-                   
-                  ]
+
+                ]
 
             })
         }
     }, [singleEditTopping])
 
-
-
-
-
     // Events Handler
-
     const isToppingAllowed = (e) => {
         setData({ ...data, isToppingAllowed: !data.isToppingAllowed })
     }
@@ -249,11 +225,19 @@ const ToppingForm = (props) => {
 
         })
 
+    }
+    const combinationHandler = (toppingCombinationData) => {
+        const toppingCombinationDatafromList = []
+        toppingCombinationData.map((topping) => {
+            toppingCombinationDatafromList.push(topping)
+        })
+        setData({ ...data, toppingsPrices: toppingCombinationData })
 
+        setData({ ...data, toppingCombinatiomQuantityList: toppingCombinationData })
     }
 
     const { toppingName, toppingAbbr, foodTypeId, measurementTypeId } = data
-
+    // console.log("form Main Data =======================>", singleEditTopping);
     return (
         <>
             <div className="addProduct__basicTabs">
@@ -413,19 +397,20 @@ const ToppingForm = (props) => {
                         <div>
                             <h3>Select Toppings: *</h3>
                         </div>
-                    
-                            <div className='ToppingName_table me-5 ' ><ToppingNames/></div>
-                            
-                        
+                        <div className='ToppingName_table me-5 ' >
+                            <ToppingNames
+                                editStatus = {Boolean(edit.id)}
+                                combinationHandler={data}
+                                combinationHandlers={combinationHandler}
+                            />
+                        </div>
                     </div>}
 
                     <div>
-
                         <Buttons fname="Save"
                             Sname="Cancel"
                             cancelHandler={cancelHandler}
                         />
-
                     </div>
                 </form>
             </div>

@@ -6,52 +6,57 @@ import ToppingSelectionTable from "../ToppingRequiredTable/ToppingSelectionTable
 
 
 function ToppingNames(props) {
+    const combinationPropsData = props.combinationHandler
+    console.log("editStatus -------------------",combinationPropsData );
+
     const dispatch = useDispatch()
 
     const [checkid, setcheckid] = useState([])
-    console.log(checkid);
-    
+
+
 
     // selector
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
     const message = useSelector((state) => state.ToppingSlices.message)
-   
+
 
     useEffect(() => {
         dispatch(fetchApiDataToppings())
     }, [checkid])
 
+    // useEffect(() => {
+    //     dispatch(fetchApiDataToppings())
+    // }, [])
+
     const toppingNameChangeHandler = (check, id, item) => {
 
 
         let itemselected = [...checkid]
-        
+
         if (check) {
-            itemselected.push( item )
+            itemselected.push(item)
             setcheckid(itemselected)
         }
         else {
-            const filteredData = checkid.filter((item) => id != item.toppingId );           
+            const filteredData = checkid.filter((item) => id != item.toppingId);
             setcheckid(filteredData);
         }
-        
+
     }
-    
-    const unCheckHandler = (id)=> {
-        console.log("-------------------------------------------------------------------------", id);
+
+    const unCheckHandler = (id) => {
 
         document.getElementById(id).checked = false;
 
-        const uncheck =  checkid.filter((item)=> id != item.toppingId)
-        console.log(uncheck);
-        setcheckid(uncheck )
+        const uncheck = checkid.filter((item) => id != item.toppingId)
+
+        setcheckid(uncheck)
 
     }
 
-
-    console.log(checkid);
-    
-
+    const combinationHandler = (data) => {
+        props.combinationHandlers(data)
+    }
 
 
     return (
@@ -71,7 +76,7 @@ function ToppingNames(props) {
                         {ToppingData && ToppingData.map((item, index) => {
                             return <tr key={index}>
                                 <td className='text-center'>
-                                    <input   className="form-check-input " id = {item.toppingId} type="checkbox" onClick={(e) => toppingNameChangeHandler(e.target.checked, item.toppingId, item)} />
+                                    <input className="form-check-input " id={item.toppingId} type="checkbox" onClick={(e) => toppingNameChangeHandler(e.target.checked, item.toppingId, item)} />
                                 </td>
                                 <td>{item.toppingName}</td>
                                 <td className='text-center'>
@@ -86,9 +91,11 @@ function ToppingNames(props) {
             </div >
             <div className='ToppingSelect_table mx-5' style={{ width: "50%" }} >
                 <ToppingSelectionTable
-                 toppingNameData={checkid}
-                 unCheckHandler={unCheckHandler}
-                 />
+                    toppingNameData={checkid}
+                    combinationHandler={combinationHandler}
+                    unCheckHandler={unCheckHandler}
+                    combinationPropsData={combinationPropsData}
+                />
             </div>
         </div>
     )

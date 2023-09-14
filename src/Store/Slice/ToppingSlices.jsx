@@ -123,7 +123,6 @@ const ToppingSlices = createSlice({
 });
 export const fetchApiDataToppings = createAsyncThunk('api/fetchDataToppings', async () => {
     try {
-        console.log("555555555555555555555555555555555555555555555555555555555555555555555555555555555555555");
         const response = await axios.get(`${url}/topping/GetAllToppings`);
         return response.data;
     } catch (error) {

@@ -10,15 +10,13 @@ import { faCommentsDollar } from '@fortawesome/free-solid-svg-icons';
 
 function ToppingPriceList(props) {
 
-    console.log("propssss=====>", props)
+    
     const { id } = useParams()
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
     const toppingPrice = useSelector((state) => state.variantSlices.data)
     const [toppingData, setToppingData] = useState([])
+    
 
-
-
-    console.log("toppingPriceokokokokok===>", toppingData)
 
     const dispatch = useDispatch()
 
@@ -34,7 +32,6 @@ function ToppingPriceList(props) {
 
     useEffect(() => {
         const finalToppingData = []
-        console.log(finalToppingData);
         if (toppingPrice && props.allToppingData.toppingsPrices.length > 0) {
 
             toppingPrice.map((item) => {
@@ -42,6 +39,7 @@ function ToppingPriceList(props) {
                     if (seletedTopping.variantId == item.variantId) {
                         const newItem = { ...item, seletedTopping }
                         finalToppingData.push(newItem)
+                        
                     }
 
                 })
@@ -53,18 +51,10 @@ function ToppingPriceList(props) {
                 finalToppingData.push(newItem)
             })
             setToppingData(finalToppingData)
+            
         }
     }, [toppingPrice])
 
-
-
-
-
-    const updateObjectAtIndex = (index, newObject) => {
-        let newArray = [...editData];
-        newArray[index] = newObject;
-        seteditData(newArray);
-    };
 
     const toppingPriceQuantityHandler = (e, variantId) => {
         let newArr = toppingData.map((item, i) => {
@@ -74,6 +64,8 @@ function ToppingPriceList(props) {
                 return item;
             }
         });
+       
+
         setToppingData(newArr)
         props.toppingPriceHandler(newArr);
     }

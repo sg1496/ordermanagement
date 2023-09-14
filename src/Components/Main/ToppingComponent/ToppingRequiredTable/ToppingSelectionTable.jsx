@@ -5,13 +5,20 @@ import { fetchApiData } from "../../../../Store/Slice/VariantSlices"
 import { useState } from 'react';
 
 function ToppingSelectionTable(props) {
-const dispatch = useDispatch();
+    console.log("combination props", props.combinationPropsData);
+
+    const dispatch = useDispatch();
 
     // useState
-    const [toppingNameDataState, setToppingNameDataState] = useState(props.toppingNameData)
+    const [toppingNameDataState, setToppingNameDataState] = useState("")
+
+    const [data, setdata] = useState([])
+    const [trialdata, setTrialdata] = useState([])
+    console.log("aaaaaaaaaaaaaaaaaa",trialdata);
 
     // useSelector
     const variantSelectionTable = useSelector((state) => state.variantSlices.data);
+    console.log("anldljsdfal;jlsdafjl;av", variantSelectionTable);
 
     // useEffect
     useEffect(() => {
@@ -29,17 +36,42 @@ const dispatch = useDispatch();
         props.unCheckHandler(id)
     }
 
-    const ToppingSelectionTable = (e, id) => { 
-        console.log(e, id);
-        let newArr = toppingNameDataState.map((item, i) => {
-            if (item.variantId == id) {
-                return { ...item, seletedTopping:{ variantId: item.variantId, quantity: e.target.name == 'quantity' ? parseInt(e.target.value) : item.seletedTopping.quantity}};
-            } else {
-                return item;
-            }
-            });
+    useEffect(() => {
+        setToppingNameDataState(props.toppingNameData);
+    }, [props.toppingNameData]);
 
+    
+
+
+
+
+    const handleToppingQuantity = (e, variantId, toppingId) => {
+        const newObj = {
+            combinationToppingId: toppingId,
+            quantity: e.target.value,
+            variantId: variantId
+        }
+
+
+
+
+
+        let abcArray = data
+
+        const index = data.findIndex(item => item.combinationToppingId === toppingId && item.variantId === variantId);
+        if (index !== -1) {
+            const arr = data;
+            arr[index] = newObj;
+            abcArray = arr
+            setdata(arr)
+        }
+        if (index === -1) {
+            abcArray = [...data, newObj]
+            setdata(prevData => [...prevData, newObj]);
+        }
+        props.combinationHandler(abcArray)
     }
+
 
     return (
         <>
@@ -55,11 +87,11 @@ const dispatch = useDispatch();
                             </tr>
                         </thead>
                         <tbody>
-                            {toppingNameDataState?.map((item, index) => {
+                            {toppingNameDataState.map((item, index) => {
                                 return <tr key={index} >
                                     <td className='pt-4'>{item.toppingName}</td>
                                     {variantSelectionTable?.map((data, ind) => {
-                                        return <td key={ind}>
+                                        return <td key={ind} >
                                             <div className='d-flex justify-content-center aligns-item-center'>
                                                 <div style={{ width: "100px" }}>
                                                     <label htmlFor="product-name" className="form-label ">
@@ -67,11 +99,12 @@ const dispatch = useDispatch();
                                                     </label>
                                                     <input
                                                         type="text"
+                                                        id={data.variantId}
                                                         className="form-control"
                                                         placeholder="Pizza"
                                                         name='quantity'
-                                                        value={item.quantity}
-                                                        onChange={(e)=>ToppingSelectionTable(e,data.variantId)}
+                                                        value={data.quantity}
+                                                        onChange={(e) => handleToppingQuantity(e, data.variantId, item.toppingId)}
                                                     />
                                                 </div>
                                             </div>
