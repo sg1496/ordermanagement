@@ -7,19 +7,17 @@ import { useState } from 'react';
 function ToppingSelectionTable(props) {
     console.log("combination props", props.combinationPropsData);
 
+
     const dispatch = useDispatch();
 
     // useState
     const [toppingNameDataState, setToppingNameDataState] = useState("")
-
+console.log("propsdata state",toppingNameDataState);    
     const [data, setdata] = useState([])
-    const [trialdata, setTrialdata] = useState([])
-    console.log("aaaaaaaaaaaaaaaaaa",trialdata);
-
+    
     // useSelector
     const variantSelectionTable = useSelector((state) => state.variantSlices.data);
-    console.log("anldljsdfal;jlsdafjl;av", variantSelectionTable);
-
+    
     // useEffect
     useEffect(() => {
         setToppingNameDataState(props.toppingNameData);
@@ -40,6 +38,7 @@ function ToppingSelectionTable(props) {
         setToppingNameDataState(props.toppingNameData);
     }, [props.toppingNameData]);
 
+  
     
 
 
@@ -51,11 +50,6 @@ function ToppingSelectionTable(props) {
             quantity: e.target.value,
             variantId: variantId
         }
-
-
-
-
-
         let abcArray = data
 
         const index = data.findIndex(item => item.combinationToppingId === toppingId && item.variantId === variantId);
