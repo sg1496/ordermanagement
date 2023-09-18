@@ -19,8 +19,7 @@ function ToppingSelectionTable(props) {
 
     // useEffect
       useEffect(() => {
-        dispatch(fetchApiDataToppings())
-        
+        dispatch(fetchApiDataToppings())        
     }, [])
 
     useEffect(() => {
