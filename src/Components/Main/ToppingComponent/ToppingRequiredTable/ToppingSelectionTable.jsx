@@ -1,50 +1,75 @@
 import React, { useEffect } from 'react';
 import tablebin from "../../../../assets/svg/tablebin.svg"
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchApiData } from "../../../../Store/Slice/VariantSlices"
+import { fetchApiData } from "../../../../Store/Slice/VariantSlices";
+import { fetchApiDataToppings, fetchEditTopping } from '../../../../Store/Slice/ToppingSlices';
 import { useState } from 'react';
 
+
 function ToppingSelectionTable(props) {
+    //    "props data come" =========> toppingNameData send topping value topping name check, combinationPropsData send whole data come in main form component
     console.log("combination props", props.combinationPropsData);
-
-
     const dispatch = useDispatch();
 
     // useState
-    const [toppingNameDataState, setToppingNameDataState] = useState("")
-console.log("propsdata state",toppingNameDataState);    
+   
     const [data, setdata] = useState([])
-    
-    // useSelector
-    const variantSelectionTable = useSelector((state) => state.variantSlices.data);
-    
+    const [variantfinal, setVariantFinal] = useState([])
+   console.log("bbbbbbbbccccccccc", variantfinal);
+
     // useEffect
-    useEffect(() => {
-        setToppingNameDataState(props.toppingNameData);
-    }, [props.toppingNameData]);
+      useEffect(() => {
+        dispatch(fetchApiDataToppings())
+        
+    }, [])
 
     useEffect(() => {
         dispatch(fetchApiData())
     }, [])
 
+    // useSelector
+    const variantSelectionTable = useSelector((state) => state.variantSlices.data);
+    const ToppingData = useSelector((state) => state.ToppingSlices.data)
+
+    useEffect(() => {
+        setVariantFinal(props.toppingNameData)
+        const finalToppingData = [
+           
+        ]
+
+        if (ToppingData && props.combinationPropsData.toppingCombinatiomQuantityList.length > 0) {
+            ToppingData.map((item) => {
+                props.combinationPropsData.toppingCombinatiomQuantityList.filter((selection) => {
+                    if (selection.toppingId === item.toppingId) {
+                        const newObj = { ...item, selection }
+                        finalToppingData.push(newObj)
+                    }
+                });
+            })
+            setVariantFinal(finalToppingData)   
+        } else if (ToppingData && props.toppingNameData.length > 0) {
+            ToppingData.map((item) => {
+                props.toppingNameData.filter((select) => {
+                    if (select.toppingId === item.toppingId) {
+                        const newAdd = { ...item, select }
+                        finalToppingData.push(newAdd)
+                    }
+                });
+            })
+            setVariantFinal(finalToppingData)
+        }
+
+    }, [ToppingData, props.toppingNameData])
+
     // functions
     const deleteHandler = (id) => {
-        const deleteddata = toppingNameDataState.filter(item => item.toppingId !== id);
-        setToppingNameDataState(deleteddata)
+        const deleteddata = variantfinal.filter(item => item.toppingId !== id);
+        setVariantFinal(deleteddata)
         props.unCheckHandler(id)
     }
 
-    useEffect(() => {
-        setToppingNameDataState(props.toppingNameData);
-    }, [props.toppingNameData]);
-
-  
-    
-
-
-
-
     const handleToppingQuantity = (e, variantId, toppingId) => {
+        console.log(e);
         const newObj = {
             combinationToppingId: toppingId,
             quantity: e.target.value,
@@ -63,6 +88,7 @@ console.log("propsdata state",toppingNameDataState);
             abcArray = [...data, newObj]
             setdata(prevData => [...prevData, newObj]);
         }
+
         props.combinationHandler(abcArray)
     }
 
@@ -70,7 +96,7 @@ console.log("propsdata state",toppingNameDataState);
     return (
         <>
             <div className='productSection__table  mt-3'>
-                {toppingNameDataState < 1 ? "" :
+                {variantfinal < 1 ? "" :
                     <table className='table m-0 text-center'>
                         <thead>
                             <tr>
@@ -81,7 +107,7 @@ console.log("propsdata state",toppingNameDataState);
                             </tr>
                         </thead>
                         <tbody>
-                            {toppingNameDataState.map((item, index) => {
+                            {variantfinal.map((item, index) => {
                                 return <tr key={index} >
                                     <td className='pt-4'>{item.toppingName}</td>
                                     {variantSelectionTable?.map((data, ind) => {
