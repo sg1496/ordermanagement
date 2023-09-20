@@ -47,7 +47,7 @@ function ToppingPriceList(props) {
             setToppingData(finalToppingData)
         } else if (toppingPrice) {
             toppingPrice.map((item) => {
-                const newItem = { ...item, seletedTopping: { price: 0, variantId: item.variantId, quantity: 0 } }
+                const newItem = { ...item, seletedTopping: { price: 0, variantId: item.variantId, quantity: 0 }}
                 finalToppingData.push(newItem)
             })
             setToppingData(finalToppingData)

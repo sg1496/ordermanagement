@@ -8,94 +8,129 @@ import { useState } from 'react';
 
 function ToppingSelectionTable(props) {
     //    "props data come" =========> toppingNameData send topping value topping name check, combinationPropsData send whole data come in main form component
-    console.log("combination props", props.combinationPropsData);
+    // console.log("combination props", props.combinationPropsData);
     const dispatch = useDispatch();
 
     // useState
-   
+    const [toppingCheckName, setToppingCheckName] = useState("")
     const [data, setdata] = useState([])
-    const [variantfinal, setVariantFinal] = useState([])
-   console.log("bbbbbbbbccccccccc", variantfinal);
+    const [trial, setTrial] = useState([])
+    // console.log("mmmmmmmmmmmnnnnnnn", trial);
+
 
     // useEffect
-      useEffect(() => {
-        dispatch(fetchApiDataToppings())        
-    }, [])
+
+    useEffect(() => {
+        setToppingCheckName(props.toppingNameData)
+    }, [props.toppingNameData])
 
     useEffect(() => {
         dispatch(fetchApiData())
+        dispatch(fetchApiDataToppings())
+
     }, [])
+
+
+
+
 
     // useSelector
     const variantSelectionTable = useSelector((state) => state.variantSlices.data);
-    const ToppingData = useSelector((state) => state.ToppingSlices.data)
+    console.log("variantSelectionTable",variantSelectionTable);
+    
+    
 
     useEffect(() => {
-        setVariantFinal(props.toppingNameData)
-        const finalToppingData = [
-           
-        ]
+        const allda = [];
+        if (variantSelectionTable && toppingCheckName && props.combinationPropsData.toppingCombinatiomQuantityList.length > 0) {
 
-        if (ToppingData && props.combinationPropsData.toppingCombinatiomQuantityList.length > 0) {
-            ToppingData.map((item) => {
-                props.combinationPropsData.toppingCombinatiomQuantityList.filter((selection) => {
-                    if (selection.toppingId === item.toppingId) {
-                        const newObj = { ...item, selection }
-                        finalToppingData.push(newObj)
-                    }
-                });
+            variantSelectionTable.map((item1) => {
+                toppingCheckName.map((item2) => {
+                    props.combinationPropsData.toppingCombinatiomQuantityList.filter((selection) => {
+                        if (1141 === item2.toppingId && selection.variantId === item1.variantId) {
+                            const newItem = { ...item1, selection }
+                            allda.push(newItem)
+                        }
+                    })
+                })
             })
-            setVariantFinal(finalToppingData)   
-        } else if (ToppingData && props.toppingNameData.length > 0) {
-            ToppingData.map((item) => {
-                props.toppingNameData.filter((select) => {
-                    if (select.toppingId === item.toppingId) {
-                        const newAdd = { ...item, select }
-                        finalToppingData.push(newAdd)
-                    }
-                });
+            setTrial(allda)
+        } else if (variantSelectionTable && toppingCheckName) {
+            
+             toppingCheckName.map((item1) => {console.log("itemtoppingcheckname",item1)
+             variantSelectionTable.map((item) => {console.log("itemvariantselection",item)
+                let dataas = { ...item, selection: { combinationToppingId: item1.toppingId, quantity: "", variantId: item.variantId } }
+                allda.push(dataas)
             })
-            setVariantFinal(finalToppingData)
+            
+            
+           return 
+        })
+        setTrial(allda)
         }
+    }, [variantSelectionTable, toppingCheckName])
 
-    }, [ToppingData, props.toppingNameData])
+    const combinationChangeHandler = (e,  variantId,toppingId,data) => {
+        console.log("44444444444",data);
+        
+        let newArr = trial.map((item , i) => {            
+            if ( variantId == item.variantId  ) {
+                console.log("true");
+                return {
+                    ...item,
+                    selection: {    
+                        ToppingCombinationId: 85,
+                        combinationToppingId: item.selection.combinationToppingId,           
+                        quantity: e.target.name == 'quantity' ? parseInt(e.target.value) : item.selection.quantity,
+                        variantId:item.variantId                        
+                    }
+                };
+            } else {
+                console.log("false");
+                return item;
+            }
+
+        });
+        setTrial(newArr)
+        props.combinationDataSendParent(newArr)
+    }
 
     // functions
     const deleteHandler = (id) => {
-        const deleteddata = variantfinal.filter(item => item.toppingId !== id);
-        setVariantFinal(deleteddata)
+        const deleteddata = toppingCheckName.filter(item => item.toppingId !== id);
+        setToppingCheckName(deleteddata)
         props.unCheckHandler(id)
     }
 
-    const handleToppingQuantity = (e, variantId, toppingId) => {
-        console.log(e);
-        const newObj = {
-            combinationToppingId: toppingId,
-            quantity: e.target.value,
-            variantId: variantId
-        }
-        let abcArray = data
+    // const handleToppingQuantity = (e, variantId, toppingId) => {
+   
+    //     const newObj = {
+    //         combinationToppingId: toppingId,
+    //         quantity: e.target.value,
+    //         variantId: variantId
+    //     }
+    //     let abcArray = data
 
-        const index = data.findIndex(item => item.combinationToppingId === toppingId && item.variantId === variantId);
-        if (index !== -1) {
-            const arr = data;
-            arr[index] = newObj;
-            abcArray = arr
-            setdata(arr)
-        }
-        if (index === -1) {
-            abcArray = [...data, newObj]
-            setdata(prevData => [...prevData, newObj]);
-        }
+    //     const index = data.findIndex(item => item.combinationToppingId === toppingId && item.variantId === variantId);
+    //     if (index !== -1) {
+    //         const arr = data;
+    //         arr[index] = newObj; x
+    //         abcArray = arr
+    //         setdata(arr)
+    //     }
+    //     if (index === -1) {
+    //         abcArray = [...data, newObj]
+    //         setdata(prevData => [...prevData, newObj]);
+    //     }
 
-        props.combinationHandler(abcArray)
-    }
+    //     props.combinationHandler(abcArray)
+    // }
 
 
     return (
         <>
             <div className='productSection__table  mt-3'>
-                {variantfinal < 1 ? "" :
+                {toppingCheckName < 1 ? "" :
                     <table className='table m-0 text-center'>
                         <thead>
                             <tr>
@@ -106,10 +141,10 @@ function ToppingSelectionTable(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {variantfinal.map((item, index) => {
+                            {toppingCheckName.map((item, index) => {
                                 return <tr key={index} >
                                     <td className='pt-4'>{item.toppingName}</td>
-                                    {variantSelectionTable?.map((data, ind) => {
+                                    {trial?.map((data, ind) => {
                                         return <td key={ind} >
                                             <div className='d-flex justify-content-center aligns-item-center'>
                                                 <div style={{ width: "100px" }}>
@@ -122,8 +157,8 @@ function ToppingSelectionTable(props) {
                                                         className="form-control"
                                                         placeholder="Pizza"
                                                         name='quantity'
-                                                        value={data.quantity}
-                                                        onChange={(e) => handleToppingQuantity(e, data.variantId, item.toppingId)}
+                                                        value={data.selection.quantity}
+                                                        onChange={(e) => combinationChangeHandler(e, data.variantId, item.toppingId,data)}
                                                     />
                                                 </div>
                                             </div>

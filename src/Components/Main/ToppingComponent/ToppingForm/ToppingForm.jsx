@@ -37,7 +37,7 @@ const ToppingForm = (props) => {
         ]
     }
     )
-
+console.log("mainddddddddddata", data);
 
 
 
@@ -45,6 +45,7 @@ const ToppingForm = (props) => {
     const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
     const toppingPrice = useSelector((state) => state.variantSlices.data)
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
+    console.log("singleEditTopping",singleEditTopping);
 
     // dispatch useEffect
     // dispatch(navTitle("Toppings"));
@@ -83,13 +84,10 @@ const ToppingForm = (props) => {
                 isCombination: false,
                 foodTypeId: "",
                 orderTypes: [
-
                 ],
                 toppingsPrices: [
-
                 ],
                 toppingCombinatiomQuantityList: [
-
                 ]
 
             })
@@ -118,7 +116,14 @@ const ToppingForm = (props) => {
             toppingPriceDatafromList.push(topping.seletedTopping)
         })
         setData({ ...data, toppingsPrices: toppingPriceDatafromList })
+    }
 
+    const combinationDataNameSend = (combinationdata) => {
+        const combinationDataList = []
+        combinationdata.map((item)=>{ 
+            combinationDataList.push(item.selection)
+        })
+        setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
     }
 
     const DiningChangeHandler = (value, checked) => {
@@ -226,18 +231,11 @@ const ToppingForm = (props) => {
         })
 
     }
-    const combinationHandler = (toppingCombinationData) => {
-        const toppingCombinationDatafromList = []
-        toppingCombinationData.map((topping) => {
-            toppingCombinationDatafromList.push(topping)
-        })
-        setData({ ...data, toppingsPrices: toppingCombinationData })
+   
 
-        setData({ ...data, toppingCombinatiomQuantityList: toppingCombinationData })
-    }
 
     const { toppingName, toppingAbbr, foodTypeId, measurementTypeId } = data
-    // console.log("form Main Data =======================>", singleEditTopping);
+    
     return (
         <>
             <div className="addProduct__basicTabs">
@@ -399,9 +397,9 @@ const ToppingForm = (props) => {
                         </div>
                         <div className='ToppingName_table me-5 ' >
                             <ToppingNames
-                                editStatus = {Boolean(edit.id)}
+                                editStatus={Boolean(edit.id)}
                                 combinationHandler={data}
-                                combinationHandlers={combinationHandler}
+                                combinationDataNameSend={combinationDataNameSend}
                             />
                         </div>
                     </div>}

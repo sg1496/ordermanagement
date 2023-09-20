@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from "axios"
 import { flushSync } from 'react-dom';
+import dummy from '../../dummy'; 
 let url = import.meta.env.VITE_APP_FOODS_API
 
 const initialState = {
@@ -10,6 +11,7 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
+    dummy
 }
 
 const ToppingSlices = createSlice({

@@ -23,6 +23,7 @@ const dummy = [
 
 
 function ToppingNames(props) {
+    // console.log("nameeeeee",props);
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
 
@@ -33,14 +34,15 @@ function ToppingNames(props) {
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
     const [ToppingDatafinal, setToppingDatafinal] = useState([])
     const edit = useParams();
+    console.log("ToppingData",ToppingData);
 
 
     useEffect(() => {
-        if (ToppingData) {
+        if (ToppingData ) {
             const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
             ToppingDatafinaltemp.map((e) => {
                 e.IsChecked = false;
-                var tempmatch = dummy.filter(x => x.combinationToppingId === e.toppingId);
+                var tempmatch = props.combinationHandler.toppingCombinatiomQuantityList.filter(x => 1141=== e.toppingId);
                 if (tempmatch.length > 0 && edit.id > 0)
                  {
                     e.IsChecked = true;
@@ -73,6 +75,9 @@ function ToppingNames(props) {
 
     const combinationHandler = (data) => {
         props.combinationHandlers(data)
+    }
+    const combinationDataSendParent =(data)=>{
+        props.combinationDataNameSend(data)
     }
 
 
@@ -120,6 +125,7 @@ function ToppingNames(props) {
                     combinationHandler={combinationHandler}
                     unCheckHandler={unCheckHandler}
                     combinationPropsData={combinationPropsData}
+                    combinationDataSendParent={combinationDataSendParent}
                 />
             </div>
         </div>
