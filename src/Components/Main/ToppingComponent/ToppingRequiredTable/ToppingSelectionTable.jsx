@@ -3,6 +3,7 @@ import tablebin from "../../../../assets/svg/tablebin.svg"
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiData } from "../../../../Store/Slice/VariantSlices";
 import { fetchApiDataToppings, fetchEditTopping } from '../../../../Store/Slice/ToppingSlices';
+
 import { useState } from 'react';
 
 
@@ -16,6 +17,7 @@ function ToppingSelectionTable(props) {
     const [data, setdata] = useState([])
     const [trial, setTrial] = useState([])
     // console.log("mmmmmmmmmmmnnnnnnn", trial);
+
 
 
     // useEffect
@@ -36,29 +38,34 @@ function ToppingSelectionTable(props) {
 
     // useSelector
     const variantSelectionTable = useSelector((state) => state.variantSlices.data);
-    console.log("variantSelectionTable",variantSelectionTable);
+    const dummydata =  useSelector((state)=> state.ToppingSlices.dummy.toppingCombinatiomQuantityList)
+    // console.log("variantSelectionTable----------------------",dummydata);
+    console.log("variantSelectionTable----------------------",variantSelectionTable);
     
     
 
     useEffect(() => {
         const allda = [];
         if (variantSelectionTable && toppingCheckName && props.combinationPropsData.toppingCombinatiomQuantityList.length > 0) {
-
+            toppingCheckName.map((item2) => {
             variantSelectionTable.map((item1) => {
-                toppingCheckName.map((item2) => {
-                    props.combinationPropsData.toppingCombinatiomQuantityList.filter((selection) => {
-                        if (1141 === item2.toppingId && selection.variantId === item1.variantId) {
+                    dummydata.filter((selection) => {
+                        if (selection.combinationToppingId === item2.toppingId && selection.variantId === item1.variantId) {
+                           
                             const newItem = { ...item1, selection }
+                           
                             allda.push(newItem)
+                           
                         }
+                        
                     })
                 })
             })
             setTrial(allda)
         } else if (variantSelectionTable && toppingCheckName) {
             
-             toppingCheckName.map((item1) => {console.log("itemtoppingcheckname",item1)
-             variantSelectionTable.map((item) => {console.log("itemvariantselection",item)
+             toppingCheckName.map((item1) => {
+             variantSelectionTable.map((item) => {
                 let dataas = { ...item, selection: { combinationToppingId: item1.toppingId, quantity: "", variantId: item.variantId } }
                 allda.push(dataas)
             })
@@ -71,11 +78,11 @@ function ToppingSelectionTable(props) {
     }, [variantSelectionTable, toppingCheckName])
 
     const combinationChangeHandler = (e,  variantId,toppingId,data) => {
-        console.log("44444444444",data);
+        // console.log("44444444444",data);
         
         let newArr = trial.map((item , i) => {            
             if ( variantId == item.variantId  ) {
-                console.log("true");
+                // console.log("true");
                 return {
                     ...item,
                     selection: {    
@@ -86,7 +93,7 @@ function ToppingSelectionTable(props) {
                     }
                 };
             } else {
-                console.log("false");
+                // console.log("false");
                 return item;
             }
 

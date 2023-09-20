@@ -4,28 +4,13 @@ import { fetchApiDataToppings } from '../../../../Store/Slice/ToppingSlices';
 import ToppingSelectionTable from "../ToppingRequiredTable/ToppingSelectionTable";
 import { useParams } from 'react-router-dom';
 
-const dummy = [
-    {
-        toppingCombinationId: 86,
-        combinationToppingId: 1132,
-        quantity: 3,
-        variantId: 14
-    },
-
-    {
-        toppingCombinationId: 87,
-        combinationToppingId: 1131,
-        quantity: 3,
-        variantId: 14
-    }
-]
-
-
-
 function ToppingNames(props) {
     // console.log("nameeeeee",props);
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
+
+    const variantSelectionTable = useSelector((state) => state.variantSlices.data);
+    const dummydata = useSelector((state) => state.ToppingSlices.dummy.toppingCombinatiomQuantityList)
 
     useEffect(() => {
         dispatch(fetchApiDataToppings())
@@ -33,18 +18,16 @@ function ToppingNames(props) {
 
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
     const [ToppingDatafinal, setToppingDatafinal] = useState([])
-    const edit = useParams();
-    console.log("ToppingData",ToppingData);
-
+    const { id } = useParams();
+    console.log("ToppingDatafinal ", ToppingDatafinal);
 
     useEffect(() => {
-        if (ToppingData ) {
+        if (ToppingData) {
             const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
             ToppingDatafinaltemp.map((e) => {
                 e.IsChecked = false;
-                var tempmatch = props.combinationHandler.toppingCombinatiomQuantityList.filter(x => 1141=== e.toppingId);
-                if (tempmatch.length > 0 && edit.id > 0)
-                 {
+                var tempmatch = dummydata.filter(x => x.combinationToppingId === e.toppingId);
+                if (tempmatch.length > 0 && id > 0) {
                     e.IsChecked = true;
                 }
             });
@@ -53,7 +36,6 @@ function ToppingNames(props) {
         }
 
     }, [ToppingData])
-
 
     const toppingNameChangeHandler = (check, id, item) => {
         const itemselected = [...ToppingDatafinal];
@@ -76,7 +58,7 @@ function ToppingNames(props) {
     const combinationHandler = (data) => {
         props.combinationHandlers(data)
     }
-    const combinationDataSendParent =(data)=>{
+    const combinationDataSendParent = (data) => {
         props.combinationDataNameSend(data)
     }
 
