@@ -60,13 +60,14 @@ function ToppingPriceList(props) {
         let newArr = toppingData.map((item, i) => {
             if (item.variantId == variantId) {
                 return { ...item, seletedTopping: { price: e.target.name == 'price' ? parseInt(e.target.value) : item.seletedTopping.price, variantId: item.variantId, quantity: e.target.name == 'quantity' ? parseInt(e.target.value) : item.seletedTopping.quantity } };
-            } else {
+            } 
+            else {
                 return item;
             }
         });
        
-
         setToppingData(newArr)
+        console.log(toppingData);
         props.toppingPriceHandler(newArr);
     }
 

@@ -15,7 +15,7 @@ const ToppingForm = (props) => {
     const dispatch = useDispatch();
     const Navigate = useNavigate();
     const edit = useParams();
-
+let isSaveCliked=false;
     // Send Data Api
     const [data, setData] = useState({
         toppingName: "",
@@ -33,22 +33,19 @@ const ToppingForm = (props) => {
         toppingsPrices: [
         ],
         toppingCombinatiomQuantityList: [
-
-        ]
+        ],
     }
     )
-console.log("mainddddddddddata", data);
+
 
 
 
     // useSelector
     const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
-    const toppingPrice = useSelector((state) => state.variantSlices.data)
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
-    console.log("singleEditTopping",singleEditTopping);
+    console.log("bbcc",singleEditTopping)
 
-    // dispatch useEffect
-    // dispatch(navTitle("Toppings"));
+
 
     useEffect(() => {
         dispatch(GetAllMeasuremenType())
@@ -112,19 +109,32 @@ console.log("mainddddddddddata", data);
 
     const toppingPriceHandler = (toppingPriseListData) => {
         const toppingPriceDatafromList = []
+
         toppingPriseListData.map((topping) => {
             toppingPriceDatafromList.push(topping.seletedTopping)
         })
         setData({ ...data, toppingsPrices: toppingPriceDatafromList })
     }
 
-    const combinationDataNameSend = (combinationdata) => {
-        const combinationDataList = []
-        combinationdata.map((item)=>{ 
-            combinationDataList.push(item.selection)
+    const combinationDataNameSend = (combinationdata) => {   
+       
+        const combinationDataList = []        
+        combinationdata && combinationdata.map((combination)=>{ 
+            combinationDataList.push(combination.selection)        
+            console.log("ajdljdljaljldjfld",combinationdata);    
         })
+        console.log("varinder combinationDataNameSend",data);  
         setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
+        console.log("varinder after combinationDataNameSend",data);  
     }
+
+    // const combinationDataNameSend = (combinationdata) => {
+    //     if (!combinationdata) return; 
+
+    //     const combinationDataList = combinationdata.map(combination => combination.selection);
+     
+    //     // setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
+    // };
 
     const DiningChangeHandler = (value, checked) => {
         if (checked) {
@@ -136,6 +146,7 @@ console.log("mainddddddddddata", data);
 
     const submitHandler = async (event) => {
         event.preventDefault();
+        isSaveCliked=true;
         //shivam comment start
         let ToppingSaveUpdateData
 
@@ -145,6 +156,8 @@ console.log("mainddddddddddata", data);
                 loginUserID: parseInt(data.loginUserID),
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
+                // variantId: parseInt(data.variantId),
+                // combinationToppingId: parseInt(data.combinationToppingId),
 
             }
         } else {
@@ -156,6 +169,7 @@ console.log("mainddddddddddata", data);
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
                 loginUserID: parseInt(data.loginUserID),
+
             }
         }
         dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
@@ -185,11 +199,7 @@ console.log("mainddddddddddata", data);
                 }
             ],
             toppingCombinatiomQuantityList: [
-                {
-                    toppingCombinationId: "",
-                    quantity: "",
-                    variantId: ""
-                }
+              
             ]
 
         })
@@ -221,21 +231,17 @@ console.log("mainddddddddddata", data);
                 }
             ],
             toppingCombinatiomQuantityList: [
-                {
-                    toppingCombinationId: "",
-                    quantity: "",
-                    variantId: ""
-                }
+               
             ]
 
         })
 
     }
-   
+
 
 
     const { toppingName, toppingAbbr, foodTypeId, measurementTypeId } = data
-    
+
     return (
         <>
             <div className="addProduct__basicTabs">
@@ -397,9 +403,10 @@ console.log("mainddddddddddata", data);
                         </div>
                         <div className='ToppingName_table me-5 ' >
                             <ToppingNames
+                                combinationDataNameSend={combinationDataNameSend}
                                 editStatus={Boolean(edit.id)}
                                 combinationHandler={data}
-                                combinationDataNameSend={combinationDataNameSend}
+                                isSaveClicked={isSaveCliked}
                             />
                         </div>
                     </div>}

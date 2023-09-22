@@ -20,40 +20,41 @@ const data = {
     }
   ],
   toppingCombinatiomQuantityList: [
-    {
-      "toppingCombinationId": 90,
-      "combinationToppingId": 1141,
-      "quantity": 9.5,
-      "variantId": 14
-    },
-    {
-      "toppingCombinationId": 91,
-      "combinationToppingId": 1141,
-      "quantity": 9.5,
-      "variantId": 15
-    },
-    {
-      "toppingCombinationId": 92,
-      "combinationToppingId": 1141,
-      "quantity": 9.5,
-      "variantId": 16
-    },
+   
     {
       "toppingCombinationId": 93,
       "combinationToppingId": 1133,
-      "quantity": 10,
+      "quantity": 4,
       "variantId": 14
     },
     {
       "toppingCombinationId": 94,
       "combinationToppingId": 1133,
-      "quantity": 10,
+      "quantity": 5,
       "variantId": 15
     },
     {
       "toppingCombinationId": 95,
       "combinationToppingId": 1133,
-      "quantity": 10,
+      "quantity": 6,
+      "variantId": 16
+    },
+    {
+      "toppingCombinationId": 96,
+      "combinationToppingId": 1145,
+      "quantity": 7,
+      "variantId": 14
+    },
+    {
+      "toppingCombinationId": 97,
+      "combinationToppingId": 1145,
+      "quantity": 8,
+      "variantId": 15
+    },
+    {
+      "toppingCombinationId": 98,
+      "combinationToppingId": 1145,
+      "quantity": 9,
       "variantId": 16
     },
   ],

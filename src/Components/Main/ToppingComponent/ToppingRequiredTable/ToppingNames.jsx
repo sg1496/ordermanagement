@@ -5,21 +5,25 @@ import ToppingSelectionTable from "../ToppingRequiredTable/ToppingSelectionTable
 import { useParams } from 'react-router-dom';
 
 function ToppingNames(props) {
-    // console.log("nameeeeee",props);
+    console.log("shubham",props);
+    let isSaveClicked =props.isSaveClicked
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
+    const { id } = useParams();
 
-    const variantSelectionTable = useSelector((state) => state.variantSlices.data);
-    const dummydata = useSelector((state) => state.ToppingSlices.dummy.toppingCombinatiomQuantityList)
 
     useEffect(() => {
         dispatch(fetchApiDataToppings())
     }, [])
-
+    useEffect(() => {
+        isSaveClicked =props.isSaveClicked
+    }, [])
+    const dummydata = useSelector((state) => state.ToppingSlices.dummy.toppingCombinatiomQuantityList)
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
+
+
     const [ToppingDatafinal, setToppingDatafinal] = useState([])
-    const { id } = useParams();
-    console.log("ToppingDatafinal ", ToppingDatafinal);
+
 
     useEffect(() => {
         if (ToppingData) {
@@ -32,10 +36,8 @@ function ToppingNames(props) {
                 }
             });
             setToppingDatafinal(ToppingDatafinaltemp);
-
         }
-
-    }, [ToppingData])
+    }, [ToppingData,dummydata])
 
     const toppingNameChangeHandler = (check, id, item) => {
         const itemselected = [...ToppingDatafinal];
@@ -68,13 +70,11 @@ function ToppingNames(props) {
             <div className='productSection__table mt-3' style={{ width: "30%" }}>
 
                 <table className='table m-0 '>
-
                     <thead>
                         <tr>
                             <th></th>
                             <th scope="col" >Topping Names</th>
                             <th scope="col" className='text-center'>Food Type</th>
-
                         </tr>
                     </thead>
 
@@ -86,7 +86,7 @@ function ToppingNames(props) {
                                         id={item.toppingId}
                                         type="checkbox"
                                         checked={item.IsChecked}
-                                        onClick={(e) => toppingNameChangeHandler(e.target.checked, item.toppingId, item)}
+                                        onChange={(e) => toppingNameChangeHandler(e.target.checked, item.toppingId, item)}
                                     />
                                 </td>
                                 <td>{item.toppingName}</td>
@@ -97,7 +97,6 @@ function ToppingNames(props) {
                         }
                         )}
                     </tbody>
-
                 </table>
 
             </div >
@@ -108,6 +107,7 @@ function ToppingNames(props) {
                     unCheckHandler={unCheckHandler}
                     combinationPropsData={combinationPropsData}
                     combinationDataSendParent={combinationDataSendParent}
+                    isSaveClicked={isSaveClicked}
                 />
             </div>
         </div>
