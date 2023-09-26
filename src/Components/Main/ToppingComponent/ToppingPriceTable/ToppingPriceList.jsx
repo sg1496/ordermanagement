@@ -70,6 +70,7 @@ function ToppingPriceList(props) {
         console.log(toppingData);
         props.toppingPriceHandler(newArr);
     }
+    console.log("aaaaaaaaaaabb4",toppingData);
 
 
 

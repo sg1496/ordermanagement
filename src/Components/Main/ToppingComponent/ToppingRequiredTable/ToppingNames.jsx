@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 
 function ToppingNames(props) {
     console.log("shubham",props);
-    let isSaveClicked =props.isSaveClicked
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
     const { id } = useParams();
@@ -15,9 +14,7 @@ function ToppingNames(props) {
     useEffect(() => {
         dispatch(fetchApiDataToppings())
     }, [])
-    useEffect(() => {
-        isSaveClicked =props.isSaveClicked
-    }, [])
+   
     const dummydata = useSelector((state) => state.ToppingSlices.dummy.toppingCombinatiomQuantityList)
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
 
@@ -26,6 +23,7 @@ function ToppingNames(props) {
 
 
     useEffect(() => {
+        console.log("pppppp")
         if (ToppingData) {
             const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
             ToppingDatafinaltemp.map((e) => {
@@ -80,6 +78,7 @@ function ToppingNames(props) {
 
                     <tbody>
                         {ToppingDatafinal.map((item, index) => {
+                            console.log("okook")
                             return <tr key={index}>
                                 <td className='text-center'>
                                     <input className="form-check-input"
@@ -103,11 +102,12 @@ function ToppingNames(props) {
             <div className='ToppingSelect_table mx-5' style={{ width: "50%" }} >
                 <ToppingSelectionTable
                     toppingNameData={ToppingDatafinal.filter(x => x.IsChecked == true)}
+                    selectedToppingName={props.combinationHandler.toppingCombinatiomQuantityList}
                     combinationHandler={combinationHandler}
                     unCheckHandler={unCheckHandler}
                     combinationPropsData={combinationPropsData}
                     combinationDataSendParent={combinationDataSendParent}
-                    isSaveClicked={isSaveClicked}
+                    data={props}
                 />
             </div>
         </div>

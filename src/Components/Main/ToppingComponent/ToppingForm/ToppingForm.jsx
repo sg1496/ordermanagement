@@ -12,10 +12,11 @@ import { fetchEditTopping, fetchSaveUpdateToppings, GetAllMeasuremenType, resetS
 
 
 const ToppingForm = (props) => {
+    console.log("pppppppp........")
     const dispatch = useDispatch();
     const Navigate = useNavigate();
     const edit = useParams();
-let isSaveCliked=false;
+
     // Send Data Api
     const [data, setData] = useState({
         toppingName: "",
@@ -33,9 +34,8 @@ let isSaveCliked=false;
         toppingsPrices: [
         ],
         toppingCombinatiomQuantityList: [
-        ],
-    }
-    )
+        ]
+    })
 
 
 
@@ -43,7 +43,6 @@ let isSaveCliked=false;
     // useSelector
     const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
-    console.log("bbcc",singleEditTopping)
 
 
 
@@ -117,16 +116,25 @@ let isSaveCliked=false;
     }
 
     const combinationDataNameSend = (combinationdata) => {   
-       
+        console.log("combinationdata", combinationdata);
         const combinationDataList = []        
         combinationdata && combinationdata.map((combination)=>{ 
-            combinationDataList.push(combination.selection)        
-            console.log("ajdljdljaljldjfld",combinationdata);    
+            combination.allTrailData.map((combinationTrail)=>{
+                combinationDataList.push(combinationTrail.selection)  
+            })
+                  
         })
-        console.log("varinder combinationDataNameSend",data);  
+        console.log("ajdljdljaljldjfld", combinationDataList);    
+         
         setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
-        console.log("varinder after combinationDataNameSend",data);  
+         
     }
+
+
+    useEffect(() => {
+        console.log("dadadaadaddad")
+    }, [data]);
+
 
     // const combinationDataNameSend = (combinationdata) => {
     //     if (!combinationdata) return; 
@@ -146,7 +154,7 @@ let isSaveCliked=false;
 
     const submitHandler = async (event) => {
         event.preventDefault();
-        isSaveCliked=true;
+
         //shivam comment start
         let ToppingSaveUpdateData
 
@@ -260,7 +268,7 @@ let isSaveCliked=false;
                                 placeholder="Pizza"
                                 name='toppingName'
                                 value={toppingName}
-                                onChange={changeHandler}
+                                onChange={(e)=>changeHandler(e)}
                                 required
                             />
                         </div>
@@ -276,7 +284,7 @@ let isSaveCliked=false;
                                 placeholder="Pizza"
                                 name='toppingAbbr'
                                 value={toppingAbbr}
-                                onChange={changeHandler}
+                                onChange={(e)=>changeHandler(e)}
                                 required
                             />
                         </div>
@@ -289,7 +297,7 @@ let isSaveCliked=false;
                                 id="taxClass"
                                 name='foodTypeId'
                                 value={foodTypeId}
-                                onChange={changeHandler}
+                                onChange={(e)=>changeHandler(e)}
                             >
                                 <option defaultValue>Select Category</option>
                                 <option value="1">Veg</option>
@@ -336,7 +344,7 @@ let isSaveCliked=false;
                                 id="taxClass"
                                 name='measurementTypeId'
                                 value={measurementTypeId}
-                                onChange={changeHandler}
+                                onChange={(e)=>changeHandler(e)}
                             >
                                 <option defaultValue>Select Category</option>
                                 {measurementList && measurementList.map(item => {
@@ -406,7 +414,7 @@ let isSaveCliked=false;
                                 combinationDataNameSend={combinationDataNameSend}
                                 editStatus={Boolean(edit.id)}
                                 combinationHandler={data}
-                                isSaveClicked={isSaveCliked}
+                                
                             />
                         </div>
                     </div>}
