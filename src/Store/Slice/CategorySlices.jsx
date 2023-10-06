@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { useCallback } from 'react';
 import axios from "axios"
-import { flushSync } from 'react-dom';
 let url = import.meta.env.VITE_APP_FOODS_API
 
 const initialState = {
@@ -9,6 +9,7 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
+    parentCategories:null,
     searchcategory: []
 }
 
@@ -103,13 +104,13 @@ const CategorySlices = createSlice({
                 state.error = true;
                 state.msg = "some error"
             })
-            .addCase(fetchDropDown.pending, (state) => {
+            .addCase(fetchParentCategory.pending, (state) => {
                 state.loading = true
             })
-            .addCase(fetchDropDown.fulfilled, (state, action) => {
+            .addCase(fetchParentCategory.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
-                    state.data = action.payload.categorylst;
+                    state.parentCategories = action.payload.parentCategories;
                 }
                 else {
                     state.loading = false;
@@ -117,7 +118,7 @@ const CategorySlices = createSlice({
                     state.message = "some error";
                 }
             })
-            .addCase(fetchDropDown.rejected, (state) => {
+            .addCase(fetchParentCategory.rejected, (state) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
@@ -174,9 +175,10 @@ export const fetchEditCategory = createAsyncThunk("api.fetchedit", async (id) =>
         throw new Error(error.message)
     }
 });
-export const fetchDropDown = createAsyncThunk('api/fetchdropdown', async () => {
+
+export const fetchParentCategory = createAsyncThunk('fetchParentCategory', async () => {
     try {
-        const response = await axios.get(`${url}/category/GetAllCategories`);
+        const response = await axios.get(`${url}/api/ParentCategory`);
         console.log(response.data);
         return response.data;
     } catch (error) {

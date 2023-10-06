@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 
 function ToppingSelectionTable(props) {
-    console.log("popds",props)
+   
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -24,31 +24,25 @@ function ToppingSelectionTable(props) {
     dispatch(fetchApiData());
     dispatch(fetchApiDataToppings());
   }, []);
-  // useEffect(() =>{ },[trial])
-  // useSelector
-  const variantSelectionTable = useSelector(
-    (state) => state.variantSlices.data
-  );
-  const dummydata = useSelector(
-    (state) => state.ToppingSlices.dummy.toppingCombinatiomQuantityList
-  );
+  
+  const variantSelectionTable = useSelector((state) => state.variantSlices.data);
+  const dummydata = useSelector((state) => state.ToppingSlices.dummy.toppingCombinatiomQuantityList);
 
   useEffect(() => {
     const allda = [];
-    if (
-      variantSelectionTable &&
-      toppingCheckName &&
-      props.selectedToppingName.length > 0
+    if (variantSelectionTable && toppingCheckName &&  props.selectedToppingName.length > 0 
     ) {
       toppingCheckName.map((item2) => {
-        var c = [];
-        var newData = {
+        let c = [];
+       
+        let newData = {
           mainToppingId: item2.toppingId,
           mainToppingName: item2.toppingName,
         };
-        var idExist = props.selectedToppingName.filter(
+        let idExist = props.selectedToppingName.filter(
           (element) => element.combinationToppingId === item2.toppingId
         );
+        
         if (idExist.length > 0) {
           variantSelectionTable.map((item1) => {
             props.selectedToppingName.map((selectedData) => {
@@ -59,12 +53,14 @@ function ToppingSelectionTable(props) {
                 let dataas = {
                   ...item1,
                   selection: {
+                    toppingCombinationId: selectedData.toppingCombinationId,
                     combinationToppingId: item2.toppingId,
                     quantity: selectedData.quantity,
                     variantId: item1.variantId,
                   },
                 };
                 c.push(dataas);
+                
               }
             });
           });
@@ -73,12 +69,14 @@ function ToppingSelectionTable(props) {
             let dataas = {
               ...item1,
               selection: {
+                toppingCombinationId:-1,
                 combinationToppingId: item2.toppingId,
                 quantity: 0,
                 variantId: item1.variantId,
               },
             };
             c.push(dataas);
+            
           });
         }
         newData = { ...newData, allTrailData: c };
@@ -108,20 +106,21 @@ function ToppingSelectionTable(props) {
         newData = { ...newData, allTrailData: c };
         allda.push(newData);
       });
-      console.log("allda",allda)
+      
       setTrial(allda);
     }
   }, [variantSelectionTable, toppingCheckName]);
 
   const combinationChangeHandler = (e, variantId, toppingId) => {
-    let newArr = trial.map((item, i) => {
-      if (item.mainToppingId === toppingId) {
+    let newArr = trial.map((item, i) => { 
+      if (id && item.mainToppingId === toppingId) {
         var c = [];
         item.allTrailData.map((traildata, ind) => {
           if (traildata.variantId === variantId) {
             var t = {
               ...traildata,
               selection: {
+                toppingCombinationId:traildata.selection.toppingCombinationId,
                 combinationToppingId: toppingId,
                 quantity: parseInt(e.target.value),
                 variantId: traildata.variantId,
@@ -132,6 +131,7 @@ function ToppingSelectionTable(props) {
             var t = {
               ...traildata,
               selection: {
+                toppingCombinationId:traildata.selection.toppingCombinationId,
                 combinationToppingId: toppingId,
                 quantity: traildata.selection.quantity,
                 variantId: traildata.variantId,
@@ -141,41 +141,40 @@ function ToppingSelectionTable(props) {
           }
         });
         return { ...item, allTrailData: c };
-      } else {
+      }else  if (item.mainToppingId === toppingId) {
+        var c = [];
+        item.allTrailData.map((traildata, ind) => {
+          if (traildata.variantId === variantId) {
+            var t = {
+              ...traildata,
+              selection: {
+                toppingCombinationId:-1,
+                combinationToppingId: toppingId,
+                quantity: parseInt(e.target.value),
+                variantId: traildata.variantId,
+              },
+            };
+            c.push(t);
+          } else {
+            var t = {
+              ...traildata,
+              selection: {
+                toppingCombinationId:-1,
+                combinationToppingId: toppingId,
+                quantity: traildata.selection.quantity,
+                variantId: traildata.variantId,
+              },
+            };
+            c.push(t);
+          }
+        });
+        return { ...item, allTrailData: c };
+      } 
+      else {
         return item;
       }
     });
 
-    // let newArr = trial.map((item, i) => {
-    //     // {editdata combinationtime}
-    //     if (id && variantId == item.selection.variantId && toppingId == item.selection.combinationToppingId) {
-    //         console.log("edit");
-    //         return {
-    //             ...item,
-    //             selection: {
-    //                 ToppingCombinationId: item.selection.toppingCombinationId,
-    //                 combinationToppingId: item.selection.combinationToppingId,
-    //                 quantity: e.target.name == 'quantity' ? parseInt(e.target.value) : item.selection.quantity,
-    //                 variantId: item.variantId
-    //             }
-    //         };
-    //     }
-    //     // {savedata combinationttime}
-    //     else if (variantId == item.selection.variantId && toppingId == item.selection.combinationToppingId) {
-    //         console.log("save");
-    //         return ({
-    //             ...item,
-    //             selection: {
-
-    //                 combinationToppingId: item.selection.combinationToppingId,
-    //                 quantity: e.target.name == 'quantity' ? parseInt(e.target.value) : item.selection.quantity,
-    //                 variantId: item.variantId
-    //             }
-    //         });
-    //     } else {
-    //         return item;
-    //     }
-    // });
     setTrial(newArr);
     props.combinationDataSendParent(newArr);
   };
@@ -212,7 +211,7 @@ function ToppingSelectionTable(props) {
                 return (
                   <tr key={index}>
                     <td className="pt-4">
-                      {item.mainToppingName}--{item.mainToppingId}
+                      {item.mainToppingName}
                     </td>
 
                     {item?.allTrailData.map((data, ind) => {

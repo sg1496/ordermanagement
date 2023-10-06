@@ -40,6 +40,7 @@ function ToppingPriceList(props) {
                         const newItem = { ...item, seletedTopping }
                         finalToppingData.push(newItem)
                         
+                        
                     }
 
                 })

@@ -18,9 +18,7 @@ const Category = () => {
 
             <div className='addProduct__navtab d-flex'>
                 <NavLink to="category">Category</NavLink>
-                <NavLink to="subcategory">Sub-Category</NavLink>
                 <NavLink to="products">Products</NavLink>
-
 
             </div>
             <div className='navTabs__content p-3'>

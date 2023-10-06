@@ -5,7 +5,7 @@ import ToppingSelectionTable from "../ToppingRequiredTable/ToppingSelectionTable
 import { useParams } from 'react-router-dom';
 
 function ToppingNames(props) {
-    console.log("shubham",props);
+    console.log(props);
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
     const { id } = useParams();
@@ -20,15 +20,17 @@ function ToppingNames(props) {
 
 
     const [ToppingDatafinal, setToppingDatafinal] = useState([])
+   
 
 
     useEffect(() => {
-        console.log("pppppp")
+       
         if (ToppingData) {
             const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
             ToppingDatafinaltemp.map((e) => {
                 e.IsChecked = false;
-                var tempmatch = dummydata.filter(x => x.combinationToppingId === e.toppingId);
+                // props.combinationHandler.toppingCombinatiomQuantityList
+                var tempmatch = props.combinationHandler.toppingCombinatiomQuantityList.filter(x => x.combinationToppingId === e.toppingId);
                 if (tempmatch.length > 0 && id > 0) {
                     e.IsChecked = true;
                 }
@@ -55,9 +57,7 @@ function ToppingNames(props) {
         setToppingDatafinal(itemselected);
     }
 
-    const combinationHandler = (data) => {
-        props.combinationHandlers(data)
-    }
+   
     const combinationDataSendParent = (data) => {
         props.combinationDataNameSend(data)
     }
@@ -78,7 +78,7 @@ function ToppingNames(props) {
 
                     <tbody>
                         {ToppingDatafinal.map((item, index) => {
-                            console.log("okook")
+                           
                             return <tr key={index}>
                                 <td className='text-center'>
                                     <input className="form-check-input"
@@ -103,7 +103,6 @@ function ToppingNames(props) {
                 <ToppingSelectionTable
                     toppingNameData={ToppingDatafinal.filter(x => x.IsChecked == true)}
                     selectedToppingName={props.combinationHandler.toppingCombinatiomQuantityList}
-                    combinationHandler={combinationHandler}
                     unCheckHandler={unCheckHandler}
                     combinationPropsData={combinationPropsData}
                     combinationDataSendParent={combinationDataSendParent}

@@ -11,6 +11,8 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
+    foodType: null,
+    orderTypes: null,
     dummy
 }
 
@@ -120,12 +122,58 @@ const ToppingSlices = createSlice({
                 state.error = true;
                 state.msg = "some error";
             })
+            .addCase(fetchFoodTypeTopping.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchFoodTypeTopping.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
+                    state.loading = false;
+                    state.foodType = action.payload.foodTypeList;
+                } else {
+                    state.loading = false;
+                    state.error = !action.payload.status;
+                    state.msg = "some error"
+                }
+            })
+            .addCase(fetchFoodTypeTopping.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.msg = "some error";
+            })
+            .addCase(GetAllOrderType.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(GetAllOrderType.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
+                    state.loading = false;
+                    state.orderTypes = action.payload.orderTypeList;
+                } else {
+                    state.loading = false;
+                    state.error = !action.payload.status;
+                    state.msg = "some error"
+                }
+            })
+            .addCase(GetAllOrderType.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.msg = "some error";
+            })
     }
 
 });
 export const fetchApiDataToppings = createAsyncThunk('api/fetchDataToppings', async () => {
     try {
         const response = await axios.get(`${url}/topping/GetAllToppings`);
+        return response.data;
+    } catch (error) {
+        console.log("error ", error);
+        throw new Error(error.message);
+    }
+});
+
+export const fetchFoodTypeTopping = createAsyncThunk('api/fetchFoodTypeToppings', async () => {
+    try {
+        const response = await axios.get(`${url}/api/FoodType/GetAllFoodType`);
         return response.data;
     } catch (error) {
         console.log("error ", error);
@@ -174,9 +222,20 @@ export const fetchEditTopping = createAsyncThunk("api.fetchedit", async (id) => 
         throw new Error(error.message)
     }
 });
+
 export const GetAllMeasuremenType = createAsyncThunk('api/fetchdropdown', async () => {
     try {
         const response = await axios.get(`${url}/api/Measurement/GetAllMeasuremenType`);
+        return response.data;
+    } catch (error) {
+        console.log("error ", error);
+        throw new Error(error.message);
+    }
+});
+
+export const GetAllOrderType = createAsyncThunk('api/fetchorderTypes', async () => {
+    try {
+        const response = await axios.get(`${url}/topping/GetAllOrderType`);
         return response.data;
     } catch (error) {
         console.log("error ", error);

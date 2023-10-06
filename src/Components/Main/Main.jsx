@@ -14,7 +14,6 @@ import Toppings from './ToppingComponent/Toppings/Toppings';
 import Categories from './ProductComponent/AddProduct/Categories/Categories';
 import AddCategory from "../Main/CategoryComponent/AddCategory/AddCategory"
 import Category from './CategoryComponent/AddCategory/category/Category';
-import SubCategory from './CategoryComponent/AddCategory/sub-category/SubCategory';
 import Products from './CategoryComponent/AddCategory/products/Products';
 import SupplierForm from './Supplier/SupplierForm/SupplierForm';
 import Mainsuppliertable from './Supplier/Suppliertablecomp/Mainsuppliertable';
@@ -49,7 +48,7 @@ function Main() {
 
                         <Route path='product' element={<Product />} />
                         <Route path="toppingform" element={<ToppingForm />} />
-                        <Route path='toppingform/:id' element={<ToppingForm/>}/>
+                        <Route path='toppingform/:id' element={<ToppingForm />} />
                         <Route path="toppings" element={<Toppings />} />
                         <Route path="categories" element={<Categories />} />
                         <Route path='categorytable' element={<Categorytable />} />
@@ -62,11 +61,11 @@ function Main() {
                         <Route path='manageroleform' element={<ManageRoleForm />} />
                         <Route path='combotable' element={<ComboTable />} />
                         <Route path='comboform' element={<ComboForm />} />
-                        <Route path='variant_table' element={<VariantsMain/>}/>
-                        <Route path='variant_form' element={<Variantform/>}/>
-                        <Route path='variant_form/:id' element={<Variantform/>}/>
-                        <Route path='add-category/category/:id' element={<Category/>}/>
-                        
+                        <Route path='variant_table' element={<VariantsMain />} />
+                        <Route path='variant_form' element={<Variantform />} />
+                        <Route path='variant_form/:id' element={<Variantform />} />
+                        {/* <Route path='add-category/category/:id' element={<Category />} /> */}
+
 
 
 
@@ -92,12 +91,12 @@ function Main() {
 
 
 
-                     
 
-                        <Route path='add-category' element={<AddCategory/>}>
+
+                        <Route path='add-category/category' element={<Category />} />
+                        <Route path='add-category' element={<AddCategory />}>
                             <Route index element={<Category />} />
-                            <Route path='category' element={<Category />} />                            
-                            <Route path='subcategory' element={<SubCategory />} />
+                            <Route path='category/:id' element={<Category />} />
                             <Route path='products' element={<Products />} />
                         </Route>
                     </Routes>

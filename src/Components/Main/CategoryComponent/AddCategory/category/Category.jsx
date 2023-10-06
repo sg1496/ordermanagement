@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import Buttons from '../../../ProductComponent/Buttons/NewButtons';
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
-import axios, { all } from "axios";
+
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchSaveUpdateCategory, fetchEditCategory, fetchDropDown, resetStates } from "../../../../../Store/Slice/CategorySlices";
+import { fetchSaveUpdateCategory, fetchEditCategory, fetchParentCategory, resetStates } from "../../../../../Store/Slice/CategorySlices";
+
 
 
 const Categoryform = () => {
     const Navigate = useNavigate()
-    let url = import.meta.env.VITE_APP_FOODS_API
+    const edit = useParams()
+
     const editData = useSelector((state) => state.categorySlices.singleData)
     const categoryDatas = useSelector(state => state.categorySlices.data)
-    console.log("categoryDatas", categoryDatas);
+    const parentCategories = useSelector(state => state.categorySlices.parentCategories)
 
 
-
-    const [dropDownvlu, setDropDownVlu] = useState([])
     const [categoryData, setCategoryData] = useState({
         categoryName: "",
         parentCategoryId: 0,
@@ -26,14 +26,11 @@ const Categoryform = () => {
         franchiseID: 0
     })
 
-    
-    const edit = useParams()
-    console.log("iiiiiiiiiiiiiiiiiiiiiiid",edit);
-    
+
+
 
     useEffect(() => {
-
-        dispatch(fetchDropDown())
+        dispatch(fetchParentCategory())
         // dropdowndata()
         if (edit.id != undefined) {
             dispatch(fetchEditCategory(edit.id))
@@ -61,29 +58,36 @@ const Categoryform = () => {
     }, [editData])
 
 
-    const dropdowndata = async () => {
-        const response = await axios.get(`${url}/category/GetAllCategories`)
-        setDropDownVlu(response.data.categorylst)
-    }
 
-    const changeHandler = (e) => {
+
+    const changeHandler = useCallback((e) => {
         setCategoryData(
             {
                 ...categoryData,
                 [e.target.name]: e.target.value
             }
         )
-    }
+    },
+    [categoryData],
+  )
 
     const cancelHandler = () => {
         Navigate(`/categorytable`)
     }
 
-    const toppingAllowedHandler = () => {
+    const toppingAllowedHandler =useCallback( () => {
         setCategoryData({ ...categoryData, isActive: !categoryData.isActive })
-    }
+    },
+    [categoryData],
+  )
 
-    const submitHandler = async (event) => {
+
+
+
+
+
+
+    const submitHandler = useCallback(async (event) => {
         event.preventDefault();
 
         let categorySaveUpdateData
@@ -112,84 +116,86 @@ const Categoryform = () => {
         })
 
 
-    }
+    },
+    [categoryData],
+  )
 
 
-    const dispatch = useDispatch();
-    dispatch(navTitle("Category"));
+const dispatch = useDispatch();
+dispatch(navTitle("Category"));
 
-    const { categoryName, parentCategoryId, } = categoryData
-    return (
-        <>
-            <div className="addProduct__basicTabs">
-                <form onSubmit={submitHandler}>
+const { categoryName, parentCategoryId } = categoryData
+return (
+    <>
+        <div className="addProduct__basicTabs">
+            <form onSubmit={submitHandler}>
 
-                    <div className="addProduct__basic d-flex mb-4">
-                        <div className="addProduct__productNamed">
-                            <label htmlFor="product-name" className="form-label inputForm__label">
-                                Category Name:
-                                <span className="formRequired">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                id="product-name"
-                                className="form-control"
-                                placeholder="Pizza"
-                                name='categoryName'
-                                value={categoryData.categoryName}
-                                onChange={changeHandler}
-                                required
-                            />
-                        </div>
-                        <div className="addProduct__productNamed">
-                            <label htmlFor="taxClass" className="form-label inputForm__label" >
-                                Parent Category:
-                            </label>
-                            <select
-                                className="form-select "
-                                name='parentCategoryId'
-                                value={parentCategoryId}
-                                onChange={changeHandler}
-                                id="taxClass"
-                            >
-                                <option defaultValue>Select Category</option>
-                                {categoryDatas && categoryDatas.map(items => {
-                                    return <option
-                                        key={items.categoryId}
-                                        value={items.categoryId}
-                                    >{items.categoryName}</option>;
-                                })}
-
-                            </select>
-                        </div>
-
-                        <div className="addProduct__isActive form-check form-switch">
-                            <label htmlFor="isActive" className="form-label inputForm__label">
-                                Is Topping Allowed ?: *
-                                <span className="formRequired "></span>
-                            </label>
-                            <input
-                                type="checkbox"
-                                id="isActive"
-                                className="form-check-input"
-                                name='toppingallowed'
-                                checked={categoryData.isActive}
-                                onChange={toppingAllowedHandler}
-                            />
-                        </div>
-
-                    </div>
-                    <div>
-
-                        <Buttons fname="Save"
-                            Sname="Cancel"
-                            cancelHandler={cancelHandler}
+                <div className="addProduct__basic d-flex mb-4">
+                    <div className="addProduct__productNamed">
+                        <label htmlFor="product-name" className="form-label inputForm__label">
+                            Category Name:
+                            <span className="formRequired">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="product-name"
+                            className="form-control"
+                            placeholder="Pizza"
+                            name='categoryName'
+                            value={categoryData.categoryName}
+                            onChange={changeHandler}
+                            required
                         />
                     </div>
-                </form>
-            </div>
-        </>
-    )
+                    <div className="addProduct__productNamed">
+                        <label htmlFor="taxClass" className="form-label inputForm__label" >
+                            Parent Category:
+                        </label>
+                        <select
+                            className="form-select "
+                            name='parentCategoryId'
+                            value={parentCategoryId}
+                            onChange={changeHandler}
+                            id="taxClass"
+                        >
+                            <option defaultValue>Select Category</option>
+                            {parentCategories?.map((items) => {
+                                return <option
+                                    key={items.parentCategoryId}
+                                    value={items.parentCategoryId}
+                                >{items.parentCategoryName}</option>;
+                            })}
+
+                        </select>
+                    </div>
+
+                    <div className="addProduct__isActive form-check form-switch">
+                        <label htmlFor="isActive" className="form-label inputForm__label">
+                            Is Topping Allowed ?: *
+                            <span className="formRequired "></span>
+                        </label>
+                        <input
+                            type="checkbox"
+                            id="isActive"
+                            className="form-check-input"
+                            name='toppingallowed'
+                            checked={categoryData.isActive}
+                            onChange={toppingAllowedHandler}
+                        />
+                    </div>
+
+                </div>
+                <div>
+
+                    <Buttons fname="Save"
+                        Sname="Cancel"
+                        cancelHandler={cancelHandler}
+                    />
+                </div>
+            </form>
+        </div>
+    </>
+)
 }
 export default Categoryform;
 
@@ -210,28 +216,28 @@ export default Categoryform;
 
 // const submitHandler = async (event) => {
 //     event.preventDefault();
-    // const categoryiesdata = { ...categoryData };
-    // console.log("cllllickkkkkkkk");
+// const categoryiesdata = { ...categoryData };
+// console.log("cllllickkkkkkkk");
 
-    // url = `${url}/category/SaveupdateCategory`
-    // const datas = {
-    //     categoryName: categoryiesdata.categoryName,
-    //     parentCategoryId: parseInt(categoryiesdata.parentCategoryId),
-    //     isActive: categoryiesdata.isActive,
-    //     categoryId: Object.keys(edit).length < 1 ? 0 : parseInt(categoryiesdata.categoryId),
-    //     loginUserID: 0,
-    //     displayOrder: 0,
-    //     franchiseID: 0
-    // }
+// url = `${url}/category/SaveupdateCategory`
+// const datas = {
+//     categoryName: categoryiesdata.categoryName,
+//     parentCategoryId: parseInt(categoryiesdata.parentCategoryId),
+//     isActive: categoryiesdata.isActive,
+//     categoryId: Object.keys(edit).length < 1 ? 0 : parseInt(categoryiesdata.categoryId),
+//     loginUserID: 0,
+//     displayOrder: 0,
+//     franchiseID: 0
+// }
 
-    // console.log("data ", datas);
-    // const result = await axios.post(url, datas)
-    // console.log(result);
-    // Navigate(`/categorytable`)
+// console.log("data ", datas);
+// const result = await axios.post(url, datas)
+// console.log(result);
+// Navigate(`/categorytable`)
 
-    // setCategoryData({
-    //     categoryName: "",
-    //     parentCategoryId
-    //         : "",
-    //     isActive: false
-    // })
+// setCategoryData({
+//     categoryName: "",
+//     parentCategoryId
+//         : "",
+//     isActive: false
+// })

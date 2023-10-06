@@ -6,29 +6,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
 import Buttons from '../../ProductComponent/Buttons/NewButtons';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchEditTopping, fetchSaveUpdateToppings, GetAllMeasuremenType, resetStates } from '../../../../Store/Slice/ToppingSlices';
+import { fetchEditTopping, fetchSaveUpdateToppings, GetAllMeasuremenType, fetchFoodTypeTopping, GetAllOrderType, resetStates } from '../../../../Store/Slice/ToppingSlices';
 
 
 
 
 const ToppingForm = (props) => {
-    console.log("pppppppp........")
+
     const dispatch = useDispatch();
+    dispatch(navTitle("Toppings"));
     const Navigate = useNavigate();
     const edit = useParams();
-
+    
     // Send Data Api
     const [data, setData] = useState({
         toppingName: "",
         toppingAbbr: "",
-        isActive: false,
+        isActive: true,
         isToppingAllowed: false,
         foodTypeId: "",
         loginUserID: Number(5),
         measurementTypeId: "",
         isCombination: false,
         categoryId: 9,
-        franchiseID: 0,
+        franchiseID: 5,
         orderTypes: [
         ],
         toppingsPrices: [
@@ -39,15 +40,20 @@ const ToppingForm = (props) => {
 
 
 
+console.log("main data", data)
+
 
     // useSelector
     const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
+    const foodType = useSelector((state) => state.ToppingSlices.foodType)
 
 
 
     useEffect(() => {
         dispatch(GetAllMeasuremenType())
+        dispatch(fetchFoodTypeTopping())
+        dispatch(GetAllOrderType())
     }, [])
 
     useEffect(() => {
@@ -66,8 +72,7 @@ const ToppingForm = (props) => {
             isCombination: singleEditTopping.singleTopping[0].isCombination,
             isToppingAllowed: singleEditTopping.singleTopping[0].isToppingAllowed,
             measurementTypeId: singleEditTopping.singleTopping[0].measurementTypeId,
-            orderTypes: [
-            ],
+            orderTypes: singleEditTopping.orderTypeList,
             toppingsPrices: singleEditTopping.toppingsPrices,
             toppingCombinatiomQuantityList: singleEditTopping.toppingCombinatiomQuantityList,
         })
@@ -115,46 +120,64 @@ const ToppingForm = (props) => {
         setData({ ...data, toppingsPrices: toppingPriceDatafromList })
     }
 
-    const combinationDataNameSend = (combinationdata) => {   
-        console.log("combinationdata", combinationdata);
-        const combinationDataList = []        
-        combinationdata && combinationdata.map((combination)=>{ 
-            combination.allTrailData.map((combinationTrail)=>{
-                combinationDataList.push(combinationTrail.selection)  
+    const combinationDataNameSend = (combinationdata) => {
+
+        const combinationDataList = []
+        combinationdata && combinationdata.map((combination) => {
+            combination.allTrailData.map((combinationTrail) => {
+                combinationDataList.push(combinationTrail.selection)
             })
-                  
         })
-        console.log("ajdljdljaljldjfld", combinationDataList);    
-         
         setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
-         
     }
 
+    const orderTypeTemp = useSelector((state) => state.ToppingSlices.orderTypes)
+
+    const [orderType, setOrderTypeData] = useState([])
+    console.log("777777777777777777777777777777777777",orderType)
 
     useEffect(() => {
-        console.log("dadadaadaddad")
-    }, [data]);
-
-
-    // const combinationDataNameSend = (combinationdata) => {
-    //     if (!combinationdata) return; 
-
-    //     const combinationDataList = combinationdata.map(combination => combination.selection);
-     
-    //     // setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
-    // };
-
-    const DiningChangeHandler = (value, checked) => {
-        if (checked) {
-            setData({ ...data, orderTypes: [...data.orderTypes, value] })
-        } else {
-            setData({ ...data, orderTypes: data.orderTypes.filter((item) => item !== value) })
+        if (orderTypeTemp) {
+            const checkorderType = JSON.parse(JSON.stringify(orderTypeTemp));
+            checkorderType.map((item) => {
+                item.IsChecked = false;
+                if (data.orderTypes) {
+                    var tempmatch = data.orderTypes.filter(x => x.orderTypeId === item.orderTypeId);
+                    if (tempmatch.length > 0 && edit.id> 0) {
+                        item.IsChecked = true;
+                    }
+                }
+            })
+            setOrderTypeData(checkorderType)
         }
-    }
+    }, [orderTypeTemp, data.orderTypes])
+    console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",data.orderTypes)
+
+    
+
+    const DiningChangeHandler = (checked, id, item) => {
+        const updatedOrderType = orderType.map(order => {
+          if (order.orderTypeId === id) {
+            return {
+              ...order,
+              IsChecked: checked
+            };
+          }
+          return order;
+        });
+      
+        setOrderTypeData(updatedOrderType);
+        // setData({...data, orderTypes: updatedOrderType})        
+      };
+
+
+
+      
+      
 
     const submitHandler = async (event) => {
         event.preventDefault();
-
+        setData({...data, orderTypes:orderType})
         //shivam comment start
         let ToppingSaveUpdateData
 
@@ -164,9 +187,6 @@ const ToppingForm = (props) => {
                 loginUserID: parseInt(data.loginUserID),
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
-                // variantId: parseInt(data.variantId),
-                // combinationToppingId: parseInt(data.combinationToppingId),
-
             }
         } else {
 
@@ -177,14 +197,12 @@ const ToppingForm = (props) => {
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
                 loginUserID: parseInt(data.loginUserID),
-
             }
-        }
-        dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
+        } dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
         dispatch(resetStates())
 
         Navigate(`/toppings`)
-        //shivam comment end
+       
         setData({
             toppingName: "",
             toppingAbbr: "",
@@ -207,14 +225,11 @@ const ToppingForm = (props) => {
                 }
             ],
             toppingCombinatiomQuantityList: [
-              
+
             ]
 
         })
-
-
     }
-
     const cancelHandler = () => {
         Navigate(`/toppings`)
         setData({
@@ -239,7 +254,7 @@ const ToppingForm = (props) => {
                 }
             ],
             toppingCombinatiomQuantityList: [
-               
+
             ]
 
         })
@@ -268,7 +283,7 @@ const ToppingForm = (props) => {
                                 placeholder="Pizza"
                                 name='toppingName'
                                 value={toppingName}
-                                onChange={(e)=>changeHandler(e)}
+                                onChange={(e) => changeHandler(e)}
                                 required
                             />
                         </div>
@@ -284,7 +299,7 @@ const ToppingForm = (props) => {
                                 placeholder="Pizza"
                                 name='toppingAbbr'
                                 value={toppingAbbr}
-                                onChange={(e)=>changeHandler(e)}
+                                onChange={(e) => changeHandler(e)}
                                 required
                             />
                         </div>
@@ -297,11 +312,17 @@ const ToppingForm = (props) => {
                                 id="taxClass"
                                 name='foodTypeId'
                                 value={foodTypeId}
-                                onChange={(e)=>changeHandler(e)}
+                                onChange={(e) => changeHandler(e)}
                             >
                                 <option defaultValue>Select Category</option>
-                                <option value="1">Veg</option>
-                                <option value="2">Non-Veg</option>
+                                {foodType?.map(item => {
+                                    return <option
+                                        key={item.foodTypeId}
+                                        value={item.foodTypeId}>
+                                        {item.foodTypeName}
+                                    </option>
+
+                                })}
                             </select>
                         </div>
 
@@ -344,7 +365,7 @@ const ToppingForm = (props) => {
                                 id="taxClass"
                                 name='measurementTypeId'
                                 value={measurementTypeId}
-                                onChange={(e)=>changeHandler(e)}
+                                onChange={(e) => changeHandler(e)}
                             >
                                 <option defaultValue>Select Category</option>
                                 {measurementList && measurementList.map(item => {
@@ -366,41 +387,20 @@ const ToppingForm = (props) => {
                     <div className="col-12 mt-4 mb-4">
                         <h3>Topping Type</h3>
                         <div className="row ms-1">
-                            <div className="form-check col-md-1">
-                                <input className="form-check-input"
-                                    type="checkbox"
-                                    name="Dining"
-                                    value={1}
-                                    onChange={(e) => DiningChangeHandler(e.target.value, e.target.checked)}
-                                />
-                                <label className="form-check-label" htmlFor="Dining">
-                                    Dining
-                                </label>
-                            </div>
-                            <div className="form-check col-md-1" >
-                                <input className="form-check-input"
-                                    type="checkbox"
-                                    name="takeAway"
-                                    value={2}
-                                    onChange={(e) => DiningChangeHandler(e.target.value, e.target.checked)}
-                                />
-                                <label className="form-check-label" htmlFor="Dining">
-                                    TakeAway
-                                </label>
-                            </div>
-                            <div className="form-check col-md-1" >
-                                <input className="form-check-input"
-                                    type="checkbox"
-                                    name="Delivery"
-                                    value={3}
-                                    onChange={(e) => DiningChangeHandler(e.target.value, e.target.checked)}
-                                />
-                                <label className="form-check-label" htmlFor="Dining">
-                                    Delivery
-                                </label>
-                            </div>
-
-
+                            {orderType && orderType.map((item, ind) => (
+                                <div className="form-check col-md-1" key={ind}>
+                                    <input className="form-check-input"
+                                        type="checkbox"
+                                        name="toppingType"
+                                        checked={item.IsChecked}
+                                        onChange={(e) => DiningChangeHandler(e.target.checked, item.orderTypeId,item)}
+                                    />
+                                    <label className="form-check-label" htmlFor="Dining">
+                                        {item.orderTypeName}
+                                    </label>
+                                </div>
+                            ))
+                            }
                         </div>
 
                     </div>
@@ -414,7 +414,7 @@ const ToppingForm = (props) => {
                                 combinationDataNameSend={combinationDataNameSend}
                                 editStatus={Boolean(edit.id)}
                                 combinationHandler={data}
-                                
+
                             />
                         </div>
                     </div>}
