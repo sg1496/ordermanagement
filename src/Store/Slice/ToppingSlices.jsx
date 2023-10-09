@@ -202,7 +202,7 @@ export const fetchDelApiDataToppings = createAsyncThunk('api.fetchDelData', asyn
 
 export const fetchSaveUpdateToppings = createAsyncThunk('api.fetchUpdateSave', async (data) => {
     try {
-        data.CategoryId=4;
+        
         data.loginUserID = 9;
         const response = await axios.post(`${url}/topping/SaveupdateTopping`, data);
         console.log("response saveupdate", response.data);

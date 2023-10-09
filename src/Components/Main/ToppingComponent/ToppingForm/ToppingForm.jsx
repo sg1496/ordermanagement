@@ -17,8 +17,10 @@ const ToppingForm = (props) => {
     dispatch(navTitle("Toppings"));
     const Navigate = useNavigate();
     const edit = useParams();
-    
-    // Send Data Api
+
+    // Send Data Api state
+    const [orderType, setOrderTypeData] = useState([])
+
     const [data, setData] = useState({
         toppingName: "",
         toppingAbbr: "",
@@ -28,26 +30,11 @@ const ToppingForm = (props) => {
         loginUserID: Number(5),
         measurementTypeId: "",
         isCombination: false,
-        categoryId: 9,
         franchiseID: 5,
-        orderTypes: [
-        ],
-        toppingsPrices: [
-        ],
-        toppingCombinatiomQuantityList: [
-        ]
+        orderTypes: [],
+        toppingsPrices: [],
+        toppingCombinatiomQuantityList: []
     })
-
-
-
-console.log("main data", data)
-
-
-    // useSelector
-    const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
-    const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
-    const foodType = useSelector((state) => state.ToppingSlices.foodType)
-
 
 
     useEffect(() => {
@@ -55,6 +42,13 @@ console.log("main data", data)
         dispatch(fetchFoodTypeTopping())
         dispatch(GetAllOrderType())
     }, [])
+
+    // useSelector
+    const measurementList = useSelector((state) => state.ToppingSlices.measurementList)
+    const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
+    const foodType = useSelector((state) => state.ToppingSlices.foodType)
+    const orderTypeTemp = useSelector((state) => state.ToppingSlices.orderTypes)
+
 
     useEffect(() => {
         if (edit.id) {
@@ -95,6 +89,22 @@ console.log("main data", data)
         }
     }, [singleEditTopping])
 
+    useEffect(() => {
+        if (orderTypeTemp) {
+            const checkorderType = JSON.parse(JSON.stringify(orderTypeTemp));
+            checkorderType.map((item) => {
+                item.IsChecked = false;
+                if (data.orderTypes) {
+                    var tempmatch = data.orderTypes.filter(x => x.orderTypeId === item.orderTypeId);
+                    if (tempmatch.length > 0 && edit.id > 0) {
+                        item.IsChecked = true;
+                    }
+                }
+            })
+            setOrderTypeData(checkorderType)
+        }
+    }, [orderTypeTemp, data.orderTypes])
+
     // Events Handler
     const isToppingAllowed = (e) => {
         setData({ ...data, isToppingAllowed: !data.isToppingAllowed })
@@ -112,8 +122,7 @@ console.log("main data", data)
     }
 
     const toppingPriceHandler = (toppingPriseListData) => {
-        const toppingPriceDatafromList = []
-
+        const toppingPriceDatafromList = [];
         toppingPriseListData.map((topping) => {
             toppingPriceDatafromList.push(topping.seletedTopping)
         })
@@ -121,8 +130,7 @@ console.log("main data", data)
     }
 
     const combinationDataNameSend = (combinationdata) => {
-
-        const combinationDataList = []
+        const combinationDataList = [];
         combinationdata && combinationdata.map((combination) => {
             combination.allTrailData.map((combinationTrail) => {
                 combinationDataList.push(combinationTrail.selection)
@@ -131,54 +139,30 @@ console.log("main data", data)
         setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
     }
 
-    const orderTypeTemp = useSelector((state) => state.ToppingSlices.orderTypes)
-
-    const [orderType, setOrderTypeData] = useState([])
-    console.log("777777777777777777777777777777777777",orderType)
-
-    useEffect(() => {
-        if (orderTypeTemp) {
-            const checkorderType = JSON.parse(JSON.stringify(orderTypeTemp));
-            checkorderType.map((item) => {
-                item.IsChecked = false;
-                if (data.orderTypes) {
-                    var tempmatch = data.orderTypes.filter(x => x.orderTypeId === item.orderTypeId);
-                    if (tempmatch.length > 0 && edit.id> 0) {
-                        item.IsChecked = true;
-                    }
-                }
-            })
-            setOrderTypeData(checkorderType)
-        }
-    }, [orderTypeTemp, data.orderTypes])
-    console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",data.orderTypes)
-
-    
-
     const DiningChangeHandler = (checked, id, item) => {
         const updatedOrderType = orderType.map(order => {
-          if (order.orderTypeId === id) {
-            return {
-              ...order,
-              IsChecked: checked
-            };
-          }
-          return order;
+            if (order.orderTypeId === id) {
+                return {
+                    ...order,
+                    IsChecked: checked
+                };
+            }
+            return order;
         });
-      
+
         setOrderTypeData(updatedOrderType);
-        // setData({...data, orderTypes: updatedOrderType})        
-      };
-
-
-
-      
-      
+    };
 
     const submitHandler = async (event) => {
         event.preventDefault();
-        setData({...data, orderTypes:orderType})
-        //shivam comment start
+
+        let newArr = []
+        orderType.map(obj => {
+            if (obj.IsChecked) {
+                newArr.push(obj.orderTypeId)
+            }
+        })
+
         let ToppingSaveUpdateData
 
         if (Object.keys(edit).length < 1) {
@@ -187,6 +171,7 @@ console.log("main data", data)
                 loginUserID: parseInt(data.loginUserID),
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
+                orderTypes: newArr
             }
         } else {
 
@@ -197,12 +182,12 @@ console.log("main data", data)
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
                 loginUserID: parseInt(data.loginUserID),
+                orderTypes: newArr
             }
-        } dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
+        }
+        dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
         dispatch(resetStates())
 
-        Navigate(`/toppings`)
-       
         setData({
             toppingName: "",
             toppingAbbr: "",
@@ -214,22 +199,14 @@ console.log("main data", data)
             isCombination: false,
             categoryId: 9,
             franchiseID: 0,
-            orderTypes: [
-
-            ],
-            toppingsPrices: [
-                {
-                    price: "",
-                    variantId: "",
-                    quantity: "",
-                }
-            ],
-            toppingCombinatiomQuantityList: [
-
-            ]
-
+            orderTypes: [],
+            toppingsPrices: [],
+            toppingCombinatiomQuantityList: []
         })
+        Navigate(`/toppings`)
     }
+
+
     const cancelHandler = () => {
         Navigate(`/toppings`)
         setData({
@@ -243,23 +220,11 @@ console.log("main data", data)
             isCombination: false,
             categoryId: 9,
             franchiseID: 0,
-            orderTypes: [
-
-            ],
-            toppingsPrices: [
-                {
-                    price: "",
-                    variantId: "",
-                    quantity: "",
-                }
-            ],
-            toppingCombinatiomQuantityList: [
-
-            ]
-
+            orderTypes: [],
+            toppingsPrices: [],
+            toppingCombinatiomQuantityList: []
         })
-
-    }
+    };
 
 
 
@@ -393,7 +358,7 @@ console.log("main data", data)
                                         type="checkbox"
                                         name="toppingType"
                                         checked={item.IsChecked}
-                                        onChange={(e) => DiningChangeHandler(e.target.checked, item.orderTypeId,item)}
+                                        onChange={(e) => DiningChangeHandler(e.target.checked, item.orderTypeId, item)}
                                     />
                                     <label className="form-check-label" htmlFor="Dining">
                                         {item.orderTypeName}
@@ -402,7 +367,6 @@ console.log("main data", data)
                             ))
                             }
                         </div>
-
                     </div>
 
                     {data.isCombination && <div >
