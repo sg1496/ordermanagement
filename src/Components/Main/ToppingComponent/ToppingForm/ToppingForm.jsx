@@ -36,7 +36,7 @@ const ToppingForm = (props) => {
         toppingCombinatiomQuantityList: []
     })
 
-
+// useEffect Dispatch data
     useEffect(() => {
         dispatch(GetAllMeasuremenType())
         dispatch(fetchFoodTypeTopping())
@@ -49,7 +49,7 @@ const ToppingForm = (props) => {
     const foodType = useSelector((state) => state.ToppingSlices.foodType)
     const orderTypeTemp = useSelector((state) => state.ToppingSlices.orderTypes)
 
-
+    // useEffect function
     useEffect(() => {
         if (edit.id) {
             dispatch(fetchEditTopping(edit.id))
@@ -225,8 +225,6 @@ const ToppingForm = (props) => {
             toppingCombinatiomQuantityList: []
         })
     };
-
-
 
     const { toppingName, toppingAbbr, foodTypeId, measurementTypeId } = data
 
