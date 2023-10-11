@@ -15,7 +15,7 @@ function ToppingNames(props) {
         dispatch(fetchApiDataToppings())
     }, [])
    
-    const dummydata = useSelector((state) => state.ToppingSlices.dummy.toppingCombinatiomQuantityList)
+    
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
 
 
@@ -37,7 +37,7 @@ function ToppingNames(props) {
             });
             setToppingDatafinal(ToppingDatafinaltemp);
         }
-    }, [ToppingData,dummydata])
+    }, [ToppingData])
 
     const toppingNameChangeHandler = (check, id, item) => {
         const itemselected = [...ToppingDatafinal];
@@ -52,9 +52,13 @@ function ToppingNames(props) {
     }
 
     const unCheckHandler = (id) => {
-        const itemselected = [...ToppingDatafinal];
-        itemselected.filter(x => x.toppingId === id).IsChecked = false;
-        setToppingDatafinal(itemselected);
+        const updatedData = ToppingDatafinal.map(item => {
+            if (item.toppingId === id) {
+                return { ...item, IsChecked: false };
+            }
+            return item;
+        });
+        setToppingDatafinal(updatedData);
     }
 
    

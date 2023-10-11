@@ -66,9 +66,9 @@ const ToppingForm = (props) => {
             isCombination: singleEditTopping.singleTopping[0].isCombination,
             isToppingAllowed: singleEditTopping.singleTopping[0].isToppingAllowed,
             measurementTypeId: singleEditTopping.singleTopping[0].measurementTypeId,
-            orderTypes: singleEditTopping.orderTypeList,
             toppingsPrices: singleEditTopping.toppingsPrices,
             toppingCombinatiomQuantityList: singleEditTopping.toppingCombinatiomQuantityList,
+            orderTypes: singleEditTopping.orderTypeModelList,
         })
         if (!edit.id) {
             setData({

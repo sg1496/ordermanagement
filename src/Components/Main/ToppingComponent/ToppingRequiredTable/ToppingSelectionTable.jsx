@@ -14,6 +14,7 @@ function ToppingSelectionTable(props) {
   // useState
   const [toppingCheckName, setToppingCheckName] = useState("");
   const [trial, setTrial] = useState([]);
+  console.log("bbbbb4444444", trial)
 
   // useEffect
   useEffect(() => {
@@ -26,7 +27,7 @@ function ToppingSelectionTable(props) {
   }, []);
   
   const variantSelectionTable = useSelector((state) => state.variantSlices.data);
-  const dummydata = useSelector((state) => state.ToppingSlices.dummy.toppingCombinatiomQuantityList);
+  
 
   useEffect(() => {
     const allda = [];

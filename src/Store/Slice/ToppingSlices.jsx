@@ -13,7 +13,7 @@ const initialState = {
     singleData: null,
     foodType: null,
     orderTypes: null,
-    dummy
+   
 }
 
 const ToppingSlices = createSlice({
