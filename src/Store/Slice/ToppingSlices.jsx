@@ -89,6 +89,7 @@ const ToppingSlices = createSlice({
             })
             .addCase(fetchEditTopping.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
+                    console.log("======================================================================================", action.payload)
                     state.loading = false;
                     state.singleData = action.payload;
                 }

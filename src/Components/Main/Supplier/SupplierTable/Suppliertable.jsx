@@ -1,9 +1,24 @@
-import React from 'react';
-import images from "../../../../assets/images"
-
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import images from "../../../../assets/images";
+import { useNavigate } from 'react-router-dom';
+import { fetchAllDataSupplier, fetchDeleteDataSupplier,fetchSingleDataSupplier,resetStates } from '../../../../Store/Slice/SupplierSlices';
 
 
 function SupplierTable() {
+  const navigate = useNavigate()
+const dispatch = useDispatch()
+
+const message = useSelector((supplierdata)=>supplierdata.SupplierSlices.message)
+
+useEffect(() => {
+  dispatch(fetchAllDataSupplier())
+   }, [message])
+
+const AllDataSupplier = useSelector((supplierdata) => supplierdata.SupplierSlices.data)
+console.log("first",AllDataSupplier)
+
+  
   return (
     <>
       
@@ -16,33 +31,18 @@ function SupplierTable() {
             </tr>
           </thead>
           <tbody> 
-            <tr>
-              <td scope="row">Achari Mix</td>
+           {AllDataSupplier?.map((item, index)=>{ console.log("11", item)
+            return <tr key={index}>
+              <td scope="row">{item.suppilerName}</td>
               <td >
                 <div className="productAction__buttons d-flex justify-content-center">
-                  <span><img src={images.editIcon} alt="Edit Icon" /></span>
-                  <span><img src={images.deleteIcon} alt="Delete Icon" /></span>
+                  <span><img src={images.editIcon} alt="Edit Icon" onClick={()=>(dispatch(fetchSingleDataSupplier(item.suppilerID)),  navigate(`/supplierform/${item.suppilerID}`))} /></span>
+                  <span><img src={images.deleteIcon} alt="Delete Icon" onClick={()=>(dispatch(fetchDeleteDataSupplier(item.suppilerID)),dispatch(resetStates()))} /></span>
                 </div>
               </td>
             </tr>
-            <tr>
-              <td scope="row">Achari Mix</td>
-              <td>
-                <div className="productAction__buttons d-flex justify-content-center">
-                  <span><img src={images.editIcon} alt="Edit Icon" /></span>
-                  <span><img src={images.deleteIcon} alt="Delete Icon" /></span>
-                </div>
-              </td>
-            </tr>
-            <tr >
-              <td scope="row">Achari Mix</td>
-              <td>
-                <div className="productAction__buttons d-flex justify-content-center">
-                  <span><img src={images.editIcon} alt="Edit Icon" /></span>
-                  <span><img src={images.deleteIcon} alt="Delete Icon" /></span>
-                </div>
-              </td>
-            </tr>
+            })
+            }
           </tbody>
         </table>
       </div >

@@ -53,6 +53,7 @@ function Main() {
                         <Route path="categories" element={<Categories />} />
                         <Route path='categorytable' element={<Categorytable />} />
                         <Route path='supplierform' element={<SupplierForm />} />
+                        <Route path='supplierform/:id' element={<SupplierForm />} />
                         <Route path='mainsuppliertable' element={<Mainsuppliertable />} />
                         <Route path='maincouponsform' element={<MainCouponsform />} />
                         <Route path='localityTable' element={<LocalityTable />} />

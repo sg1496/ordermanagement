@@ -7,6 +7,7 @@ import createSagaMiddleware from 'redux-saga'
 import { watcherSaga } from "./sagas/rootsagas";
 import ToppingSlices from "./Slice/ToppingSlices";
 import ProductSlices from "./Slice/ProductSlices";
+import SupplierSlices from "./Slice/SupplierSlices";
                                                                                                                                     
 
 // const sagaMiddleware = createSagaMiddleware();
@@ -18,7 +19,8 @@ const store = configureStore(
             categorySlices: CategorySlices,
             variantSlices: apiSlices,
             ToppingSlices: ToppingSlices,
-            ProductSlices: ProductSlices
+            ProductSlices: ProductSlices,
+            SupplierSlices: SupplierSlices
             
 
         },

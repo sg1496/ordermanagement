@@ -48,6 +48,7 @@ const ToppingForm = (props) => {
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
     const foodType = useSelector((state) => state.ToppingSlices.foodType)
     const orderTypeTemp = useSelector((state) => state.ToppingSlices.orderTypes)
+    console.log("************************************************", singleEditTopping)
 
     // useEffect function
     useEffect(() => {
