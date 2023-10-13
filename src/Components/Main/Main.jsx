@@ -19,7 +19,6 @@ import SupplierForm from './Supplier/SupplierForm/SupplierForm';
 import Mainsuppliertable from './Supplier/Suppliertablecomp/Mainsuppliertable';
 import MainCouponsform from './Coupons/MainCouponsform';
 import Categorytable from './CategoryComponent/AddCategory/Categorytable/Categorytable';
-import LocalityTable from './Locality/LocalityTable';
 import ManageTable from './ManageUser/ManageTable/ManageTable';
 import ManageuserForm from './ManageUser/MangaeUserForm/ManageuserForm';
 import ManageRoleForm from './ManageRole/ManageRoleForm';
@@ -33,6 +32,8 @@ import ComboTable from './ComboComponent/ComboTableComponent/ComboTable/ComboTab
 import ComboForm from './ComboComponent/ComboFormComponent/ComboForm';
 import VariantsMain from './Variant/VariantSearchTable/VariantsMain';
 import Variantform from './Variant/VariantForm/Variantform';
+import LocalityMain from './Locality/LocalitySearchTable/LocalityMain';
+import LocalityForm from './Locality/LocalityForm/LocalityForm';
 
 
 
@@ -56,7 +57,8 @@ function Main() {
                         <Route path='supplierform/:id' element={<SupplierForm />} />
                         <Route path='mainsuppliertable' element={<Mainsuppliertable />} />
                         <Route path='maincouponsform' element={<MainCouponsform />} />
-                        <Route path='localityTable' element={<LocalityTable />} />
+                        <Route path='localityTable' element={<LocalityMain />} />
+                        <Route path='locality_form' element={<LocalityForm />} />
                         <Route path='managetable' element={<ManageTable />} />
                         <Route path='manageuserform' element={<ManageuserForm />} />
                         <Route path='manageroleform' element={<ManageRoleForm />} />

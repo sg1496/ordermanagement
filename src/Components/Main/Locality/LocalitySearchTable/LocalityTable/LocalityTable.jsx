@@ -1,8 +1,8 @@
 import React from 'react';
 import "./LocalityTable.scss";
-import images from "../../../assets/images"
+import images from "../../../../../assets/images"
 import { useDispatch } from 'react-redux';
-import { navTitle } from '../../../Store/Slice/NavSlices';
+import { navTitle } from '../../../../../Store/Slice/NavSlices';
 
 const LocalityTable = () => {
     const dispatch = useDispatch();
