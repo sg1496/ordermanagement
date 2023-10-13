@@ -59,6 +59,7 @@ function Main() {
                         <Route path='maincouponsform' element={<MainCouponsform />} />
                         <Route path='localityTable' element={<LocalityMain />} />
                         <Route path='locality_form' element={<LocalityForm />} />
+                        <Route path='locality_form/:id' element={<LocalityForm />} />
                         <Route path='managetable' element={<ManageTable />} />
                         <Route path='manageuserform' element={<ManageuserForm />} />
                         <Route path='manageroleform' element={<ManageRoleForm />} />

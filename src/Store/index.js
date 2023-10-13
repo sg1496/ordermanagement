@@ -8,6 +8,7 @@ import { watcherSaga } from "./sagas/rootsagas";
 import ToppingSlices from "./Slice/ToppingSlices";
 import ProductSlices from "./Slice/ProductSlices";
 import SupplierSlices from "./Slice/SupplierSlices";
+import LocalitySlices from "./Slice/LocalitySlices";
                                                                                                                                     
 
 // const sagaMiddleware = createSagaMiddleware();
@@ -20,7 +21,8 @@ const store = configureStore(
             variantSlices: apiSlices,
             ToppingSlices: ToppingSlices,
             ProductSlices: ProductSlices,
-            SupplierSlices: SupplierSlices
+            SupplierSlices: SupplierSlices,
+            LocalitySlices: LocalitySlices
             
 
         },

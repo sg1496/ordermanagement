@@ -9,13 +9,13 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
-    statelistdata:null
+  
     
    
 }
 
-const SupplierSlices = createSlice({
-    name: "SupplierApi",
+const LocalitySlices = createSlice({
+    name: "LocalityApi",
     initialState: initialState,
     reducers: {
         resetStates: (state) => {
@@ -27,28 +27,28 @@ const SupplierSlices = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAllDataSupplier.pending, (state) => {
+            .addCase(fetchAllDataLocality.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchAllDataSupplier.fulfilled, (state, action) => {
+            .addCase(fetchAllDataLocality.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
-                    state.data = action.payload.suppilerModelList;
+                    state.data = action.payload.localityModelList;
                 } else {
                     state.loading = false;
                     state.error = !action.payload.status;
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchAllDataSupplier.rejected, (state, action) => {
+            .addCase(fetchAllDataLocality.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchDeleteDataSupplier.pending, (state) => {
+            .addCase(fetchDeleteDataLocality.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchDeleteDataSupplier.fulfilled, (state, action) => {
+            .addCase(fetchDeleteDataLocality.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
                     state.message = action.payload.message;
@@ -58,15 +58,15 @@ const SupplierSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchDeleteDataSupplier.rejected, (state, action) => {
+            .addCase(fetchDeleteDataLocality.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchSaveUpdateSupplier.pending, (state) => {
+            .addCase(fetchSaveUpdateLocality.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchSaveUpdateSupplier.fulfilled, (state, action) => {
+            .addCase(fetchSaveUpdateLocality.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
                     state.message = action.payload.message;
@@ -77,18 +77,18 @@ const SupplierSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchSaveUpdateSupplier.rejected, (state, action) => {
+            .addCase(fetchSaveUpdateLocality.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchSingleDataSupplier.pending, (state) => {
+            .addCase(fetchSingleDataLocality.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchSingleDataSupplier.fulfilled, (state, action) => {
+            .addCase(fetchSingleDataLocality.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
-                    state.singleData = action.payload.suppilerResponseModelList;
+                    state.singleData = action.payload.localityResponseModelList;
                 }
                 else {
                     state.loading = false;
@@ -96,36 +96,19 @@ const SupplierSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchSingleDataSupplier.rejected, (state, action) => {
+            .addCase(fetchSingleDataLocality.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error"
             })
-            .addCase(fetchAllDataState.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(fetchAllDataState.fulfilled, (state, action) => {
-                if (action.payload.status === 200) {
-                    state.loading = false;
-                    state.statelistdata = action.payload.stateList;
-                } else {
-                    state.loading = false;
-                    state.error = !action.payload.status;
-                    state.msg = "some error"
-                }
-            })
-            .addCase(fetchAllDataState.rejected, (state, action) => {
-                state.loading = false;
-                state.error = true;
-                state.msg = "some error";
-            })
+         
            
     }
 
 });
-export const fetchAllDataSupplier = createAsyncThunk('api/fetchDataSupplier', async () => {
+export const fetchAllDataLocality = createAsyncThunk('api/fetchDataLocality', async () => {
     try {
-        const response = await axios.get(`${url}/api/Supplier/GetAllSuppiler`);
+        const response = await axios.get(`${url}/api/Locality/GetAllLocality`);
         return response.data;
     } catch (error) {
         console.log("error ", error);
@@ -133,16 +116,13 @@ export const fetchAllDataSupplier = createAsyncThunk('api/fetchDataSupplier', as
     }
 });
 
-export const fetchDeleteDataSupplier = createAsyncThunk('api.fetchDeleteDataSupplier', async (id) => {
-    console.log("dafsafasfasd",id);
-   
+export const fetchDeleteDataLocality = createAsyncThunk('api.fetchDeleteDataLocality', async (id) => {   
     try {
-        const response = await axios.delete(`${url}/api/Supplier/DeleteSuppiler/${id}`, {
+        const response = await axios.delete(`${url}/api/Locality/DeleteLocality/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-        console.log("response", response.data)
         return response.data
 
     } catch (error) {
@@ -150,10 +130,9 @@ export const fetchDeleteDataSupplier = createAsyncThunk('api.fetchDeleteDataSupp
     }
 });
 
-export const fetchSaveUpdateSupplier = createAsyncThunk('api.fetchUpdateSaveSupplier', async (data) => {
+export const fetchSaveUpdateLocality = createAsyncThunk('api.fetchUpdateSaveLocality', async (data) => {
     try {
-        data.loginUserID = 9;
-        const response = await axios.post(`${url}/api/Supplier/SaveupdateSuppiler`, data);
+        const response = await axios.post(`${url}/api/Locality/SaveupdateLocality`, data);
         console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
@@ -161,10 +140,10 @@ export const fetchSaveUpdateSupplier = createAsyncThunk('api.fetchUpdateSaveSupp
     }
 });
 
-export const fetchSingleDataSupplier = createAsyncThunk("api.fetchSingleDataSupplier", async (id) => {
+export const fetchSingleDataLocality = createAsyncThunk("api.fetchSingleDataLocality", async (id) => {
       
     try {
-        const response = await axios.get(`${url}/api/Supplier/GetSingleSuppiler/${id}`)
+        const response = await axios.get(`${url}/api/Locality/GetSingleLocality/${id}`)
         console.log(response.data);
         return response.data
     } catch (error) {
@@ -172,16 +151,7 @@ export const fetchSingleDataSupplier = createAsyncThunk("api.fetchSingleDataSupp
     }
 });
 
-export const fetchAllDataState = createAsyncThunk('api/fetchDataState', async () => {
-    try {
-        const response = await axios.get(`${url}/api/CommonOMController/GetAllState`);
-        return response.data;
-    } catch (error) {
-        console.log("error ", error);
-        throw new Error(error.message);
-    }
-});
 
 
-export default SupplierSlices.reducer;
-export const { resetStates } = SupplierSlices.actions;
+export default LocalitySlices.reducer;
+export const { resetStates } = LocalitySlices.actions;
