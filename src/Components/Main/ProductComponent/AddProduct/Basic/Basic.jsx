@@ -6,12 +6,13 @@ import { fetchSaveUpdateProduct } from "../../../../../Store/Slice/ProductSlices
 import { useNavigate, useParams } from "react-router-dom";
 import Buttons from "../../Buttons/NewButtons";
 
-function Basic() {
+function Basic(props) {
     const dispatch = useDispatch();
     dispatch(navTitle("Add Products"));
     const Navigate = useNavigate();
     const basicEdit = useParams()
 
+    
     const [data, setData] = useState({
         productName: "",
         isActive: false,
@@ -24,68 +25,44 @@ function Basic() {
     console.log(data);
 
     const changeHandler = (e) => {
-        setData(
-            {
+        
+          let newArr =  {
                 ...data,
                 [e.target.name]: e.target.value
             }
-        )
+        setData(newArr)
+
+        props.basicFormDataHandler(newArr)
     }
 
+    
     const toggleChange = (e) => {
-        setData({ ...data, isActive: !data.isActive })
+        let newArr ={ ...data, isActive: !data.isActive }
+        setData(newArr)
+        props.basicFormDataHandler(newArr)
     }
 
 
     const taxableChange = (e) => {
-        setData({ ...data, isTaxable: !data.isTaxable })
+        let newArr = { ...data, isTaxable: !data.isTaxable }
+            setData(newArr)
+            props.basicFormDataHandler(newArr)
     }
 
     const showInKitchenHandler = (e) => {
-        setData({ ...data, showInKitchen: !data.showInKitchen })
+        let newArr = { ...data, showInKitchen: !data.showInKitchen }
+        setData(newArr)
+            props.basicFormDataHandler(newArr)
 
     }
-
-
-    const onSubmit =  (event) => {
-        event.preventDefault();
-
-        let newProductData
-
-        if (Object.keys(basicEdit).length < 1) {
-            newProductData = {...data,
-                foodTypeId: parseInt(data.foodTypeId),
-                taxClassId: parseInt(data.taxClassId)
-            }         
-        }else{
-            newProductData = {...data,
-                foodTypeId: parseInt(data.foodTypeId),
-                taxClassId: parseInt(data.taxClassId),
-                productId: parseInt(basicEdit.id)
-            }
-        }
-        dispatch(fetchSaveUpdateProduct(newProductData))
-
-       
-
-        Navigate(`/product`)
-        setData({
-            productName: "",
-            isActive: false,
-            isTaxable: false,
-            foodTypeId: "",
-            showInKitchen: false,
-            taxClassId: ""
-        })
-
-    }
+    
     const { productName, foodTypeId, taxClassId } = data
 
     return (
         <>
             <div className="addProduct__basicTab">
-                <form onSubmit={onSubmit}>
-                    <div className="addProduct__basicForm d-flex">
+                <form >
+                   <div className="addProduct__basicForm d-flex ">
                         <div className="field_width">
                             <label htmlFor="product-name" className="form-label inputForm__label">
                                 Product Name:
@@ -176,13 +153,8 @@ function Basic() {
                                 onChange={showInKitchenHandler}
                             />
                         </div>
-                    </div>
-                    <div>
-                    <Buttons fname="Save"
-                            Sname="Cancel"
-                            
-                        />
-                    </div>
+                    </div>        
+                   
                 </form>
             </div>
         </>

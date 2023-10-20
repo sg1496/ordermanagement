@@ -13,7 +13,7 @@ function ProductSearch() {
                 <FontAwesomeIcon icon={faSearch} className='product__innerSearchInputIcon position-absolute' />
             </div>
             <div className="product__innerAddnewButtons">
-                <Link to="/add-product/basic">
+                <Link to="/add-product/productform">
                     <FontAwesomeIcon icon={faSquarePlus} />
                     <span className='ps-2'>Add New</span>
                 </Link>

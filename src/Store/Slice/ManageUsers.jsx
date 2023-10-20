@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from "axios"
 import { flushSync } from 'react-dom';
+import dummy from '../../dummy'; 
 let url = import.meta.env.VITE_APP_FOODS_API
 
 const initialState = {
@@ -9,13 +10,12 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
-    statelistdata:null
     
    
 }
 
-const SupplierSlices = createSlice({
-    name: "SupplierApi",
+const ManageUserSlices = createSlice({
+    name: "ManageUser",
     initialState: initialState,
     reducers: {
         resetStates: (state) => {
@@ -27,28 +27,28 @@ const SupplierSlices = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAllDataSupplier.pending, (state) => {
+            .addCase(fetchAllDataUsers.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchAllDataSupplier.fulfilled, (state, action) => {
+            .addCase(fetchAllDataUsers.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
-                    state.data = action.payload.suppilerModelList;
+                    state.data = action.payload.usermodellist;
                 } else {
                     state.loading = false;
                     state.error = !action.payload.status;
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchAllDataSupplier.rejected, (state, action) => {
+            .addCase(fetchAllDataUsers.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchDeleteDataSupplier.pending, (state) => {
+            .addCase(fetchDelDataUser.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchDeleteDataSupplier.fulfilled, (state, action) => {
+            .addCase(fetchDelDataUser.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
                     state.message = action.payload.message;
@@ -58,16 +58,16 @@ const SupplierSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchDeleteDataSupplier.rejected, (state, action) => {
+            .addCase(fetchDelDataUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchSaveUpdateSupplier.pending, (state) => {
+            .addCase(fetchSaveUpdateDataUser.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchSaveUpdateSupplier.fulfilled, (state, action) => {
-                if (action.payload.status === 200) {
+            .addCase(fetchSaveUpdateDataUser.fulfilled, (state, action) => {
+                if (action.payload.status === 200 || action.payload.status === 201) {
                     state.loading = false;
                     state.message = action.payload.message;
                 }
@@ -77,18 +77,18 @@ const SupplierSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchSaveUpdateSupplier.rejected, (state, action) => {
+            .addCase(fetchSaveUpdateDataUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchSingleDataSupplier.pending, (state) => {
+            .addCase(fetchSingleEditDataUser.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchSingleDataSupplier.fulfilled, (state, action) => {
+            .addCase(fetchSingleEditDataUser.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
-                    state.singleData = action.payload.suppilerResponseModelList;
+                    state.singleData = action.payload.usermodellist;
                 }
                 else {
                     state.loading = false;
@@ -96,36 +96,18 @@ const SupplierSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchSingleDataSupplier.rejected, (state, action) => {
+            .addCase(fetchSingleEditDataUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error"
             })
-            .addCase(fetchAllDataState.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(fetchAllDataState.fulfilled, (state, action) => {
-                if (action.payload.status === 200) {
-                    state.loading = false;
-                    state.statelistdata = action.payload.stateList;
-                } else {
-                    state.loading = false;
-                    state.error = !action.payload.status;
-                    state.msg = "some error"
-                }
-            })
-            .addCase(fetchAllDataState.rejected, (state, action) => {
-                state.loading = false;
-                state.error = true;
-                state.msg = "some error";
-            })
-           
+          
     }
 
 });
-export const fetchAllDataSupplier = createAsyncThunk('api/fetchDataSupplier', async () => {
+export const fetchAllDataUsers = createAsyncThunk('api/fetchAllDataUsers', async () => {
     try {
-        const response = await axios.get(`${url}/api/Supplier/GetAllSuppiler`);
+        const response = await axios.get(`${url}/users/GetAllUsersDetails`);
         return response.data;
     } catch (error) {
         console.log("error ", error);
@@ -133,16 +115,18 @@ export const fetchAllDataSupplier = createAsyncThunk('api/fetchDataSupplier', as
     }
 });
 
-export const fetchDeleteDataSupplier = createAsyncThunk('api.fetchDeleteDataSupplier', async (id) => {
-    console.log("dafsafasfasd",id);
-   
+export const fetchDelDataUser = createAsyncThunk('api.fetchDeleteDataUser', async (id) => {
+    console.log(id);
+    let data = JSON.stringify({
+        "userId": id
+    });
     try {
-        const response = await axios.delete(`${url}/api/Supplier/DeleteSuppiler/${id}`, {
+        const response = await axios.delete(`${url}/users/deleteUserDetails`, {
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            data: data
         })
-        console.log("response", response.data)
         return response.data
 
     } catch (error) {
@@ -150,10 +134,11 @@ export const fetchDeleteDataSupplier = createAsyncThunk('api.fetchDeleteDataSupp
     }
 });
 
-export const fetchSaveUpdateSupplier = createAsyncThunk('api.fetchUpdateSaveSupplier', async (data) => {
+export const fetchSaveUpdateDataUser = createAsyncThunk('api.fetchUpdateSaveDataUser', async (data) => {
     try {
+        data.userTypeID = 1;
         data.loginUserID = 9;
-        const response = await axios.post(`${url}/api/Supplier/SaveupdateSuppiler`, data);
+        const response = await axios.post(`${url}/users/saveUpdateUserDetails`, data);
         console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
@@ -161,10 +146,10 @@ export const fetchSaveUpdateSupplier = createAsyncThunk('api.fetchUpdateSaveSupp
     }
 });
 
-export const fetchSingleDataSupplier = createAsyncThunk("api.fetchSingleDataSupplier", async (id) => {
-      
+export const fetchSingleEditDataUser = createAsyncThunk("api.fetchSingleEditDataUser", async (id) => {
+    
     try {
-        const response = await axios.get(`${url}/api/Supplier/GetSingleSuppiler/${id}`)
+        const response = await axios.get(`${url}/users/getSingleUserDetails/${id}`)
         console.log(response.data);
         return response.data
     } catch (error) {
@@ -172,16 +157,6 @@ export const fetchSingleDataSupplier = createAsyncThunk("api.fetchSingleDataSupp
     }
 });
 
-export const fetchAllDataState = createAsyncThunk('api/fetchDataState', async () => {
-    try {
-        const response = await axios.get(`${url}/api/CommonApi/GetAllState`);
-        return response.data;
-    } catch (error) {
-        console.log("error ", error);
-        throw new Error(error.message);
-    }
-});
+export default ManageUserSlices.reducer;
+export const { resetStates } = ManageUserSlices.actions;
 
-
-export default SupplierSlices.reducer;
-export const { resetStates } = SupplierSlices.actions;

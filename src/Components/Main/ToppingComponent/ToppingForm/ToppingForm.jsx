@@ -36,6 +36,7 @@ const ToppingForm = (props) => {
         toppingCombinatiomQuantityList: []
     })
 
+    console.log("first dfdsfdsafss",  data)
 // useEffect Dispatch data
     useEffect(() => {
         dispatch(GetAllMeasuremenType())

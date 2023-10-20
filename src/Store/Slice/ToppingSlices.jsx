@@ -159,6 +159,24 @@ const ToppingSlices = createSlice({
                 state.error = true;
                 state.msg = "some error";
             })
+            .addCase(ToppingCombinationDelete.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(ToppingCombinationDelete.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
+                    state.loading = false;
+                    state.message = action.payload.message;
+                } else {
+                    state.loading = false;
+                    state.error = !action.payload.status;
+                    state.msg = "some error"
+                }
+            })
+            .addCase(ToppingCombinationDelete.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.msg = "some error";
+            })
     }
 
 });
@@ -241,6 +259,16 @@ export const GetAllOrderType = createAsyncThunk('api/fetchorderTypes', async () 
     } catch (error) {
         console.log("error ", error);
         throw new Error(error.message);
+    }
+});
+
+export const ToppingCombinationDelete = createAsyncThunk('api/ToppingCombinationDelete', async (id) => {
+    try {
+        const response = await axios.get(`${url}/topping/DeleteCombinationTopping/${id}`)
+        console.log(response.data);
+        return response.data
+    } catch (error) {
+        throw new Error(error.message)
     }
 });
 

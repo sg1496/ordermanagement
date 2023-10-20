@@ -1,3 +1,6 @@
 .mainDiv {
   height: calc(100vh - 16px);
 }
+.form-check-input:checked {
+  background-color: "#C53705"; 
+}

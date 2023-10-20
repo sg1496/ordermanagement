@@ -4,10 +4,6 @@ import "./Main.scss"
 import { Route, Routes } from 'react-router-dom';
 
 import Heading from './Heading/Heading';
-import Basic from './ProductComponent/AddProduct/Basic/Basic';
-import PCategories from './ProductComponent/AddProduct/Categories/Categories';
-import Description from './ProductComponent/AddProduct/Description/Description';
-import Variants from './ProductComponent/AddProduct/Variants/Variants';
 import AddProduct from './ProductComponent/AddProduct/AddProduct';
 import Product from './ProductComponent/Product/Product';
 import Toppings from './ToppingComponent/Toppings/Toppings';
@@ -34,6 +30,7 @@ import VariantsMain from './Variant/VariantSearchTable/VariantsMain';
 import Variantform from './Variant/VariantForm/Variantform';
 import LocalityMain from './Locality/LocalitySearchTable/LocalityMain';
 import LocalityForm from './Locality/LocalityForm/LocalityForm';
+import ProductForm from './ProductComponent/AddProduct/ProductForm/ProductForm';
 
 
 
@@ -46,7 +43,6 @@ function Main() {
                 <div className="mainIneerSection m-3">
                     <Routes>
                         <Route index element={<Product />} />
-
                         <Route path='product' element={<Product />} />
                         <Route path="toppingform" element={<ToppingForm />} />
                         <Route path='toppingform/:id' element={<ToppingForm />} />
@@ -62,27 +58,19 @@ function Main() {
                         <Route path='locality_form/:id' element={<LocalityForm />} />
                         <Route path='managetable' element={<ManageTable />} />
                         <Route path='manageuserform' element={<ManageuserForm />} />
+                        <Route path='manageuserform/:id' element={<ManageuserForm />} />
                         <Route path='manageroleform' element={<ManageRoleForm />} />
                         <Route path='combotable' element={<ComboTable />} />
                         <Route path='comboform' element={<ComboForm />} />
                         <Route path='variant_table' element={<VariantsMain />} />
                         <Route path='variant_form' element={<Variantform />} />
                         <Route path='variant_form/:id' element={<Variantform />} />
-                        {/* <Route path='add-category/category/:id' element={<Category />} /> */}
-
-
-
 
 
                         <Route path='add-product' element={<AddProduct />}>
-                            <Route index element={<Basic />} />
-                            <Route path='basic' element={<Basic />} />
-                            <Route path='categories' element={<PCategories />} />
-                            <Route path='description' element={<Description />} />
-                            <Route path='variants' element={<Variants />} />
+                            <Route index element={<ProductForm />} />
+                            <Route path='productform' element={<ProductForm />} />
                         </Route>
-
-
 
 
                         <Route path='settings' element={<Settings />}>
@@ -92,9 +80,6 @@ function Main() {
                             <Route path='receiptformat' element={<ReceiptFormat />} />
                             <Route path='rewardprogram' element={<RewardProgram />} />
                         </Route>
-
-
-
 
 
                         <Route path='add-category/category' element={<Category />} />

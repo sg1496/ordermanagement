@@ -1,14 +1,14 @@
 import { useState, useEffect, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchApiDataToppings } from '../../../../Store/Slice/ToppingSlices';
-import ToppingSelectionTable from "../ToppingRequiredTable/ToppingSelectionTable";
+import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
+import ToppingSelectionTable from '../../../ToppingComponent/ToppingRequiredTable/ToppingSelectionTable';
 import { useParams } from 'react-router-dom';
-import CheckBox  from  "../../CheckBox/CheckBox"
+import ProductToppingSelectionTable from './ProductToppingSelectionTable';
 
-function ToppingNames(props) {
-    console.log(props);
+function ToppingNames() {
+    
     const dispatch = useDispatch()
-    const combinationPropsData = props.combinationHandler
+    // const combinationPropsData = props.combinationHandler
     const { id } = useParams();
 
 
@@ -28,14 +28,14 @@ function ToppingNames(props) {
        
         if (ToppingData) {
             const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
-            ToppingDatafinaltemp.map((e) => {
-                e.IsChecked = false;
-                // props.combinationHandler.toppingCombinatiomQuantityList
-                var tempmatch = props.combinationHandler.toppingCombinatiomQuantityList.filter(x => x.combinationToppingId === e.toppingId);
-                if (tempmatch.length > 0 && id > 0) {
-                    e.IsChecked = true;
-                }
-            });
+            // ToppingDatafinaltemp.map((e) => {
+            //     e.IsChecked = false;
+            //     // props.combinationHandler.toppingCombinatiomQuantityList
+            //     // var tempmatch = props.combinationHandler.toppingCombinatiomQuantityList.filter(x => x.combinationToppingId === e.toppingId);
+            //     // if (tempmatch.length > 0 && id > 0) {
+            //         e.IsChecked = true;
+            //     // }
+            // });
             setToppingDatafinal(ToppingDatafinaltemp);
         }
     }, [ToppingData])
@@ -86,7 +86,6 @@ function ToppingNames(props) {
                            
                             return <tr key={index}>
                                 <td className='text-center'>
-                                 
                                     <input className="form-check-input"
                                         id={item.toppingId}
                                         type="checkbox"
@@ -105,14 +104,14 @@ function ToppingNames(props) {
                 </table>
 
             </div >
-            <div className='ToppingSelect_table mx-5' style={{ width: "50%" }} >
-                <ToppingSelectionTable
+            <div className='ToppingSelect_table mx-5' style={{ width: "70%" }} >
+                <ProductToppingSelectionTable
                     toppingNameData={ToppingDatafinal.filter(x => x.IsChecked == true)}
-                    selectedToppingName={props.combinationHandler.toppingCombinatiomQuantityList}
+                    // selectedToppingName={props.combinationHandler.toppingCombinatiomQuantityList}
                     unCheckHandler={unCheckHandler}
-                    combinationPropsData={combinationPropsData}
+                    // combinationPropsData={combinationPropsData}
                     combinationDataSendParent={combinationDataSendParent}
-                    data={props}
+                    // data={props}
                 />
             </div>
         </div>
