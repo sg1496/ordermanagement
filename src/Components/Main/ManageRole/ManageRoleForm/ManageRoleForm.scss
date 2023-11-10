@@ -21,12 +21,12 @@ $primaryColor: #C53705;
         width: 73px;
         height: 30px;
         float: none;
-        background-image: url("../../../assets/svg/circleRed.svg");
+        background-image: url("../../../../assets/svg/circleRed.svg");
 
         &:checked {
             background-position: right center;
             background-color: white;
-            background-image: url("../../../assets/svg/circleGreen.svg");
+            background-image: url("../../../../assets/svg/circleGreen.svg");
         }
 
         &:active {

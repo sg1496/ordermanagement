@@ -1,37 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./Description.scss";
 import { useDispatch } from 'react-redux';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
 
-function Description(props) {
+const Description = (props) =>{
     const dispatch = useDispatch();
     dispatch(navTitle("Add Products"));
+    
+
+    const [discriptionData, setDiscriptionData] = useState({
+        productDescription: ""
+    })
 
     const handleDescriptionChange = (e) => {
-        const descriptionValue = e.target.value;
+        let newArr ={
+            ...discriptionData,
+            [e.target.name ]: e.target.value
+        }
+        setDiscriptionData(newArr)
       
         // Call the parent function to send the description data
-        props.descriptionDataHandler(descriptionValue);
+        props.descriptionDataHandler(newArr);
       };
+
+      const {productDescription} = discriptionData
 
     return (
         <>
             <div className='addProduct__descriptionTab'>
-                <form>
+                {/* <form> */}
                     <div className="addProduct__descriptionFormm">
                         <div className="addProduct__description">
                             <label htmlFor="description" className='form-label inputForm__label'>Description :</label>
-                            <textarea name=""
+                            <textarea
                                 id="description"
                                 cols="10"
                                 rows="5"
                                 className='form-control w-25'
                                 placeholder='This product is'
+                                name="productDescription"
+                                value={productDescription}
                                 onChange={handleDescriptionChange}
                             ></textarea>
                         </div>
                     </div>
-                </form>
+                {/* </form> */}
             </div>
         </>
     )

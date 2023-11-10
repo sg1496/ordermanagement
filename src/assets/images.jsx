@@ -12,6 +12,8 @@ import stockManagment from "./svg/stock-managment.svg";
 import user from "./svg/users.svg";
 import deleteIcon from "./svg/Delete.svg";
 import editIcon from "./svg/Edit.svg";
+import checkbtn from "./svg/checkbtn.svg";
+
 
 
 export default {
@@ -28,5 +30,6 @@ export default {
     stockManagment,
     user,
     deleteIcon,
-    editIcon
+    editIcon,
+    checkbtn
 }

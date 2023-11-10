@@ -6,7 +6,7 @@ import { fetchSaveUpdateProduct } from "../../../../../Store/Slice/ProductSlices
 import { useNavigate, useParams } from "react-router-dom";
 import Buttons from "../../Buttons/NewButtons";
 
-function Basic(props) {
+const Basic = (props) => {
     const dispatch = useDispatch();
     dispatch(navTitle("Add Products"));
     const Navigate = useNavigate();
@@ -55,13 +55,15 @@ function Basic(props) {
             props.basicFormDataHandler(newArr)
 
     }
+
+  
     
     const { productName, foodTypeId, taxClassId } = data
 
     return (
         <>
             <div className="addProduct__basicTab">
-                <form >
+                {/* <form > */}
                    <div className="addProduct__basicForm d-flex ">
                         <div className="field_width">
                             <label htmlFor="product-name" className="form-label inputForm__label">
@@ -155,7 +157,7 @@ function Basic(props) {
                         </div>
                     </div>        
                    
-                </form>
+                {/* </form> */}
             </div>
         </>
     );

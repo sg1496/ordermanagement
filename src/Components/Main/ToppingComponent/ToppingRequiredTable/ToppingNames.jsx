@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings } from '../../../../Store/Slice/ToppingSlices';
 import ToppingSelectionTable from "../ToppingRequiredTable/ToppingSelectionTable";
 import { useParams } from 'react-router-dom';
-import CheckBox  from  "../../CheckBox/CheckBox"
+
 
 function ToppingNames(props) {
-    console.log(props);
+    console.log(console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddataaa55", props.combinationHandler.toppingCombinatiomQuantityList));
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
     const { id } = useParams();
@@ -21,6 +21,7 @@ function ToppingNames(props) {
 
 
     const [ToppingDatafinal, setToppingDatafinal] = useState([])
+    console.log("toppingname all data", ToppingDatafinal)
    
 
 
@@ -85,7 +86,7 @@ function ToppingNames(props) {
                         {ToppingDatafinal.map((item, index) => {
                            
                             return <tr key={index}>
-                                <td className='text-center'>
+                                <td className='text-center addProduct__subcategoryCheckboxes'>
                                  
                                     <input className="form-check-input"
                                         id={item.toppingId}
@@ -101,11 +102,13 @@ function ToppingNames(props) {
                             </tr>
                         }
                         )}
+                        
                     </tbody>
                 </table>
 
             </div >
             <div className='ToppingSelect_table mx-5' style={{ width: "50%" }} >
+                
                 <ToppingSelectionTable
                     toppingNameData={ToppingDatafinal.filter(x => x.IsChecked == true)}
                     selectedToppingName={props.combinationHandler.toppingCombinatiomQuantityList}
@@ -114,6 +117,7 @@ function ToppingNames(props) {
                     combinationDataSendParent={combinationDataSendParent}
                     data={props}
                 />
+                
             </div>
         </div>
     )

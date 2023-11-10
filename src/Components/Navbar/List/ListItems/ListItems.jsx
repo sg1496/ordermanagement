@@ -54,7 +54,7 @@ function ListItems() {
                                     <Link to="managetable" >Manage User</Link>
                                 </li>
                                 <li className="sidebarInner__SUblist">
-                                    <Link to="manageroleform">Manage Role</Link>
+                                    <Link to="manageRoleTable">Manage Role</Link>
                                 </li>
                                 <li className="sidebarInner__SUblist">
                                     <Link to="settings" >Settings</Link>

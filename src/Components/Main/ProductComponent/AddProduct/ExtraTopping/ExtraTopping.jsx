@@ -1,17 +1,99 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
-import CheckBox from "../../../CheckBox/CheckBox"
+import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
+import { fetchApiData } from '../../../../../Store/Slice/VariantSlices';
 
 
 
 
 
 
-const ExtraTopping = () => {
+const ExtraTopping = (props) => {
     const Navigate = useNavigate()
     const dispatch = useDispatch();
 
+    const toppingList = useSelector((topping) => topping.ToppingSlices.data)
+    const variantList = useSelector((variant) => variant.variantSlices.data)
+   
+
+    useEffect(() => {
+        dispatch(fetchApiDataToppings())
+        dispatch(fetchApiData())
+    }, [])
+
+
+    const [extraToppingData, setExtraToppingData] = useState([]);
+
+
+    useEffect(() => {
+        const newdata = []
+        if (toppingList && variantList) {
+            
+            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(variantList));
+            toppingList?.map((item) => {
+                var a = []
+                var newData = {
+                    ...item
+                }
+                ToppingDatafinaltemp.map((item1) => {
+                    item1.IsChecked = false;
+                    let dataas = {
+                        ...item1,
+                        selection: {
+                            combinationToppingId: item.toppingId,
+                            variantId: item1.variantId,
+                        },
+                    };
+                    a.push(dataas);
+                });
+                newData = { ...newData, allTrailData: a };
+                newdata.push(newData);
+            });
+            setExtraToppingData(newdata)
+        }
+    }, [toppingList, variantList])
+
+    console.log("datttttttttttttas", extraToppingData)
+
+    const categoryChangeHandler = (check, categoryId, items, id) => {
+        // Update the "IsChecked" property for the clicked item
+        items.IsChecked = check;
+    
+        // Create a new array based on the updated data
+        const updatedExtraToppingData = extraToppingData.map((topping) => {
+            if (topping.toppingId === id) {
+                return {
+                    ...topping,
+                    allTrailData: topping.allTrailData.map((variant) => {
+                        if (variant.variantId === categoryId) {
+                            return {
+                                ...variant,
+                                IsChecked: check,
+                            };
+                        }
+                        return variant;
+                    }),
+                };
+            }
+            return topping;
+        });
+    
+        setExtraToppingData(updatedExtraToppingData);
+    
+        // Extract selected data
+        const selectedData = updatedExtraToppingData.flatMap((topping) => {
+            console.log("first", topping.allTrailData)
+            return topping.allTrailData.filter((variant) => variant.IsChecked)
+                .map((variant) => ({
+                    combinationToppingId: topping.toppingId,
+                    variantId: variant.variantId,
+                }));
+        });
+    
+        // Send the selected data to a handler
+        props.extraToppingDataHandler(selectedData);
+    };
 
     return (
         <>
@@ -20,108 +102,43 @@ const ExtraTopping = () => {
                 <table className='table m-0'>
                     <thead>
                         <tr>
-                            <th scope="col" style={{width:"25%"}}>Topping Name</th>
-                            <th scope="col" className='text-center' style={{width:"25%"}}>Food Type</th>
-                            <th scope="col" className='text-center' style={{width:"50%"}}>Variants</th>
+                            <th scope="col" style={{ width: "25%" }}>Topping Name</th>
+                            <th scope="col" className='text-center' style={{ width: "25%" }}>Food Type</th>
+                            <th scope="col" className='text-center' style={{ width: "50%" }} colSpan={"3"}>Variants</th>
                         </tr>
                     </thead>
                     <tbody>
 
 
-                        <tr >
-                            <td>BBQ chicken</td>
-                            <td className='text-center'>Non-Veg</td>
-                            <td className='text-center'>
-                                <div className='d-flex justify-content-center '  >
-                                    <div className='d-flex mx-5 '>
-                                        <div className='text-center mx-2'>
-                                            <CheckBox/>
+                        {extraToppingData?.map((topping, index) => {
+                            return <tr key={index} >
+                                <td>{topping.toppingName}</td>
+                                <td className='text-center'>{topping.foodTypeId === 1 ? "veg" : "non-veg"}</td>
+                                {topping.allTrailData?.map((variant, ind) => {
+                                    return <td className='text-center' key={ind}>
+                                        <div className='d-flex justify-content-center '  >
+                                            <div className='addProduct__subcategoryCheckboxes  mx-2'>
+                                                <input className="form-check-input "
+                                                    type="checkbox"
+                                                    name="toppingType"
+                                                    checked={variant.IsChecked}
+                                                    onChange={(e) => categoryChangeHandler(e.target.checked, variant.variantId, variant, topping.toppingId)}
+                                                />
+                                            </div>
+                                            <label
+                                                htmlFor="product-name"
+                                                className="form-label "
+                                            >
+                                                {variant.variantName}
+                                            </label>
+
                                         </div>
-                                        <div>Variant 1</div>
-
-                                    </div>
-                                    <div className='d-flex mx-5' >
-                                        <div className='text-center mx-2'>
-                                          <CheckBox/>
-                                        </div>
-                                        <div>Variant 2</div>
-
-                                    </div>
-                                    <div className='d-flex mx-5'>
-                                        <div className='text-center mx-2'>
-                                           <CheckBox/>
-                                        </div>
-                                        <div>Variant 3</div>
-
-                                    </div>
-                                </div>
-                            </td>
-
-                        </tr>
-
-                        <tr >
-                            <td>Olive</td>
-                            <td className='text-center'>Veg</td>
-                            <td className='text-center'>
-                                <div className='d-flex justify-content-center '  >
-                                    <div className='d-flex mx-5 '>
-                                        <div className='text-center mx-2'>
-                                            <CheckBox/>
-                                        </div>
-                                        <div>Variant 1</div>
-
-                                    </div>
-                                    <div className='d-flex mx-5' >
-                                        <div className='text-center mx-2'>
-                                          <CheckBox/>
-                                        </div>
-                                        <div>Variant 2</div>
-
-                                    </div>
-                                    <div className='d-flex mx-5'>
-                                        <div className='text-center mx-2'>
-                                           <CheckBox/>
-                                        </div>
-                                        <div>Variant 3</div>
-
-                                    </div>
-                                </div>
-                            </td>
-
-                        </tr>
-
-                        <tr >
-                            <td>Cucumber</td>
-                            <td className='text-center'>Veg</td>
-                            <td className='text-center'>
-                                <div className='d-flex justify-content-center '  >
-                                    <div className='d-flex mx-5 '>
-                                        <div className='text-center mx-2'>
-                                            <CheckBox/>
-                                        </div>
-                                        <div>Variant 1</div>
-
-                                    </div>
-                                    <div className='d-flex mx-5' >
-                                        <div className='text-center mx-2'>
-                                          <CheckBox/>
-                                        </div>
-                                        <div>Variant 2</div>
-
-                                    </div>
-                                    <div className='d-flex mx-5'>
-                                        <div className='text-center mx-2'>
-                                           <CheckBox/>
-                                        </div>
-                                        <div>Variant 3</div>
-
-                                    </div>
-                                </div>
-                            </td>
-
-                        </tr>
-                        
-
+                                    </td>
+                                })
+                                }
+                            </tr>
+                        })
+                        }
                     </tbody>
                 </table>
             </div >

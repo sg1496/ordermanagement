@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Buttons from '../../../ProductComponent/Buttons/NewButtons';
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
@@ -68,18 +68,18 @@ const Categoryform = () => {
             }
         )
     },
-    [categoryData],
-  )
+        [categoryData],
+    )
 
     const cancelHandler = () => {
         Navigate(`/categorytable`)
     }
 
-    const toppingAllowedHandler =useCallback( () => {
+    const toppingAllowedHandler = useCallback(() => {
         setCategoryData({ ...categoryData, isActive: !categoryData.isActive })
     },
-    [categoryData],
-  )
+        [categoryData],
+    )
 
 
 
@@ -117,85 +117,85 @@ const Categoryform = () => {
 
 
     },
-    [categoryData],
-  )
+        [categoryData],
+    )
 
 
-const dispatch = useDispatch();
-dispatch(navTitle("Category"));
+    const dispatch = useDispatch();
+    dispatch(navTitle("Category"));
 
-const { categoryName, parentCategoryId } = categoryData
-return (
-    <>
-        <div className="addProduct__basicTabs">
-            <form onSubmit={submitHandler}>
+    const { categoryName, parentCategoryId } = categoryData
+    return (
+        <>
+            <div className="addProduct__basicTabs">
+                <form onSubmit={submitHandler}>
 
-                <div className="addProduct__basic d-flex mb-4">
-                    <div className="addProduct__productNamed">
-                        <label htmlFor="product-name" className="form-label inputForm__label">
-                            Category Name:
-                            <span className="formRequired">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="product-name"
-                            className="form-control"
-                            placeholder="Pizza"
-                            name='categoryName'
-                            value={categoryData.categoryName}
-                            onChange={changeHandler}
-                            required
+                    <div className="addProduct__basic d-flex mb-4">
+                        <div className="addProduct__productNamed">
+                            <label htmlFor="product-name" className="form-label inputForm__label">
+                                Category Name:
+                                <span className="formRequired">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="product-name"
+                                className="form-control"
+                                placeholder="Pizza"
+                                name='categoryName'
+                                value={categoryData.categoryName}
+                                onChange={changeHandler}
+                                required
+                            />
+                        </div>
+                        <div className="addProduct__productNamed">
+                            <label htmlFor="taxClass" className="form-label inputForm__label" >
+                                Parent Category:
+                            </label>
+                            <select
+                                className="form-select "
+                                name='parentCategoryId'
+                                value={parentCategoryId}
+                                onChange={changeHandler}
+                                id="taxClass"
+                            >
+                                <option defaultValue>Select Category</option>
+                                {parentCategories?.map((items) => {
+                                    return <option
+                                        key={items.parentCategoryId}
+                                        value={items.parentCategoryId}
+                                    >{items.parentCategoryName}</option>;
+                                })}
+
+                            </select>
+                        </div>
+
+                        <div className="addProduct__isActive form-check form-switch">
+                            <label htmlFor="isActive" className="form-label inputForm__label">
+                                Is Topping Allowed ?: *
+                                <span className="formRequired "></span>
+                            </label>
+                            <input
+                                type="checkbox"
+                                id="isActive"
+                                className="form-check-input"
+                                name='toppingallowed'
+                                checked={categoryData.isActive}
+                                onChange={toppingAllowedHandler}
+                            />
+                        </div>
+
+                    </div>
+                    <div>
+
+                        <Buttons fname="Save"
+                            Sname="Cancel"
+                            cancelHandler={cancelHandler}
                         />
                     </div>
-                    <div className="addProduct__productNamed">
-                        <label htmlFor="taxClass" className="form-label inputForm__label" >
-                            Parent Category:
-                        </label>
-                        <select
-                            className="form-select "
-                            name='parentCategoryId'
-                            value={parentCategoryId}
-                            onChange={changeHandler}
-                            id="taxClass"
-                        >
-                            <option defaultValue>Select Category</option>
-                            {parentCategories?.map((items) => {
-                                return <option
-                                    key={items.parentCategoryId}
-                                    value={items.parentCategoryId}
-                                >{items.parentCategoryName}</option>;
-                            })}
-
-                        </select>
-                    </div>
-
-                    <div className="addProduct__isActive form-check form-switch">
-                        <label htmlFor="isActive" className="form-label inputForm__label">
-                            Is Topping Allowed ?: *
-                            <span className="formRequired "></span>
-                        </label>
-                        <input
-                            type="checkbox"
-                            id="isActive"
-                            className="form-check-input"
-                            name='toppingallowed'
-                            checked={categoryData.isActive}
-                            onChange={toppingAllowedHandler}
-                        />
-                    </div>
-
-                </div>
-                <div>
-
-                    <Buttons fname="Save"
-                        Sname="Cancel"
-                        cancelHandler={cancelHandler}
-                    />
-                </div>
-            </form>
-        </div>
-    </>
-)
+                </form>
+            </div>
+        </>
+    )
 }
 export default Categoryform;
 

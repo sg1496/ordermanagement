@@ -11,12 +11,12 @@
         height: 20px;
         float: none;
         background-position: left center;
-        background-image: url("../../../assets/svg/circleRed.svg");
+        background-image: url("../../../../assets/svg/circleRed.svg");
 
         &:checked {
             background-position: right center;
             background-color: white;
-            background-image: url("../../../assets/svg/circleGreen.svg");
+            background-image: url("../../../../assets/svg/circleGreen.svg");
         }
 
         &:active {
@@ -44,12 +44,12 @@
         height: 20px;
         float: none;
         background-position: left center;
-        background-image: url("../../../assets/svg/circleGreen.svg");
+        background-image: url("../../../../assets/svg/circleGreen.svg");
 
         &:checked {
             background-position: right center;
             background-color: white;
-            background-image: url("../../../assets/svg/circleRed.svg");
+            background-image: url("../../../../assets/svg/circleRed.svg");
         }
 
         &:active {

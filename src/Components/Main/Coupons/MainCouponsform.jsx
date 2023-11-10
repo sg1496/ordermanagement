@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Buttons from '../ProductComponent/Buttons/NewButtons';
 import plus from "../../../assets/svg/plus.svg"
 import subtract from "../../../assets/svg/subtract.svg"
@@ -14,11 +14,22 @@ import { navTitle } from '../../../Store/Slice/NavSlices';
 const MainCouponsform = () => {
     const[Shows , setShows]= useState(false);
     const[show , setShow]= useState(false);
+    const [couponData, setCouponData] = useState({
+        couponCode:"",
+        couponName:"",
+        discountValue:"",
+        discountStartDate:"",
+    })
+
+    const changeHandler = ()=>{
+
+    }
 
     const dispatch = useDispatch();
     dispatch(navTitle("Coupons"));
     console.log(show)
 
+    const {couponCode,couponName,discountValue,discountStartDate} = couponData
     return (
         <>
             <div className="addProduct__basicTabs  ">
@@ -35,6 +46,9 @@ const MainCouponsform = () => {
                                 id="product-name"
                                 className="form-control"
                                 placeholder="Flat20coupon"
+                                name='couponCode'
+                                value={couponCode}
+                                onChange={(e)=> changeHandler(e)}
                                 required
                             />
                         </div>
@@ -49,26 +63,25 @@ const MainCouponsform = () => {
                                 id="product-name"
                                 className="form-control"
                                 placeholder="Demo"
+                                name='couponName'
+                                value={couponName}
+                                onChange={(e)=> changeHandler(e)}
                                 required
                             />
                         </div>
 
                         <div className="addProduct__productNames">
-                            <label htmlFor="product-name" className="form-label inputForm__label">
+                            <label htmlFor="taxClass" className="form-label inputForm__label" >
                                 Discount Type:
                                 <span className="formRequired">*</span>
                             </label>
-                            <input
-                                type="text"
-                                id="product-name"
-                                className="form-control"
-                                placeholder="Demo"
-                                required
-                            />
+                            <select className="form-select " id="taxClass" >
+                                <option defaultValue>demo</option>
+                                <option value="one">one</option>
+                                <option value="two">two</option>
+                                <option value="Three">three</option>
+                            </select>
                         </div>
-
-
-
 
                     </div>
                     <div className=" addProduct__basicForm d-flex mb-3">
@@ -82,6 +95,9 @@ const MainCouponsform = () => {
                                 id="product-name"
                                 className="form-control"
                                 placeholder="20%"
+                                name='discountValue'
+                                value={discountValue}
+                                onChange={(e)=> changeHandler(e)}
                                 required
                             />
                         </div>
@@ -96,6 +112,9 @@ const MainCouponsform = () => {
                                 id="product-name"
                                 className="form-control"
                                 placeholder="14/02/2023"
+                                name='discountStartDate'
+                                value={discountStartDate}
+                                onChange={(e)=> changeHandler(e)}
                                 required
                             />
                         </div>
@@ -110,6 +129,9 @@ const MainCouponsform = () => {
                                 id="product-name"
                                 className="form-control"
                                 placeholder="20/02/2023"
+                                name='discountStartDate'
+                                value={discountStartDate}
+                                onChange={(e)=> changeHandler(e)}
                                 required
                             />
                         </div>
@@ -200,7 +222,7 @@ const MainCouponsform = () => {
                                 <div><p>Product</p></div>
                             </div>
                             <div className='d-flex align-items-center  '>
-                                <div><p>Enable Category Requirement</p></div>
+                                <div><p>Enable minimum cart subtotal requirement</p></div>
                                 <div className=" form-check form-switch pt-1 ms-4 abc" >
                                     <input
                                         type="checkbox"

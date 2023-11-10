@@ -5,10 +5,11 @@ import ToppingSelectionTable from '../../../ToppingComponent/ToppingRequiredTabl
 import { useParams } from 'react-router-dom';
 import ProductToppingSelectionTable from './ProductToppingSelectionTable';
 
-function ToppingNames() {
+function ToppingNames(props) {
+    console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddataaa55", props.combinationHandler.productToppingsList)
     
     const dispatch = useDispatch()
-    // const combinationPropsData = props.combinationHandler
+    const combinationPropsData = props.combinationHandler
     const { id } = useParams();
 
 
@@ -23,34 +24,32 @@ function ToppingNames() {
     const [ToppingDatafinal, setToppingDatafinal] = useState([])
    
 
-
     useEffect(() => {
-       
-        if (ToppingData) {
-            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
-            // ToppingDatafinaltemp.map((e) => {
-            //     e.IsChecked = false;
-            //     // props.combinationHandler.toppingCombinatiomQuantityList
-            //     // var tempmatch = props.combinationHandler.toppingCombinatiomQuantityList.filter(x => x.combinationToppingId === e.toppingId);
-            //     // if (tempmatch.length > 0 && id > 0) {
-            //         e.IsChecked = true;
-            //     // }
-            // });
-            setToppingDatafinal(ToppingDatafinaltemp);
-        }
-    }, [ToppingData])
-
-    const toppingNameChangeHandler = (check, id, item) => {
-        const itemselected = [...ToppingDatafinal];
-        if (check) {
-            item.IsChecked = true;
-        }
-        else {
-            item.IsChecked = false;
-        }
-        itemselected.filter(x => x.toppingId === id).IsChecked = check;
-        setToppingDatafinal(itemselected);
+    if (ToppingData) {
+        const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
+        ToppingDatafinaltemp.map((e) => {
+            e.IsChecked = false;
+            // props.combinationHandler.toppingCombinatiomQuantityList
+            var tempmatch = props.combinationHandler.productToppingsList.filter(x => x.combinationProductId === e.toppingId);
+            if (tempmatch.length > 0 && id > 0) {
+                e.IsChecked = true;
+            }
+        });
+        setToppingDatafinal(ToppingDatafinaltemp);
     }
+}, [ToppingData])
+
+const toppingNameChangeHandler = (check, id, item) => {
+    const itemselected = [...ToppingDatafinal];
+    if (check) {
+        item.IsChecked = true;
+    }
+    else {
+        item.IsChecked = false;
+    }
+    itemselected.filter(x => x.toppingId === id).IsChecked = check;
+    setToppingDatafinal(itemselected);
+}
 
     const unCheckHandler = (id) => {
         const updatedData = ToppingDatafinal.map(item => {
@@ -85,7 +84,7 @@ function ToppingNames() {
                         {ToppingDatafinal.map((item, index) => {
                            
                             return <tr key={index}>
-                                <td className='text-center'>
+                                <td className='text-center addProduct__subcategoryCheckboxes'>
                                     <input className="form-check-input"
                                         id={item.toppingId}
                                         type="checkbox"
@@ -107,11 +106,11 @@ function ToppingNames() {
             <div className='ToppingSelect_table mx-5' style={{ width: "70%" }} >
                 <ProductToppingSelectionTable
                     toppingNameData={ToppingDatafinal.filter(x => x.IsChecked == true)}
-                    // selectedToppingName={props.combinationHandler.toppingCombinatiomQuantityList}
+                    selectedToppingName={props.combinationHandler.productToppingsList}
                     unCheckHandler={unCheckHandler}
-                    // combinationPropsData={combinationPropsData}
+                    combinationPropsData={combinationPropsData}
                     combinationDataSendParent={combinationDataSendParent}
-                    // data={props}
+                    data={props}
                 />
             </div>
         </div>

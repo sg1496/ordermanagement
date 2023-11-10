@@ -16,7 +16,7 @@ function ToppingPriceList(props) {
     const toppingPrice = useSelector((state) => state.variantSlices.data)
     const [toppingData, setToppingData] = useState([])
     
-
+console.log("ddddddddddddddddddddddddd45", toppingData)
 
     const dispatch = useDispatch()
 

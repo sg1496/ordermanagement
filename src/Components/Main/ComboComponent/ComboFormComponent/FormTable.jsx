@@ -19,11 +19,11 @@ function FormTable() {
             <div className='productSection__table mt-5'>
                 <table className='table m-0 text-center'>
                     <thead >
-                        <tr>
-                            <th style={{ border: "Transparent" }} >
+                        <tr style={{width: "100%"}}>
+                            <th style={{ border: "Transparent", width: "20%" }} >
 
                             </th>
-                            <th scope="col" >
+                            <th scope="col" style={{ width: "10%" }} >
                                 Category
                             </th>
                             <th scope="col" style={{ width: "20%" }}>
@@ -32,20 +32,20 @@ function FormTable() {
                             <th scope="col" style={{ width: "20%" }}>
                                 Variant
                             </th>
-                            <th scope="col" >
+                            <th scope="col" style={{ width: "15%" }}>
                                 Quantity
                             </th>
-                            <th scope="col" >
+                            <th scope="col" style={{ width: "15%" }}>
                                 Price
                             </th>
                         </tr>
                     </thead>
                     <tbody className='text-center'>
-                        <tr>
+                        <tr className='text-center'>
                             <td></td>
                             <td  >
 
-                                <div className="addProduct__productName ">
+                                <div className="addProduct__productName text-center">
                                     <select className=" inputForm__inputField " id="taxClass" >
                                         <option defaultValue>Pizza</option>
                                         <option value="one">one</option>
@@ -55,17 +55,17 @@ function FormTable() {
                                 </div>
                             </td>
                             <td  >
-
+                            <div className="addProduct__productName text-center ">
                                 <select className=" inputForm__inputField " id="taxClass" >
                                     <option defaultValue>Margerita</option>
                                     <option value="one">one</option>
                                     <option value="two">two</option>
                                     <option value="Three">three</option>
                                 </select>
-
+                                </div>
                             </td>
                             <td className='text-center'>
-                                <div className="addProduct__productName">
+                                <div className="addProduct__productName text-center">
                                     <select className=" inputForm__inputField " id="taxClass" >
                                         <option defaultValue>Extra Cheeze</option>
                                         <option value="one">one</option>
@@ -76,7 +76,7 @@ function FormTable() {
                             </td>
 
                             <td className='text-center'>
-                                <div className="addProduct__productNamed">
+                                <div className="addProduct__productName text-center">
 
                                     <input
                                         type="number"
@@ -134,7 +134,7 @@ function FormTable() {
                             </td>
 
                             <td className='text-center'>
-                                <div className="addProduct__productNamed">
+                                <div className="addProduct__productName">
 
                                     <input
                                         type="number"
@@ -205,7 +205,7 @@ function FormTable() {
                             </td>
 
                             <td className='text-center'>
-                                <div className="addProduct__productNamed">
+                                <div className="addProduct__productName">
                                     <input
                                         type="Number"
                                         id="product-name"

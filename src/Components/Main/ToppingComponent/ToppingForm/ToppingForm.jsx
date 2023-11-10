@@ -138,6 +138,7 @@ const ToppingForm = (props) => {
                 combinationDataList.push(combinationTrail.selection)
             })
         })
+        console.log("page 882", combinationDataList)
         setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
     }
 
@@ -353,14 +354,14 @@ const ToppingForm = (props) => {
                         <h3>Topping Type</h3>
                         <div className="row ms-1">
                             {orderType && orderType.map((item, ind) => (
-                                <div className="form-check col-md-1" key={ind}>
-                                    <input className="form-check-input"
+                                <div className="addProduct__subcategoryCheckboxes d-flex align-items-center col-md-1 " key={ind}>
+                                    <input className="form-check-input " 
                                         type="checkbox"
                                         name="toppingType"
                                         checked={item.IsChecked}
                                         onChange={(e) => DiningChangeHandler(e.target.checked, item.orderTypeId, item)}
                                     />
-                                    <label className="form-check-label" htmlFor="Dining">
+                                    <label className="inputFormCheckbox__label " htmlFor="Dining">
                                         {item.orderTypeName}
                                     </label>
                                 </div>

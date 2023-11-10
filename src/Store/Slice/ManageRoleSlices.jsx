@@ -9,11 +9,13 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
+    pageData: null,
+    
    
 }
 
-const ProductSlices = createSlice({
-    name: "productApi",
+const ManageRoleSlices = createSlice({
+    name: "ManageRole",
     initialState: initialState,
     reducers: {
         resetStates: (state) => {
@@ -21,36 +23,32 @@ const ProductSlices = createSlice({
             state.error = null;
             state.message = null
         },
-        searchstates(state, action) {
-            state.searchcategory = []
-            const data = state.searchcategory.push(action.payload)
-            console.log("data", data);
-        },
+
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchApiDataProduct.pending, (state) => {
+            .addCase(fetchAllDataRole.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchApiDataProduct.fulfilled, (state, action) => {
+            .addCase(fetchAllDataRole.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
-                    state.data = action.payload.productlst;
+                    state.data = action.payload.roleResponseList;
                 } else {
                     state.loading = false;
                     state.error = !action.payload.status;
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchApiDataProduct.rejected, (state, action) => {
+            .addCase(fetchAllDataRole.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchDelApiDataProduct.pending, (state) => {
+            .addCase(fetchDelDataRole.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchDelApiDataProduct.fulfilled, (state, action) => {
+            .addCase(fetchDelDataRole.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
                     state.message = action.payload.message;
@@ -60,16 +58,16 @@ const ProductSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchDelApiDataProduct.rejected, (state, action) => {
+            .addCase(fetchDelDataRole.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchSaveUpdateProduct.pending, (state) => {
+            .addCase(fetchSaveUpdateDataRole.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchSaveUpdateProduct.fulfilled, (state, action) => {
-                if (action.payload.status === 200) {
+            .addCase(fetchSaveUpdateDataRole.fulfilled, (state, action) => {
+                if (action.payload.status === 200 || action.payload.status === 201) {
                     state.loading = false;
                     state.message = action.payload.message;
                 }
@@ -79,19 +77,18 @@ const ProductSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchSaveUpdateProduct.rejected, (state, action) => {
+            .addCase(fetchSaveUpdateDataRole.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchEditProduct.pending, (state) => {
+            .addCase(fetchSingleEditDataRole.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchEditProduct.fulfilled, (state, action) => {
+            .addCase(fetchSingleEditDataRole.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
                     state.singleData = action.payload;
-
                 }
                 else {
                     state.loading = false;
@@ -99,35 +96,46 @@ const ProductSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchEditProduct.rejected, (state, action) => {
+            .addCase(fetchSingleEditDataRole.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error"
             })
-            .addCase(fetchCombinationDelApiDataProduct.pending, (state) => {
+            .addCase(fetchAllDataRolepage.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchCombinationDelApiDataProduct.fulfilled, (state, action) => {
+            .addCase(fetchAllDataRolepage.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
-                    state.message = action.payload.message;
-                } else {
+                    state.pageData = action.payload.pageTypeResponseList;
+                }
+                else {
                     state.loading = false;
                     state.error = !action.payload.status;
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchCombinationDelApiDataProduct.rejected, (state, action) => {
+            .addCase(fetchAllDataRolepage.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
-                state.msg = "some error";
+                state.msg = "some error"
             })
+          
+    }
+
+});
+export const fetchAllDataRole = createAsyncThunk('api/fetchAllDatarole', async () => {
+    try {
+        const response = await axios.get(`${url}/api/Role/GetAllRole`);
+        return response.data;
+    } catch (error) {
+        console.log("error ", error);
+        throw new Error(error.message);
     }
 });
-
-export const fetchApiDataProduct = createAsyncThunk('api/fetchApiDataProduct', async () => {
+export const fetchAllDataRolepage = createAsyncThunk('api/fetchAllDatarolepage', async () => {
     try {
-        const response = await axios.get(`${url}/product/GetAllProducts`);
+        const response = await axios.get(`${url}/api/Role/GetAllPAgeType`);
         return response.data;
     } catch (error) {
         console.log("error ", error);
@@ -135,17 +143,16 @@ export const fetchApiDataProduct = createAsyncThunk('api/fetchApiDataProduct', a
     }
 });
 
-export const fetchDelApiDataProduct = createAsyncThunk('api.fetchDelData', async (id) => {
-    let data = JSON.stringify({
-        "productId": id
-    });
+export const fetchDelDataRole = createAsyncThunk('api.fetchDelDataRole', async (id) => {
+    console.log("dafsafasfasd",id);
+   
     try {
-        const response = await axios.delete(`${url}/product/DeleteProductDetails`, {
+        const response = await axios.delete(`${url}/api/Role/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
-            },
-            data: data
+            }
         })
+        console.log("response", response.data)
         return response.data
 
     } catch (error) {
@@ -153,10 +160,11 @@ export const fetchDelApiDataProduct = createAsyncThunk('api.fetchDelData', async
     }
 });
 
-export const fetchSaveUpdateProduct = createAsyncThunk('api.fetchUpdateSave', async (data) => {
-    console.log("daata", data);
+export const fetchSaveUpdateDataRole = createAsyncThunk('api.fetchUpdateSaveDataRole', async (data) => {
     try {
-        const response = await axios.post(`${url}/product/SaveupdateProduct`, data);
+        
+        data.loginUserID = 9;
+        const response = await axios.post(`${url}/api/Role`, data);
         console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
@@ -164,32 +172,17 @@ export const fetchSaveUpdateProduct = createAsyncThunk('api.fetchUpdateSave', as
     }
 });
 
-export const fetchEditProduct = createAsyncThunk("api.fetchedit", async (id) => {
-    console.log(id);
+export const fetchSingleEditDataRole = createAsyncThunk("api.fetchSingleEditDataUser", async (id) => {
+    
     try {
-        const response = await axios.get(`${url}/product/GetSingleProduct/${id}`)
+        const response = await axios.get(`${url}/api/Role/GetSingleRole/${id}`)
+        console.log(response.data);
         return response.data
-
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const fetchCombinationDelApiDataProduct = createAsyncThunk('api.fetchCombinationDelData', async (id) => {
-    try {
-        const response = await axios.delete(`${url}/product/DeleteCombinationProduct/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        return response.data
+export default ManageRoleSlices.reducer;
+export const { resetStates } = ManageRoleSlices.actions;
 
-    } catch (error) {
-        throw new Error(error.message)
-    }
-});
-
-
-
-export default ProductSlices.reducer;
-export const { resetStates, searchstates } = ProductSlices.actions;

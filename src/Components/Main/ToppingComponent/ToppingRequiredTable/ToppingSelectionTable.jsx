@@ -7,15 +7,16 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 
 function ToppingSelectionTable(props) {
-   
+
   const dispatch = useDispatch();
   const { id } = useParams();
 
   // useState
   const [toppingCheckName, setToppingCheckName] = useState("");
   const [trial, setTrial] = useState([]);
+  const [trials, setTrials] = useState(false);
   console.log("bbbbb4444444", trial)
-
+  console.log("ssssssssshubham", trial)
   // useEffect
   useEffect(() => {
     setToppingCheckName(props.toppingNameData);
@@ -25,17 +26,17 @@ function ToppingSelectionTable(props) {
     dispatch(fetchApiData());
     dispatch(fetchApiDataToppings());
   }, []);
-  
+
   const variantSelectionTable = useSelector((state) => state.variantSlices.data);
-  
+
 
   useEffect(() => {
     const allda = [];
-    if (variantSelectionTable && toppingCheckName &&  props.selectedToppingName.length > 0 
+    if (variantSelectionTable && toppingCheckName && props.selectedToppingName.length > 0
     ) {
       toppingCheckName.map((item2) => {
         let c = [];
-       
+
         let newData = {
           mainToppingId: item2.toppingId,
           mainToppingName: item2.toppingName,
@@ -43,7 +44,7 @@ function ToppingSelectionTable(props) {
         let idExist = props.selectedToppingName.filter(
           (element) => element.combinationToppingId === item2.toppingId
         );
-        
+
         if (idExist.length > 0) {
           variantSelectionTable.map((item1) => {
             props.selectedToppingName.map((selectedData) => {
@@ -61,7 +62,7 @@ function ToppingSelectionTable(props) {
                   },
                 };
                 c.push(dataas);
-                
+
               }
             });
           });
@@ -70,14 +71,15 @@ function ToppingSelectionTable(props) {
             let dataas = {
               ...item1,
               selection: {
-                toppingCombinationId:-1,
+                toppingCombinationId: -1,
                 combinationToppingId: item2.toppingId,
                 quantity: 0,
                 variantId: item1.variantId,
+
               },
             };
             c.push(dataas);
-            
+
           });
         }
         newData = { ...newData, allTrailData: c };
@@ -99,6 +101,7 @@ function ToppingSelectionTable(props) {
               combinationToppingId: item1.toppingId,
               quantity: 0,
               variantId: item.variantId,
+
             },
           };
           c.push(dataas);
@@ -107,21 +110,23 @@ function ToppingSelectionTable(props) {
         newData = { ...newData, allTrailData: c };
         allda.push(newData);
       });
-      
+
       setTrial(allda);
+      console.log("page 74", allda)
     }
   }, [variantSelectionTable, toppingCheckName]);
 
   const combinationChangeHandler = (e, variantId, toppingId) => {
-    let newArr = trial.map((item, i) => { 
+    let newArr = trial.map((item, i) => {
       if (id && item.mainToppingId === toppingId) {
         var c = [];
         item.allTrailData.map((traildata, ind) => {
+          console.log("************************************************************", traildata)
           if (traildata.variantId === variantId) {
             var t = {
               ...traildata,
               selection: {
-                toppingCombinationId:traildata.selection.toppingCombinationId,
+                toppingCombinationId: traildata.selection.toppingCombinationId,
                 combinationToppingId: toppingId,
                 quantity: parseInt(e.target.value),
                 variantId: traildata.variantId,
@@ -132,27 +137,29 @@ function ToppingSelectionTable(props) {
             var t = {
               ...traildata,
               selection: {
-                toppingCombinationId:traildata.selection.toppingCombinationId,
+                toppingCombinationId: traildata.selection.toppingCombinationId,
                 combinationToppingId: toppingId,
                 quantity: traildata.selection.quantity,
                 variantId: traildata.variantId,
+                isDeleted: traildata.selection.isDeleted
               },
             };
             c.push(t);
           }
         });
         return { ...item, allTrailData: c };
-      }else  if (item.mainToppingId === toppingId) {
+      } else if (item.mainToppingId === toppingId) {
         var c = [];
         item.allTrailData.map((traildata, ind) => {
           if (traildata.variantId === variantId) {
             var t = {
               ...traildata,
               selection: {
-                toppingCombinationId:-1,
+                toppingCombinationId: -1,
                 combinationToppingId: toppingId,
                 quantity: parseInt(e.target.value),
                 variantId: traildata.variantId,
+                isDeleted: traildata.selection.isDeleted
               },
             };
             c.push(t);
@@ -160,17 +167,18 @@ function ToppingSelectionTable(props) {
             var t = {
               ...traildata,
               selection: {
-                toppingCombinationId:-1,
+                toppingCombinationId: -1,
                 combinationToppingId: toppingId,
                 quantity: traildata.selection.quantity,
                 variantId: traildata.variantId,
+                isDeleted: traildata.selection.isDeleted
               },
             };
             c.push(t);
           }
         });
         return { ...item, allTrailData: c };
-      } 
+      }
       else {
         return item;
       }
@@ -180,12 +188,14 @@ function ToppingSelectionTable(props) {
     props.combinationDataSendParent(newArr);
   };
 
-  // functions
   const deleteHandler = (id) => {
-    const deleteddata = trial.filter((item) => item.mainToppingId !== id);
-    setTrial(deleteddata);
+    // const deleteddata = trial.filter((item) => item.mainToppingId !== id);
+    // console.log("pageeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", deleteddata)
+    // setTrials(deleteddata);
     props.unCheckHandler(id);
   };
+
+  console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd222", trials)
 
   return (
     <>

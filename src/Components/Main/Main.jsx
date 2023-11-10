@@ -17,7 +17,7 @@ import MainCouponsform from './Coupons/MainCouponsform';
 import Categorytable from './CategoryComponent/AddCategory/Categorytable/Categorytable';
 import ManageTable from './ManageUser/ManageTable/ManageTable';
 import ManageuserForm from './ManageUser/MangaeUserForm/ManageuserForm';
-import ManageRoleForm from './ManageRole/ManageRoleForm';
+// import ManageRoleForm from './ManageRole/ManageRoleForm';
 import Settings from './Settings/Settings';
 import GeneralForm from './Settings/GeneralForm';
 import StoreDetails from './Settings/StoreDetails';
@@ -31,6 +31,8 @@ import Variantform from './Variant/VariantForm/Variantform';
 import LocalityMain from './Locality/LocalitySearchTable/LocalityMain';
 import LocalityForm from './Locality/LocalityForm/LocalityForm';
 import ProductForm from './ProductComponent/AddProduct/ProductForm/ProductForm';
+import Manage from './ManageRole/ManageRolecombine/Manage';
+import ManageRoleForm from './ManageRole/ManageRoleForm/ManageRoleForm';
 
 
 
@@ -60,6 +62,8 @@ function Main() {
                         <Route path='manageuserform' element={<ManageuserForm />} />
                         <Route path='manageuserform/:id' element={<ManageuserForm />} />
                         <Route path='manageroleform' element={<ManageRoleForm />} />
+                        <Route path='manageroleform/:id' element={<ManageRoleForm />} />
+                        <Route path='manageRoleTable' element={<Manage/>}/>
                         <Route path='combotable' element={<ComboTable />} />
                         <Route path='comboform' element={<ComboForm />} />
                         <Route path='variant_table' element={<VariantsMain />} />

@@ -1,64 +1,142 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./Categories.scss";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
+import { fetchApiDataCategory, fetchParentCategory } from '../../../../../Store/Slice/CategorySlices';
 
-function Categories() {
-
-    const [showSubParentCategory, setshowSubParentCategory] = useState(false);
+function Categories(props) {
     const dispatch = useDispatch();
     dispatch(navTitle("Add Products"));
 
-    const handleparentCategory = (event) => {
-        if (event.target.value == 1) {
-            setshowSubParentCategory(true);
-        } else {
-            setshowSubParentCategory(false);
+    const categoryList = useSelector((category) => category.categorySlices.data)
+    const parentCategories = useSelector(state => state.categorySlices.parentCategories)
+    useEffect(() => {
+        dispatch(fetchParentCategory())
+        dispatch(fetchApiDataCategory())
+    }, [])
+
+    const [categoryData, setCategoryData] = useState([]);
+    const [pCategoryData, setPCategoryData] = useState({
+        parentCategoryId: ""
+    });
+
+    useEffect(() => {
+        const newdata = []
+        if (categoryList) {
+            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(categoryList));
+            ToppingDatafinaltemp?.map((item) => {
+                item.IsChecked = false;
+                let dataas = { ...item, selectcategory: { categoryId: item.categoryId, parentCategoryId: "" } }
+                newdata.push(dataas)
+            })
+            setCategoryData(newdata)
         }
+    }, [categoryList])
+
+    const categoryChangeHandler = (check, categoryId, items) => {
+        let newArr
+        const itemselected = [...categoryData];
+        if (check) {
+            items.IsChecked = true;
+            newArr = itemselected?.map((item) => {
+                if (item.categoryId == categoryId) {
+                    return {
+                        ...item,
+                        selectcategory: {
+                            parentCategoryId: pCategoryData.parentCategoryId,
+                            categoryId: item.categoryId
+                        }
+                    };
+                } else {             
+                    return item;
+                }
+            })
+        } else {
+            items.IsChecked = false;
+            newArr = itemselected?.map((item) => {
+                if (item.categoryId == categoryId) {
+                    return {
+                        ...item,
+                        selectcategory: {
+                            parentCategoryId: "",
+                            categoryId: ""
+                        }
+                    };
+                } else {
+                    return item;
+                }
+            })
+        }
+       const finalcategoryData = newArr.filter(x => x.IsChecked === true)
+        setCategoryData(newArr);
+        // settestState(da)
+        props.categoriesDataHandler(finalcategoryData)
+    }   
+
+    const changeHandler = (e) => {
+        setPCategoryData({
+            ...pCategoryData,
+            [e.target.name]: parseInt(e.target.value)
+        })
     }
 
+    const { parentCategoryId } = pCategoryData
     return (
         <>
             <div className="addProduct__categoryTab">
-                <form>
-                    <div className="addProduct__categoryTab d-flex">
+                    <div className="addProduct__categoryTab">
+
+
                         <div className="field_width">
                             <label htmlFor="parentCategory" className="form-label inputForm__label" >
                                 Select Parent Category:
                                 <span className="formRequired">*</span>
                             </label>
-                            <select className="form-select " id="parentCategory"
-                                onChange={handleparentCategory}>
-                                <option defaultValue>Select Class</option>
-                                <option value="1">Pizza</option>
-                                <option value="2">Burger</option>
-                                <option value="3">Wrap</option>
-                                <option value="4">Sandwich</option>
-                                <option value="5">Side Order</option>
-                                <option value="6">Beverages</option>
-                                <option value="7">Chinese</option>
-                                <option value="8">Dessert</option>
+                            <select
+                                className="form-select "
+                                name='parentCategoryId'
+                                value={parentCategoryId}
+                                onChange={(e) => changeHandler(e)}
+                            >
+                                <option defaultValue>Select Category</option>
+                                {parentCategories?.map((items) => {
+                                    return <option
+                                        key={items.parentCategoryId}
+                                        value={items.parentCategoryId}
+                                    >{items.parentCategoryName}</option>;
+                                })}
                             </select>
                         </div>
-                    </div>
-                    {showSubParentCategory &&
-                        (
-                            <div className="addProduct__subcatgeoryTab py-3 d-flex">
 
-                                <div className="addProduct__subcategoryCheckboxes d-flex align-items-center">
-                                    <input type="checkbox" className='form-check-input' id='Non veg' />
-                                    <label htmlFor="Non veg" className='inputFormCheckbox__label'>Non veg</label>
-                                </div>
-                                <div className="addProduct__subcategoryCheckboxes d-flex align-items-center">
-                                    <input type="checkbox" className='form-check-input' id='veg' />
-                                    <label htmlFor="veg" className='inputFormCheckbox__label'>Veg</label>
-                                </div>
+                        <div className="col-12 mt-4 mb-4">
+                            <div className="row ms-1">
+                                {categoryData?.map((item, ind) => (
+                                    <div className="addProduct__subcategoryCheckboxes d-flex align-items-center col-md-1" key={ind}>
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            name="categoryId"
+                                            checked={item.IsChecked}
+                                            onChange={(e) => categoryChangeHandler(e.target.checked, item.categoryId, item)}
+                                        />
+                                        <label className="inputFormCheckbox__label" htmlFor="Dining">
+                                            {item.categoryName}
+                                        </label>
+                                    </div>
+                                ))
+                                }
                             </div>
-                        )}
-                </form >
+                        </div>
+                    </div>
             </div >
         </>
     )
 }
 
 export default Categories
+
+
+
+
+
+

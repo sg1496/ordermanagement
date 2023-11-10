@@ -10,6 +10,8 @@ import ProductSlices from "./Slice/ProductSlices";
 import SupplierSlices from "./Slice/SupplierSlices";
 import LocalitySlices from "./Slice/LocalitySlices";
 import ManageUsers from "./Slice/ManageUsers";
+import ManageRoleSlices from "./Slice/ManageRoleSlices";
+import LoginSlices from "./Slice/LoginSlices";
                                                                                                                                     
 
 // const sagaMiddleware = createSagaMiddleware();
@@ -17,6 +19,7 @@ const store = configureStore(
     {
         reducer:
         {
+            LoginSlices: LoginSlices,
             navheader: NavSlices,
             categorySlices: CategorySlices,
             variantSlices: apiSlices,
@@ -24,7 +27,9 @@ const store = configureStore(
             ProductSlices: ProductSlices,
             SupplierSlices: SupplierSlices,
             LocalitySlices: LocalitySlices,
-            ManageUserSlices: ManageUsers
+            ManageUserSlices: ManageUsers,
+            ManageRoleSlices: ManageRoleSlices,
+
             
 
         },
