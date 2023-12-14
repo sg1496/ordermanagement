@@ -6,7 +6,8 @@ import { useParams } from 'react-router-dom';
 import ProductToppingSelectionTable from './ProductToppingSelectionTable';
 
 function ToppingNames(props) {
-    console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddataaa55", props.combinationHandler.productToppingsList)
+   
+
     
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
@@ -58,6 +59,7 @@ const toppingNameChangeHandler = (check, id, item) => {
             }
             return item;
         });
+        
         setToppingDatafinal(updatedData);
     }
 

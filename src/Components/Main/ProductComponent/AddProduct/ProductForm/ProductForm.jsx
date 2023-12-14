@@ -6,9 +6,14 @@ import Basic from '../Basic/Basic'
 import Buttons from '../../Buttons/NewButtons'
 import ProductToppingsNames from '../Toppings/ProductToppingsNames'
 import ExtraTopping from '../ExtraTopping/ExtraTopping'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchEditProduct } from '../../../../../Store/Slice/ProductSlices'
 
 const ProductForm = (props) => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const edit = useParams()
 
     const [productFormData, setProductFormData] = useState({
@@ -21,105 +26,144 @@ const ProductForm = (props) => {
         loginUserID: 5,
         showInKitchen: false,
         productDescription: "",
-        parentCategoryId: '',
         editProductCategory: [],
         productVariantList: [],
         productToppingsList: [],
         productExtraToppingsList: []
 
     })
+
     console.log("finalstate", productFormData)
 
+    useEffect(() => {
+        if (edit.id != undefined) {
+            dispatch(fetchEditProduct(edit.id))
+        }
+    }, [edit])
 
-    const basicFormDataHandler = useCallback((data) => {
-        setProductFormData(data)
+    const singleEditDataProduct = useSelector((product) => product.ProductSlices.singleData)
+    
 
-    }, [])
+    useEffect(() => {
+        !singleEditDataProduct ? setProductFormData({
+            ...productFormData
+        }) : setProductFormData({
+            productName: singleEditDataProduct.singleProductList[0].productName,
+            isActive: singleEditDataProduct.singleProductList[0].isActive,
+            isTaxable: singleEditDataProduct.singleProductList[0].isTaxable,
+            taxClassId: singleEditDataProduct.singleProductList[0].taxClassId,
+            foodTypeId: singleEditDataProduct.singleProductList[0].foodTypeId,
+            loginUserID: 5,
+            showInKitchen: singleEditDataProduct.singleProductList[0].showInKitchen,
+            productDescription: singleEditDataProduct.productDescriptsionList[0].productDescription,
+            editProductCategory: singleEditDataProduct.editProductCategory,
+            productVariantList: singleEditDataProduct.productVariantList,
+            productToppingsList: singleEditDataProduct.productToppingsList,
+            productExtraToppingsList: singleEditDataProduct.productExtraToppingsList,
 
-    const handleDescriptionData = useCallback((data) => {
-        setProductFormData(data)
+        })
 
-    }, [])
+    }, [singleEditDataProduct])
 
-    const categoriesDataHandler = useCallback((data) => {
 
+
+
+
+    const basicFormDataHandler = (data) => {
+        setProductFormData({
+            ...productFormData,
+            productName: data.productName,
+            isActive: data.isActive,
+            isTaxable: data.isTaxable,
+            foodTypeId: data.foodTypeId,
+            taxClassId: data.taxClassId,
+            showInKitchen: data.showInKitchen
+        })
+
+    }
+
+    const handleDescriptionData = (data) => {
+        setProductFormData({ ...productFormData, productDescription: data.productDescription })
+    }
+
+    const categoriesDataHandler = (data) => {
         const categoriesList = [];
         data?.map((catagory) => {
             categoriesList.push(catagory.selectcategory)
         })
-        setProductFormData({ ...productFormData, productCategoryList: categoriesList })
-    }, [])
+        setProductFormData({ ...productFormData, editProductCategory: categoriesList })
+    }
 
-    const variantDataHandler = useCallback((vdata) => {
-
+    const variantDataHandler = (vdata) => {
         const variantDataList = [];
         vdata?.map((variant) => {
             variantDataList.push(variant.selectvariant)
         })
         setProductFormData({ ...productFormData, productVariantList: variantDataList })
-    }, [])
+    }
 
-    const extraToppingDataHandler = useCallback((Edata) => {
-
-        console.log("aaaab", Edata)
+    const extraToppingDataHandler = (Edata) => {
         const extratoppingDataList = [];
         Edata?.map((extra) => {
             extratoppingDataList.push(extra)
         })
         setProductFormData({ ...productFormData, productExtraToppingsList: extratoppingDataList })
-    }, [])
+    }
 
-    const combinationDataNameSend = useCallback((Tdata) => {
-        console.log("page no 5558", Tdata)
+    const combinationDataNameSend = (Tdata) => {
         const combinationDataList = [];
         Tdata?.map((combination) => {
-            console.log("page12", combination)
             combination.allTrailData.map((combinationTrail) => {
-                console.log("page15", combinationTrail.selection)
-                // if (combinationTrail.selection.combinationProductId === combination.toppingId) {
+                if (combinationTrail.selection.combinationProductId === combination.toppingId) {
                     var newItem = { ...combinationTrail.selection, ...combination.selectionD }
                     combinationDataList.push(newItem)
-                // }
+                }
             })
-
         })
-        console.log("page447", combinationDataList)
         setProductFormData({ ...productFormData, productToppingsList: combinationDataList })
-
-    }, [])
+    }
 
     const onSubmit = (e) => {
-        e.PreventDefault()
+        e.preventDefault()
+    }
+
+    const cancelHandler = () => {
+        navigate(`/product`)
     }
 
     return (
         <>
             <form onSubmit={onSubmit}>
                 <div>
-                    {/* <Basic basicFormDataHandler={basicFormDataHandler} />
-                  <Description descriptionDataHandler={handleDescriptionData} />
-                 <Categories  categoriesDataHandler = {categoriesDataHandler}/>
-                  <Variants variantDataHandler = {variantDataHandler} />
-                <ProductToppingsNames />
-                 <ExtraTopping /> */}
-                    {props.step === 1 && <Basic basicFormDataHandler={basicFormDataHandler} />}
-                    {props.step === 2 && <Description descriptionDataHandler={handleDescriptionData} />}
-                    {props.step === 3 && <Categories categoriesDataHandler={categoriesDataHandler} />}
-                    {props.step === 4 && <Variants variantDataHandler={variantDataHandler} />}
+                    {/* <Basic basicFormDataHandler={basicFormDataHandler} productFormState = {productFormData} />
+                    <Description descriptionDataHandler={handleDescriptionData} />
+                    <Categories categoriesDataHandler={categoriesDataHandler} />
+                    <Variants variantDataHandler={variantDataHandler} />
+                    <ProductToppingsNames
+                        combinationDataNameSend={combinationDataNameSend}
+                        combinationHandler={productFormData}
+                    />
+                    <ExtraTopping extraToppingDataHandler={extraToppingDataHandler} /> */}
+                    {props.step === 1 && <Basic basicFormDataHandler={basicFormDataHandler} productFormState={productFormData} setProductFormData={setProductFormData} />}
+                    {props.step === 2 && <Description descriptionDataHandler={handleDescriptionData} productFormState={productFormData} />}
+                    {props.step === 3 && <Categories categoriesDataHandler={categoriesDataHandler} productFormState={productFormData} />}
+                    {props.step === 4 && <Variants variantDataHandler={variantDataHandler} productFormState={productFormData} />}
                     {props.step === 5 && <ProductToppingsNames
                         combinationDataNameSend={combinationDataNameSend}
                         combinationHandler={productFormData}
                     />}
-                    {props.step === 6 && <ExtraTopping extraToppingDataHandler={extraToppingDataHandler} />}
+                    {props.step === 6 && <ExtraTopping
+                        extraToppingDataHandler={extraToppingDataHandler}
+                        productFormState={productFormData}
+                        setProductFormData={setProductFormData}
+                    />}
 
                 </div>
                 <div>
 
                     <Buttons fname="Save"
                         Sname="Cancel"
-
-
-
+                        cancelHandler={cancelHandler}
                     />
                 </div>
             </form>

@@ -36,7 +36,7 @@ const ToppingForm = (props) => {
         toppingCombinatiomQuantityList: []
     })
 
-    console.log("first dfdsfdsafss",  data)
+    
 // useEffect Dispatch data
     useEffect(() => {
         dispatch(GetAllMeasuremenType())
@@ -49,7 +49,7 @@ const ToppingForm = (props) => {
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
     const foodType = useSelector((state) => state.ToppingSlices.foodType)
     const orderTypeTemp = useSelector((state) => state.ToppingSlices.orderTypes)
-    console.log("************************************************", singleEditTopping)
+   
 
     // useEffect function
     useEffect(() => {
@@ -132,13 +132,18 @@ const ToppingForm = (props) => {
     }
 
     const combinationDataNameSend = (combinationdata) => {
+        
         const combinationDataList = [];
         combinationdata && combinationdata.map((combination) => {
             combination.allTrailData.map((combinationTrail) => {
-                combinationDataList.push(combinationTrail.selection)
+                // combinationDataList.push(combinationTrail.selection)
+                if (combinationTrail.selection.combinationToppingId === combination.toppingId) {
+                    var newItem = { ...combinationTrail.selection, ...combination.selectionD }
+                    combinationDataList.push(newItem)
+                }
             })
         })
-        console.log("page 882", combinationDataList)
+        
         setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
     }
 
@@ -377,7 +382,6 @@ const ToppingForm = (props) => {
                         <div className='ToppingName_table me-5 ' >
                             <ToppingNames
                                 combinationDataNameSend={combinationDataNameSend}
-                                editStatus={Boolean(edit.id)}
                                 combinationHandler={data}
 
                             />

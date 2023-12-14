@@ -74,6 +74,8 @@ function Main() {
                         <Route path='add-product' element={<AddProduct />}>
                             <Route index element={<ProductForm />} />
                             <Route path='productform' element={<ProductForm />} />
+                            <Route path='productform/:id' element={<ProductForm />} />
+
                         </Route>
 
 

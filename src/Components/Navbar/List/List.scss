@@ -33,45 +33,45 @@
         margin-top: 10px;
     }
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    &:hover {
-        width: 320px;
-        transition: all 0.3s ease-in-out;
-        white-space: nowrap;
+    // &:hover {
+    //     width: 320px;
+    //     transition: all 0.3s ease-in-out;
+    //     white-space: nowrap;
 
-        .sidebar_listItemsInner {
-            justify-content: start;
+    //     .sidebar_listItemsInner {
+    //         justify-content: start;
 
-            p {
-                opacity: 1;
-                display: block;
-            }
-        }
+    //         p {
+    //             opacity: 1;
+    //             display: block;
+    //         }
+    //     }
 
-        .sidebar__innerMenu {
-            opacity: 1;
-            display: block;
-            transition: all 0.3s ease-in-out;
-        }
+    //     .sidebar__innerMenu {
+    //         opacity: 1;
+    //         display: block;
+    //         transition: all 0.3s ease-in-out;
+    //     }
 
-        .login__detailsSec {
-            padding: 28px 10px;
+    //     .login__detailsSec {
+    //         padding: 28px 10px;
 
-            .user__name {
-                p {
-                    width: 100%;
-                    transition: all 0.3s ease-in-out;
-                }
-            }
+    //         .user__name {
+    //             p {
+    //                 width: 100%;
+    //                 transition: all 0.3s ease-in-out;
+    //             }
+    //         }
 
-            .user__logout {
-                a {
-                    width: 100%;
-                    transition: all 0.3s ease-in-out;
-                    display: block;
-                }
-            }
-        }
-    }
+    //         .user__logout {
+    //             a {
+    //                 width: 100%;
+    //                 transition: all 0.3s ease-in-out;
+    //                 display: block;
+    //             }
+    //         }
+    //     }
+    // }
 
     .login__detailsSec {
         padding: 28px 10px;
@@ -123,4 +123,114 @@
             }
         }
     }
+}
+
+
+
+
+
+
+.sidebar__width {
+    background: #FFE0BA;
+    border-radius: 0px 10px 10px 0px;
+    height: 100%;
+    width: 320px;
+    transition: all 0.3s ease-in-out;
+    white-space: nowrap;
+
+    .sidebar_listItemsInner {
+        justify-content: start;
+
+        p {
+            opacity: 1;
+            display: block;
+        }
+    }
+
+    .sidebar__innerMenu {
+        opacity: 0;
+        display: none;
+        transition: all 0.3s ease-in-out;
+        margin-left: 40px;
+        margin-top: 10px;
+    }
+
+    .sidebar__innerMenu {
+        opacity: 1;
+        display: block;
+        transition: all 0.3s ease-in-out;
+    }  
+
+        
+
+    .login__detailsSec {
+        padding: 28px 10px;
+
+        .user__name {
+            p {
+                width: 100%;
+                transition: all 0.3s ease-in-out;
+            }
+        }
+
+        .user__logout {
+            a {
+                width: 100%;
+                transition: all 0.3s ease-in-out;
+                display: block;
+            }
+        }
+    }
+    // .login__detailsSec {
+    //     padding: 28px 10px;
+
+    //     .user__name {
+    //         p {
+    //             width: 70px;
+    //             transition: all 0.3s ease-in-out;
+    //         }
+    //     }
+
+    //     .user__logout {
+    //         a {
+    //             width: 70px;
+    //             display: block;
+    //             transition: all 0.3s ease-in-out;
+    //         }
+    //     }
+    // }
+
+        .sideBar__list {
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: all 0.3s ease-in-out;
+
+            &::-webkit-scrollbar {
+                width: 5px;
+
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #f1f1f100;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: $primaryColor;
+                border-radius: 5px;
+            }
+        }
+
+    .listStyle {
+        height: calc(100% - 31%);
+        overflow: hidden;
+
+        .sideBar__list {
+            .sidebar_listItems {
+                padding: 25px 19px;
+                border-bottom: 1px solid black;
+            }
+        }
+    }
+
+    
 }

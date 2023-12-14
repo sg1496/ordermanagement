@@ -3,15 +3,17 @@ import "./ManageuserForm.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
 import Buttons from '../../ProductComponent/Buttons/NewButtons';
-import { fetchAllDataUsers,fetchSaveUpdateDataUser, fetchSingleEditDataUser, resetStates } from '../../../../Store/Slice/ManageUsers';
+import { fetchAllDataUsers, fetchSaveUpdateDataUser, fetchSingleEditDataUser, resetStates } from '../../../../Store/Slice/ManageUsers';
 import { useNavigate, useParams } from 'react-router-dom';
+import {  fetchLoginDataRolepage } from '../../../../Store/Slice/ManageRoleSlices';
+import verifyToken from '../../../SignIn/verifyToken';
 
 const ManageuserForm = () => {
     const dispatch = useDispatch();
     dispatch(navTitle("Manage User"));
     const navigate = useNavigate()
     const edit = useParams()
-
+    const loginToken= verifyToken()
 
     const [checkPass, setcheckPass] = useState(true)
     const [manageUser, setManageUser] = useState({
@@ -19,14 +21,23 @@ const ManageuserForm = () => {
         firstName: "",
         lastName: "",
         mobileNo: "",
+        roleId:"",
         // userTypeID: 1,
-        // loginUserID: 5,
+        franchiseId: "",
         confirmPassword: "",
-        passKey: ""
+        passKey: "",
+        parentUserId:""
     })
 
     const singleDataManageUser = useSelector((manageUser) => manageUser.ManageUserSlices.singleData)
+    const roleData =  useSelector((role)=> role.ManageRoleSlices.loginData)
+    console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddda", roleData)
+
+    useEffect(() => {
+      dispatch(fetchLoginDataRolepage(loginToken.userID))
+    }, [])
     
+
 
     useEffect(() => {
         if (edit.id !== undefined) {
@@ -41,7 +52,8 @@ const ManageuserForm = () => {
             email: singleDataManageUser.email,
             firstName: singleDataManageUser.firstName,
             lastName: singleDataManageUser.lastName,
-            mobileNo: singleDataManageUser.mobileNo,          
+            roleId: singleDataManageUser.roleId,
+            mobileNo: singleDataManageUser.mobileNo,
         })
         if (!edit.id) {
             setManageUser({
@@ -49,8 +61,9 @@ const ManageuserForm = () => {
                 firstName: '',
                 lastName: "",
                 mobileNo: "",
+                roleId:"",
                 userTypeID: "",
-                loginUserID: "",
+                franchiseId: "",
             })
         }
     }, [singleDataManageUser])
@@ -75,20 +88,25 @@ const ManageuserForm = () => {
         e.preventDefault()
 
         let manageUserdata
-        if (checkPass) {    
+        if (checkPass) {
             if (Object.keys(edit).length < 1) {
                 manageUserdata = {
                     ...manageUser,
-                    userName: manageUser.email,
+                    roleId: parseInt(manageUser.roleId),
+                    franchiseId: parseInt(loginToken.userID),
+                    parentUserId:1
                 }
-            }else{
+            } else {
                 manageUserdata = {
                     ...manageUser,
-                    userId: parseInt(edit.id)
-                    
+                    userId: parseInt(edit.id),
+                    roleId: parseInt(manageUser.roleId),
+                    franchiseId: parseInt(loginToken.userID),
+                    parentUserId:1
+
                 }
             }
-            
+
         } else {
             setManageUser({
                 ...manageUser,
@@ -105,7 +123,7 @@ const ManageuserForm = () => {
             userName: "",
             firstName: "",
             lastName: "",
-            mobileNo: "",            
+            mobileNo: "",
             confirmPassword: "",
             passKey: ""
         })
@@ -120,13 +138,13 @@ const ManageuserForm = () => {
             firstName: "",
             lastName: "",
             mobileNo: "",
-            
+
             confirmPassword: "",
             passKey: ""
         })
     }
 
-    const { email, firstName, lastName, mobileNo, passKey, confirmPassword } = manageUser
+    const { email, firstName, lastName, mobileNo,roleId, passKey, confirmPassword } = manageUser
 
     return (
         <>
@@ -190,6 +208,9 @@ const ManageuserForm = () => {
 
                     </div>
                     <div className=" addProduct__basicForm d-flex mb-3">
+
+
+
                         <div className="addProduct__productNames">
                             <label htmlFor="product-name" className="form-label inputForm__label">
                                 Contact Number:
@@ -205,6 +226,29 @@ const ManageuserForm = () => {
                                 onChange={(e) => changeHandler(e)}
                                 required
                             />
+                        </div>
+
+                        <div className="addProduct__productNames">
+                            <label htmlFor="taxClass" className="form-label inputForm__label" >
+                                Manage Role:
+                                <span className="formRequired">*</span>
+                            </label>
+                            <select className="form-select "
+                                id="taxClass"
+                                name='roleId'
+                                value={roleId}
+                                onChange={(e) => changeHandler(e)}
+                            >
+                                <option defaultValue>Select Role</option>
+                                {roleData?.map(item => {
+                                    return <option
+                                        key={item.roleID}
+                                        value={item.roleID}>
+                                        {item.roleName}
+                                    </option>
+
+                                })}
+                            </select>
                         </div>
 
                         <div className="addProduct__productNames">
@@ -224,6 +268,11 @@ const ManageuserForm = () => {
                             />
                         </div>
 
+
+
+                    </div>
+
+                    <div className=" addProduct__basicForm d-flex mb-5">
                         <div className="addProduct__productNames">
                             <label htmlFor="product-name" className="form-label inputForm__label">
                                 Confirm Passward:
@@ -241,7 +290,6 @@ const ManageuserForm = () => {
                             // required
                             />
                         </div>
-
                     </div>
 
                     <div>

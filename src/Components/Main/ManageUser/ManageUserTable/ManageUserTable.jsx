@@ -2,24 +2,26 @@ import React, { useEffect } from 'react';
 
 import images from "../../../../assets/images"
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllDataUsers, fetchDelDataUser, fetchSingleEditDataUser, resetStates } from '../../../../Store/Slice/ManageUsers';
+import { fetchAllDataUsers, fetchDelDataUser, fetchLoginDataUsers, fetchSingleEditDataUser, resetStates } from '../../../../Store/Slice/ManageUsers';
 import { useNavigate } from 'react-router-dom';
-
+import verifyToken from '../../../SignIn/verifyToken';
 function ManageUserTable() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const loginToken= verifyToken()
 
-    const manageUserData = useSelector((manageuser) => manageuser.ManageUserSlices.data);
+    // const manageUserData = useSelector((manageuser) => manageuser.ManageUserSlices.data.loginData);
+    const manageLoginUserData = useSelector((manageuser) => manageuser.ManageUserSlices.loginData);
     const manageUserMessage = useSelector((manageuser) => manageuser.ManageUserSlices.message);
 
-    console.log("save/edit", manageUserMessage)
+    console.log("save/edit---------", loginToken.serTypeId)
 
 
     useEffect(() => {
-        dispatch(fetchAllDataUsers())
+        dispatch(fetchLoginDataUsers({id : loginToken.userID, pid: loginToken.serTypeId}))
     }, [manageUserMessage])
 
-    console.log("first", manageUserData)
+    // console.log("first", manageUserData)
 
     return (
         <>
@@ -34,7 +36,7 @@ function ManageUserTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {manageUserData?.map((item, index) => {
+                        {manageLoginUserData?.map((item, index) => {
                             return <tr key={index}>
                                 <td scope="row" >{item.email}</td>
                                 <td className='text-center'>{item.mobileNo}</td>

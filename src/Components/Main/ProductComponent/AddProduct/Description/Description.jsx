@@ -4,26 +4,20 @@ import { useDispatch } from 'react-redux';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
 
 const Description = (props) =>{
+    
     const dispatch = useDispatch();
     dispatch(navTitle("Add Products"));
     
 
-    const [discriptionData, setDiscriptionData] = useState({
-        productDescription: ""
-    })
-
     const handleDescriptionChange = (e) => {
         let newArr ={
-            ...discriptionData,
+            ...props.productFormState,
             [e.target.name ]: e.target.value
         }
-        setDiscriptionData(newArr)
-      
-        // Call the parent function to send the description data
         props.descriptionDataHandler(newArr);
       };
 
-      const {productDescription} = discriptionData
+   
 
     return (
         <>
@@ -39,7 +33,7 @@ const Description = (props) =>{
                                 className='form-control w-25'
                                 placeholder='This product is'
                                 name="productDescription"
-                                value={productDescription}
+                                value={props.productFormState.productDescription}
                                 onChange={handleDescriptionChange}
                             ></textarea>
                         </div>

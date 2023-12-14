@@ -3,20 +3,24 @@ import React, { useEffect } from 'react';
 import images from "../../../../assets/images"
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchAllDataRole, fetchDelDataRole, fetchSingleEditDataRole,resetStates } from '../../../../Store/Slice/ManageRoleSlices';
+import verifyToken from '../../../SignIn/VerifyToken';
+import { fetchAllDataRole, fetchDelDataRole, fetchLoginDataRolepage, fetchSingleEditDataRole,resetStates } from '../../../../Store/Slice/ManageRoleSlices';
 
 const ManageRoleDataTable = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const loginToken= verifyToken()
 
-    const manageRoleData = useSelector((manageRole) => manageRole.ManageRoleSlices.data);
+    // const manageRoleData = useSelector((manageRole) => manageRole.ManageRoleSlices.data);
+    const manageLoginRoleData = useSelector((manageRole) => manageRole.ManageRoleSlices.loginData);
     const manageRoleMessage = useSelector((manageRole) => manageRole.ManageRoleSlices.message);
 
-    console.log("save/edit", manageRoleData, manageRoleMessage)
+    console.log("save/edit",  manageRoleMessage)
 
 
     useEffect(() => {
-        dispatch(fetchAllDataRole())
+        // dispatch(fetchAllDataRole())
+        dispatch(fetchLoginDataRolepage(loginToken.userID))
     }, [manageRoleMessage])
 
     // console.log("first", manageUserData)
@@ -32,7 +36,7 @@ const ManageRoleDataTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {manageRoleData?.map((item, index) => {
+                        {manageLoginRoleData?.map((item, index) => {
                             return <tr key={index}>
                                 <td scope="row" >{item.roleName}</td>
                                 <td >

@@ -5,6 +5,7 @@ import { navTitle } from "../../../../Store/Slice/NavSlices";
 import Buttons from "../../ProductComponent/Buttons/NewButtons";
 import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import verifyToken from "../../../SignIn/VerifyToken";
 import { fetchSaveUpdateLocality, fetchSingleDataLocality, resetStates } from "../../../../Store/Slice/LocalitySlices";
 
 
@@ -15,9 +16,12 @@ function LocalityForm(props) {
     dispatch(navTitle("Locality-Form"));
     const edit = useParams();
 
+    const loginUserId = useSelector(login => login.LoginSlices)
+    console.log("loginUserId", loginUserId)
+
     const [locatitySetData, setLocatitySetData] = useState({
         localityName: '',
-        loginUserID: 1
+        loginUserID: "",
     })
 
     useEffect(() => {
@@ -35,7 +39,7 @@ function LocalityForm(props) {
         }) : setLocatitySetData({
             localityName: localitySingleData.localityName
         })
-        if (!edit.id) {            
+        if (!edit.id) {
             setLocatitySetData({
                 localityName: ''
             })
@@ -55,12 +59,20 @@ function LocalityForm(props) {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        const loginToken = verifyToken()
 
         let localityData
         if (Object.keys(edit).length < 1) {
-            localityData = { ...locatitySetData }
+            localityData = {
+                ...locatitySetData,
+                loginUserID: loginToken.userID
+            }
         } else {
-            localityData = { ...locatitySetData, localityID: parseInt(edit.id) }
+            localityData = {
+                ...locatitySetData,
+                localityID: parseInt(edit.id),
+                loginUserID: loginToken.userID
+            }
         }
 
         dispatch(fetchSaveUpdateLocality(localityData))

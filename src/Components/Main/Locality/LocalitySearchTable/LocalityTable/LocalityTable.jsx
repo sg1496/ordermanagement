@@ -4,18 +4,20 @@ import images from "../../../../../assets/images"
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
 import { useNavigate } from 'react-router-dom';
-import { fetchAllDataLocality, fetchDeleteDataLocality, fetchSingleDataLocality, resetStates } from '../../../../../Store/Slice/LocalitySlices';
+import {  fetchDeleteDataLocality, fetchLoginDataLocality, fetchSingleDataLocality, resetStates } from '../../../../../Store/Slice/LocalitySlices';
+import verifyToken from '../../../../SignIn/VerifyToken';
 
 const LocalityTable = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     dispatch(navTitle("Manage Locality"));
+    const loginToken= verifyToken()
 
     const LocalityMessage = useSelector((locality) => locality.LocalitySlices.message);
-    const LocalityAllData = useSelector((locality) => locality.LocalitySlices.data);  
+    const LocalityAllData = useSelector((locality) => locality.LocalitySlices.loginData);  
 
     useEffect(() => {
-        dispatch(fetchAllDataLocality())
+        dispatch(fetchLoginDataLocality(loginToken.userID))
     }, [LocalityMessage])   
     
 

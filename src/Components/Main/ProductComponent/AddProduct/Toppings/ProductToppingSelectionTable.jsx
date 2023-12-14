@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 
 function ProductToppingSelectionTable(props) {
-    console.log("ddddddddddata11", props)
+    
 
     const dispatch = useDispatch();
     const { id } = useParams();
@@ -16,8 +16,8 @@ function ProductToppingSelectionTable(props) {
     // useState
     const [toppingCheckName, setToppingCheckName] = useState("");
     const [trial, setTrial] = useState([]);
-    console.log("bbbbb4444444", trial)
-   
+    
+
     // useEffect
     useEffect(() => {
         setToppingCheckName(props.toppingNameData);
@@ -31,99 +31,120 @@ function ProductToppingSelectionTable(props) {
     const variantSelectionTable = useSelector((state) => state.variantSlices.data);
 
     useEffect(() => {
-                const allda = [];
-                if (variantSelectionTable && toppingCheckName && props.selectedToppingName.length > 0
-                ) {
-                    const addKeyCheck = JSON.parse(JSON.stringify(toppingCheckName));
-                    addKeyCheck.map((item2) => {
-                        item2.isRemovable = false
-        
-                        let c = [];
-                        let newData
-        
-                         newData = {
-                            // mainToppingId: item2.toppingId,
-                            // mainToppingName: item2.toppingName,
-                            ...item2, selectionD: { toppingId: item2.toppingId, isRemovable: false }
-                        };
-                        let idExist = props.selectedToppingName.filter(
-                            (element) => element.combinationProductId === item2.toppingId
-                        );
-        
-                        if (idExist.length > 0) {
-                            variantSelectionTable.map((item1) => {
-                                props.selectedToppingName.map((selectedData) => {
-                                    if (
-                                        selectedData.variantId === item1.variantId &&
-                                        selectedData.combinationProductId === item2.toppingId
-                                    ) {
-                                        let dataas = {
-                                            ...item1,
-                                            selection: {
-                                                productCombinationId: selectedData.productCombinationId,
-                                                combinationProductId: item2.toppingId,
-                                                quantity: selectedData.quantity,
-                                                variantId: item1.variantId,
-                                                isRemovable: selectedData.isRemoved
-                                            },
-                                        };
-                                        c.push(dataas);
-        
-                                    }
-                                });
-                            });
-                        } else {
-                             
-                            variantSelectionTable.map((item1) => {
+        const allda = [];
+        if (variantSelectionTable && toppingCheckName && props.selectedToppingName.length > 0
+        ) {
+            const addKeyCheck = JSON.parse(JSON.stringify(toppingCheckName));
+            addKeyCheck.map((item2) => {
+                item2.isRemoved = false
+                item2.isDeleted = false
+
+                let c = [];
+                let newData
+
+
+                let idExist = props.selectedToppingName.filter(
+                    (element) => {
+                        if (element.combinationProductId === item2.toppingId) {
+                            newData = {
+                                // mainToppingId: item2.toppingId,
+                                // mainToppingName: item2.toppingName,
+                                ...item2, selectionD: { toppingId: item2.toppingId, isRemoved: element.isRemoved, isDeleted: element.isDeleted }
+                                
+                            };
+                            return newData
+                        }
+                    }
+                );
+
+                if (idExist.length > 0) {
+
+                    variantSelectionTable.map((item1) => {
+                        props.selectedToppingName.map((selectedData) => {
+                            if (
+                                selectedData.variantId === item1.variantId &&
+                                selectedData.combinationProductId === item2.toppingId
+                            ) {
                                 let dataas = {
                                     ...item1,
                                     selection: {
-                                        productCombinationId: -1,
+                                        productCombinationId: selectedData.productCombinationId,
                                         combinationProductId: item2.toppingId,
-                                        quantity: 0,
+                                        quantity: selectedData.quantity,
                                         variantId: item1.variantId,
-                                        isRemovable: false
+
                                     },
                                 };
                                 c.push(dataas);
-                            });
-                        }
-                        newData = { ...newData, allTrailData: c };
-                        allda.push(newData);
-                    });
-                    setTrial(allda);
-                } else
-                    if (variantSelectionTable && toppingCheckName) {
-                        const addKeyCheck = JSON.parse(JSON.stringify(toppingCheckName));
-                        addKeyCheck.map((item1) => {
-                            item1.isRemovable = false
-                            var c = [];
-        
-                            var newData = {
-                                ...item1, selectionD: { toppingId: item1.toppingId, isRemovable: false }
-                            };
-                            variantSelectionTable.map((item) => {
-                                let dataas = {
-                                    ...item,
-                                    selection: {
-                                        combinationProductId: item1.toppingId,
-                                        quantity: 0,
-                                        variantId: item.variantId,
-                                        isRemovable: false
-        
-                                    },
-                                };
-                                c.push(dataas);
-                                // allda.push(dataas)
-                            });
-                            newData = { ...newData, allTrailData: c };
-                            allda.push(newData);
+
+                            }
                         });
-        
-                        setTrial(allda);
-                       
-                    }
-            }, [variantSelectionTable, toppingCheckName]);
+                    });
+                } else {
+                    newData = {
+                        // mainToppingId: item2.toppingId,
+                        // mainToppingName: item2.toppingName,
+                        ...item2, selectionD: { toppingId: item2.toppingId, isRemoved: false, isDeleted: 0  }
+                        
+                    };
+                    variantSelectionTable.map((item1) => {
+                        let dataas = {
+                            ...item1,
+                            selection: {
+                                productCombinationId: -1,
+                                combinationProductId: item2.toppingId,
+                                quantity: 0,
+                                variantId: item1.variantId,
+                                isRemoved: false,
+                                
+                            },
+                        };
+                        c.push(dataas);
+                    });
+                }
+                newData = { ...newData, allTrailData: c };
+                allda.push(newData);
+            });
+            setTrial(allda);
+        } else
+            if (variantSelectionTable && toppingCheckName) {
+                const addKeyCheck = JSON.parse(JSON.stringify(toppingCheckName));
+                addKeyCheck.map((item1) => {
+                   
+                    item1.isRemoved = false
+                    item1.isDeleted = false
+                    var c = [];
+                    
+
+                    var newData = {
+                        ...item1, selectionD: { toppingId: item1.toppingId, isRemoved: false, isDeleted: 0 }
+                    };
+                    variantSelectionTable.map((item) => {
+                        let dataas = {
+                            ...item,
+                            selection: {
+                                productCombinationId: -1,
+                                combinationProductId: item1.toppingId,
+                                quantity: 0,
+                                variantId: item.variantId,
+                                isRemoved: false,
+                               
+
+
+                            },
+                        };
+                        c.push(dataas);
+                        // allda.push(dataas)
+                    });
+                    
+                    newData = { ...newData, allTrailData: c };
+                    allda.push(newData);
+                });
+
+                setTrial(allda);
+
+            }
+    }, [variantSelectionTable, toppingCheckName]);
 
 
     // useEffect(() => {
@@ -211,7 +232,7 @@ function ProductToppingSelectionTable(props) {
     //         });
 
     //         setTrial(allda);
-    //         console.log("page 74", allda)
+    //         
     //     }
     // }, [variantSelectionTable, toppingCheckName]);
 
@@ -220,7 +241,7 @@ function ProductToppingSelectionTable(props) {
             if (item.toppingId === toppingId) {
                 var c = [];
                 item.allTrailData.map((traildata, ind) => {
-                    
+
                     if (traildata.variantId === variantId) {
                         var t = {
                             ...traildata,
@@ -240,7 +261,7 @@ function ProductToppingSelectionTable(props) {
                                 combinationProductId: toppingId,
                                 quantity: traildata.selection.quantity,
                                 variantId: traildata.variantId,
-                                isDeleted: traildata.selection.isDeleted
+
                             },
                         };
                         c.push(t);
@@ -258,7 +279,7 @@ function ProductToppingSelectionTable(props) {
                                 combinationProductId: toppingId,
                                 quantity: parseInt(e.target.value),
                                 variantId: traildata.variantId,
-                                isDeleted: traildata.selection.isDeleted
+
                             },
                         };
                         c.push(t);
@@ -270,7 +291,7 @@ function ProductToppingSelectionTable(props) {
                                 combinationProductId: toppingId,
                                 quantity: traildata.selection.quantity,
                                 variantId: traildata.variantId,
-                                isDeleted: traildata.selection.isDeleted
+
                             },
                         };
                         c.push(t);
@@ -287,42 +308,30 @@ function ProductToppingSelectionTable(props) {
         props.combinationDataSendParent(newArr);
     };
 
-    const deleteHandler = (id) => {
-        // const deleteddata = trial.filter((item) => item.mainToppingId !== id);
-        // console.log("pageeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", deleteddata)
-        // setTrials(deleteddata);
-        props.unCheckHandler(id);
-    };
-    const toppingNameChangeHandler = (e, item, id) => {
-        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", e, item, id)
-
-                let newArr = trial.map((item) => {
-                    if (item.toppingId === id) {
-                        return {
-                            ...item,
-                            selectionD: {
-                                toppingId: item.toppingId,
-                                isRemovable: e.target.name === 'isRemovable' ? e.target.checked : item.selection.isRemovable,
-                            }
-                        };
-                    } else {
-                        return item;
+   
+    const toppingNameChangeHandler = (id, e, item) => {
+       
+    
+        let newArr = trial.map((topping) => {
+            if (topping.toppingId === id) {
+                return {
+                    ...topping,
+                    selectionD: {
+                        ...topping.selectionD,
+                        isRemoved: e.target.name === 'isRemoved' ? e.target.checked : topping.selectionD.isRemoved,
+                        isDeleted: 1 // Not sure if this property is necessary for your case
                     }
-                })
-                console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&", newArr)
-                setTrial(newArr)
-                props.combinationDataSendParent(newArr);
-                // item.allTrailData[0].selection.isRemovable=check
-                // item.allTrailData[1].selection.isRemovable=check
-                // item.allTrailData[2].selection.isRemovable=check
-        
-                // item.allTrailData?.map((item) => {
-                //     item.selection.isRemovable = check
-                // })
-        
+                };
             }
+            return topping;
+        });
+    
+        
+        setTrial(newArr);
+        props.combinationDataSendParent(newArr);
+    };
 
-    // console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd222", trials)
+   
 
     return (
         <>
@@ -340,7 +349,7 @@ function ProductToppingSelectionTable(props) {
                                     Required Quantity
                                 </th>
                                 <th scope="col">
-                                    isRemovable
+                                    isRemoved
                                 </th>
                                 <th scope="col" style={{ width: "25%" }}>
                                     Action
@@ -393,9 +402,9 @@ function ProductToppingSelectionTable(props) {
                                                     type="checkbox"
                                                     id={`isActive${index}`}
                                                     className="form-check-input p-2 toggle_btn"
-                                                    name="isRemovable"
-                                                    // checked={item.selection.isRemovable}
-                                                    onChange={(e) => toppingNameChangeHandler(e, item, item.toppingId)}
+                                                    name="isRemoved"
+                                                    checked={item.selectionD.isRemoved}
+                                                    onChange={(e) => toppingNameChangeHandler(item.toppingId,e, item)}
                                                 />
                                             </div>
                                         </td>
@@ -403,7 +412,7 @@ function ProductToppingSelectionTable(props) {
                                             <img
                                                 src={tablebin}
                                                 alt="Delete Icon"
-                                                onClick={() => deleteHandler(item.mainToppingId)}
+                                                onClick={(e) =>( toppingNameChangeHandler(item.toppingId,e, null, ),props.unCheckHandler(item.toppingId))}
                                             />
                                         </td>
                                     </tr>
@@ -472,7 +481,7 @@ export default ProductToppingSelectionTable;
 //     // useState
 //     const [toppingCheckName, setToppingCheckName] = useState("");
 //     const [trial, setTrial] = useState([]);
-//     console.log("bbbbb4444444", trial)
+//     
 
 //     // useEffect
 //     useEffect(() => {
@@ -495,7 +504,7 @@ export default ProductToppingSelectionTable;
 //                     ...item,
 //                     selectionD: {
 //                         toppingId: item.toppingId,
-//                         isRemovable: e.target.name === 'isRemovable' ? e.target.checked : item.selectionD.isRemovable,
+//                         isRemoved: e.target.name === 'isRemoved' ? e.target.checked : item.selectionD.isRemoved,
 //                     }
 //                 };
 //             } else {
@@ -504,12 +513,12 @@ export default ProductToppingSelectionTable;
 //         })
 //         setTrial(newArr)
 //         props.combinationDataSendParent(newArr);
-//         // item.allTrailData[0].selection.isRemovable=check
-//         // item.allTrailData[1].selection.isRemovable=check
-//         // item.allTrailData[2].selection.isRemovable=check
+//         // item.allTrailData[0].selection.isRemoved=check
+//         // item.allTrailData[1].selection.isRemoved=check
+//         // item.allTrailData[2].selection.isRemoved=check
 
 //         // item.allTrailData?.map((item) => {
-//         //     item.selection.isRemovable = check
+//         //     item.selection.isRemoved = check
 //         // })
 
 //     }
@@ -520,7 +529,7 @@ export default ProductToppingSelectionTable;
 //         ) {
 //             const addKeyCheck = JSON.parse(JSON.stringify(toppingCheckName));
 //             addKeyCheck.map((item2) => {
-//                 item2.isRemovable = false
+//                 item2.isRemoved = false
 
 //                 let c = [];
 //                 let newData
@@ -548,7 +557,7 @@ export default ProductToppingSelectionTable;
 //                                         combinationProductId: item2.toppingId,
 //                                         quantity: selectedData.quantity,
 //                                         variantId: item1.variantId,
-//                                         isRemovable: selectedData.isRemoved
+//                                         isRemoved: selectedData.isRemoved
 //                                     },
 //                                 };
 //                                 c.push(dataas);
@@ -560,7 +569,7 @@ export default ProductToppingSelectionTable;
 //                      newData = {
 //                         // mainToppingId: item2.toppingId,
 //                         // mainToppingName: item2.toppingName,
-//                         ...item2, selectionD: { toppingId: item2.toppingId, isRemovable: false }
+//                         ...item2, selectionD: { toppingId: item2.toppingId, isRemoved: false }
 //                     };
 //                     variantSelectionTable.map((item1) => {
 //                         let dataas = {
@@ -570,7 +579,7 @@ export default ProductToppingSelectionTable;
 //                                 combinationProductId: item2.toppingId,
 //                                 quantity: 0,
 //                                 variantId: item1.variantId,
-//                                 isRemovable: false
+//                                 isRemoved: false
 //                             },
 //                         };
 //                         c.push(dataas);
@@ -584,11 +593,11 @@ export default ProductToppingSelectionTable;
 //             if (variantSelectionTable && toppingCheckName) {
 //                 const addKeyCheck = JSON.parse(JSON.stringify(toppingCheckName));
 //                 addKeyCheck.map((item1) => {
-//                     item1.isRemovable = false
+//                     item1.isRemoved = false
 //                     var c = [];
 
 //                     var newData = {
-//                         ...item1, selectionD: { toppingId: item1.toppingId, isRemovable: false }
+//                         ...item1, selectionD: { toppingId: item1.toppingId, isRemoved: false }
 //                     };
 //                     variantSelectionTable.map((item) => {
 //                         let dataas = {
@@ -608,16 +617,16 @@ export default ProductToppingSelectionTable;
 //                 });
 
 //                 setTrial(allda);
-//                 console.log("page 88", allda)
+//                 
 //             }
 //     }, [variantSelectionTable, toppingCheckName]);
 
 
 
 //     const combinationChangeHandler = (e, variantId, toppingId) => {
-//         console.log("item 2", e, variantId, toppingId)
+//         
 //         let newArr = trial.map((item, i) => {
-//             console.log("item 1", item)
+//            
 //             if (id && item.toppingId === toppingId) {
 
 //                 var c = [];
@@ -724,7 +733,7 @@ export default ProductToppingSelectionTable;
 //                                     Required Quantity
 //                                 </th>
 //                                 <th scope="col">
-//                                     isRemovable
+//                                     isRemoved
 //                                 </th>
 //                                 <th scope="col" style={{ width: "25%" }}>
 //                                     Action
@@ -733,7 +742,7 @@ export default ProductToppingSelectionTable;
 //                         </thead>
 //                         <tbody>
 //                             {trial?.map((item, index) => {
-//                                 console.log("item 3", item)
+//                                 
 //                                 return (
 //                                     <tr key={index}>
 //                                         <td className="pt-4">
@@ -778,8 +787,8 @@ export default ProductToppingSelectionTable;
 //                                                     type="checkbox"
 //                                                     id={`isActive${index}`}
 //                                                     className="form-check-input p-2 toggle_btn"
-//                                                     name="isRemovable"
-//                                                     // checked={item.selection.isRemovable}
+//                                                     name="isRemoved"
+//                                                     // checked={item.selection.isRemoved}
 //                                                     onChange={(e) => toppingNameChangeHandler(e, item, item.toppingId)}
 //                                                 />
 //                                             </div>

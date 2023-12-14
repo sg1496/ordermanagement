@@ -6,11 +6,13 @@ import { fetchApiData } from '../../../../../Store/Slice/VariantSlices';
 import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
 
 function Variants(props) {
+
+    
     const dispatch = useDispatch();
     dispatch(navTitle("Add Products"));
 
     const [variantData, setVariantData] = useState([])
-    console.log("abababbababababb4444444", variantData)
+    
 
     const variantList = useSelector((variant) => variant.variantSlices.data)
     const toppingList = useSelector((topping) => topping.ToppingSlices.data)
@@ -22,9 +24,22 @@ function Variants(props) {
 
     useEffect(() => {
         const varntdata = []
-        if (variantList) {
+        if (variantList && props.productFormState.productVariantList.length > 0) {
             variantList?.map((item) => {
-                const newItem = { ...item, selectvariant: { price: 0, variantId: item.variantId, salePrice: 0, toppingId: "", isActive:false } }
+                
+                props.productFormState.productVariantList.filter((selectvariant) => {
+                    
+                    if (selectvariant.variantId === item.variantId) {
+                        const newItem = { ...item, selectvariant }
+                        varntdata.push(newItem)
+                    }
+                })
+            })
+            setVariantData(varntdata)
+        }
+        else if (variantList) {
+            variantList?.map((item) => {
+                const newItem = { ...item, selectvariant: { price: 0, variantId: item.variantId, salePrice: 0, toppingId: "", isActive: false } }
                 varntdata.push(newItem)
             })
             setVariantData(varntdata)
@@ -32,7 +47,8 @@ function Variants(props) {
     }, [variantList])
 
     const changeHandler = (e, id) => {
-        let newArr = variantData?.map((item) => { console.log("/////////////////////////////////////////////////////////", item)
+        let newArr = variantData?.map((item) => {
+           
             if (item.variantId === id) {
                 return {
                     ...item,
@@ -48,18 +64,18 @@ function Variants(props) {
                 return item;
             }
         })
-        const finalVariantData = newArr.filter((x)=> x.selectvariant.toppingId !== "")
+        const finalVariantData = newArr.filter((x) => x.selectvariant.toppingId !== "")
         setVariantData(newArr)
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",finalVariantData)
+        
         props.variantDataHandler(finalVariantData)
     }
 
-   
 
 
 
 
-    const { price, salePrice, toppingId } = variantData
+
+    
     return (
         <>
             <div className='addProduct__variantsTab'>
@@ -79,7 +95,7 @@ function Variants(props) {
                                 </thead>
                                 <tbody>
                                     {variantData?.map((item, index) => {
-                                        
+
                                         return <tr key={index}>
                                             <th scope="row">{index + 1}</th>
                                             <td>{item.variantName}</td>
@@ -99,7 +115,7 @@ function Variants(props) {
                                                         className="form-control"
                                                         placeholder="0"
                                                         name='price'
-                                                        value={price}
+                                                        value={item.selectvariant.price}
                                                         onChange={(e) => { changeHandler(e, item.variantId) }}
                                                     />
                                                 </div>
@@ -110,7 +126,7 @@ function Variants(props) {
                                                         className="form-control"
                                                         placeholder="0"
                                                         name='salePrice'
-                                                        value={salePrice}
+                                                        value={item.selectvariant.salePrice}
                                                         onChange={(e) => { changeHandler(e, item.variantId) }}
                                                     />
                                                 </div>
@@ -120,7 +136,7 @@ function Variants(props) {
                                                     <select
                                                         className="form-select inputForm__inputField d-inline-block"
                                                         name='toppingId'
-                                                        value={toppingId}
+                                                        value={item.selectvariant.toppingId}
                                                         onChange={(e) => changeHandler(e, item.variantId)}
                                                     >
                                                         <option defaultValue>Select Toppings</option>

@@ -10,12 +10,13 @@ import { fetchApiData } from '../../../../../Store/Slice/VariantSlices';
 
 
 const ExtraTopping = (props) => {
+   
     const Navigate = useNavigate()
     const dispatch = useDispatch();
 
     const toppingList = useSelector((topping) => topping.ToppingSlices.data)
     const variantList = useSelector((variant) => variant.variantSlices.data)
-   
+
 
     useEffect(() => {
         dispatch(fetchApiDataToppings())
@@ -28,8 +29,67 @@ const ExtraTopping = (props) => {
 
     useEffect(() => {
         const newdata = []
-        if (toppingList && variantList) {
-            
+        if (toppingList && variantList && props.productFormState.productExtraToppingsList.length > 0) {
+            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(variantList));
+            toppingList?.map((item) => {
+                
+                var a = []
+                var newData
+
+                let idExist = props.productFormState.productExtraToppingsList.filter(
+                    (element) => {
+                        
+                        if (element.combinationExtraToppingId === item.toppingId) {
+                            newData = {
+                                ...item
+                            };
+                            return newData
+                        }
+                    }
+                );
+
+                if (idExist.length > 0) {
+                    ToppingDatafinaltemp.map((item1) => {
+                        
+                        item1.IsChecked = false;
+                        props.productFormState.productExtraToppingsList.filter((selectedData) => {
+                            
+                            if (selectedData.variantId === item1.variantId && selectedData.combinationExtraToppingId === item.toppingId) {
+                                item1.IsChecked = true;
+                                let dataas = {
+                                    ...item1,
+                                    selection: {
+                                        combinationToppingId: item.toppingId,
+                                        variantId: item1.variantId,
+                                    },
+                                };
+                                a.push(dataas);
+                            }
+                        })
+                    });
+                } else {
+                    newData = {
+                        ...item
+                    };
+                    ToppingDatafinaltemp.map((item1) => {
+                        item1.IsChecked = false;
+                        let dataas = {
+                            ...item1,
+                            selection: {
+                                combinationToppingId: item.toppingId,
+                                variantId: item1.variantId,
+                            },
+                        };
+                        a.push(dataas);
+                    });
+                }
+                newData = { ...newData, allTrailData: a };
+                newdata.push(newData);
+            });
+            setExtraToppingData(newdata)
+        }
+        else if (toppingList && variantList) {
+
             const ToppingDatafinaltemp = JSON.parse(JSON.stringify(variantList));
             toppingList?.map((item) => {
                 var a = []
@@ -54,12 +114,12 @@ const ExtraTopping = (props) => {
         }
     }, [toppingList, variantList])
 
-    console.log("datttttttttttttas", extraToppingData)
+
 
     const categoryChangeHandler = (check, categoryId, items, id) => {
         // Update the "IsChecked" property for the clicked item
         items.IsChecked = check;
-    
+
         // Create a new array based on the updated data
         const updatedExtraToppingData = extraToppingData.map((topping) => {
             if (topping.toppingId === id) {
@@ -78,19 +138,18 @@ const ExtraTopping = (props) => {
             }
             return topping;
         });
-    
+
         setExtraToppingData(updatedExtraToppingData);
-    
+
         // Extract selected data
         const selectedData = updatedExtraToppingData.flatMap((topping) => {
-            console.log("first", topping.allTrailData)
             return topping.allTrailData.filter((variant) => variant.IsChecked)
                 .map((variant) => ({
                     combinationToppingId: topping.toppingId,
                     variantId: variant.variantId,
-                }));
+                }));              
         });
-    
+
         // Send the selected data to a handler
         props.extraToppingDataHandler(selectedData);
     };

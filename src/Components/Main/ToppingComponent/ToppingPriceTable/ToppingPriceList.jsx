@@ -32,6 +32,7 @@ console.log("ddddddddddddddddddddddddd45", toppingData)
 
     useEffect(() => {
         const finalToppingData = []
+        console.log('props.allToppingData.toppingsPrices88888888888888888888888888888888888888888888888',props.allToppingData.toppingsPrices)
         if (toppingPrice && props.allToppingData.toppingsPrices.length > 0) {
 
             toppingPrice.map((item) => {

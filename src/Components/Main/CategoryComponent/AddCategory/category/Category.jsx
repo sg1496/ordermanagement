@@ -5,12 +5,16 @@ import { navTitle } from '../../../../../Store/Slice/NavSlices';
 
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchSaveUpdateCategory, fetchEditCategory, fetchParentCategory, resetStates } from "../../../../../Store/Slice/CategorySlices";
+import verifyToken from '../../../../SignIn/verifyToken';
 
 
 
 const Categoryform = () => {
     const Navigate = useNavigate()
     const edit = useParams()
+    const loginToken= verifyToken()
+
+    console.log("check the verify token", loginToken)
 
     const editData = useSelector((state) => state.categorySlices.singleData)
     const categoryDatas = useSelector(state => state.categorySlices.data)

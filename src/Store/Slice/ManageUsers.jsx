@@ -5,6 +5,7 @@ import dummy from '../../dummy';
 let url = import.meta.env.VITE_APP_FOODS_API
 
 const initialState = {
+    loginData:null,
     data: null,
     loading: false,
     error: null,
@@ -41,6 +42,24 @@ const ManageUserSlices = createSlice({
                 }
             })
             .addCase(fetchAllDataUsers.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.msg = "some error";
+            })
+            .addCase(fetchLoginDataUsers.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchLoginDataUsers.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
+                    state.loading = false;
+                    state.loginData = action.payload.usermodellist;
+                } else {
+                    state.loading = false;
+                    state.error = !action.payload.status;
+                    state.msg = "some error"
+                }
+            })
+            .addCase(fetchLoginDataUsers.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
@@ -105,9 +124,20 @@ const ManageUserSlices = createSlice({
     }
 
 });
+
 export const fetchAllDataUsers = createAsyncThunk('api/fetchAllDataUsers', async () => {
     try {
         const response = await axios.get(`${url}/users/GetAllUsersDetails`);
+        return response.data;
+    } catch (error) {
+        console.log("error ", error);
+        throw new Error(error.message);
+    }
+});
+
+export const fetchLoginDataUsers = createAsyncThunk('api/fetchLoginDataUsers', async (obj) => {
+    try {
+        const response = await axios.get(`${url}/users/GetAllUsersDetails/${obj.id}/${obj.pid}`);
         return response.data;
     } catch (error) {
         console.log("error ", error);
@@ -136,8 +166,8 @@ export const fetchDelDataUser = createAsyncThunk('api.fetchDeleteDataUser', asyn
 
 export const fetchSaveUpdateDataUser = createAsyncThunk('api.fetchUpdateSaveDataUser', async (data) => {
     try {
-        data.userTypeID = 1;
-        data.loginUserID = 9;
+        data.userTypeID = 3;
+        
         const response = await axios.post(`${url}/users/saveUpdateUserDetails`, data);
         console.log("response saveupdate", response.data);
         return response.data

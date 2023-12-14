@@ -4,6 +4,7 @@ import { flushSync } from 'react-dom';
 let url = import.meta.env.VITE_APP_FOODS_API
 
 const initialState = {
+    loginData:null,
     data: null,
     loading: false,
     error: null,
@@ -45,9 +46,27 @@ const LocalitySlices = createSlice({
                 state.error = true;
                 state.msg = "some error";
             })
-            .addCase(fetchDeleteDataLocality.pending, (state) => {
+            .addCase(fetchLoginDataLocality.pending, (state) => {
                 state.loading = true;
             })
+            .addCase(fetchLoginDataLocality.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
+                    state.loading = false;
+                    state.loginData = action.payload.localityModelList;
+                } else {
+                    state.loading = false;
+                    state.error = !action.payload.status;
+                    state.msg = "some error"
+                }
+            })
+            .addCase(fetchLoginDataLocality.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.msg = "some error";
+            })
+            .addCase(fetchDeleteDataLocality.pending, (state) => {
+                state.loading = true;
+            })            
             .addCase(fetchDeleteDataLocality.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
@@ -109,6 +128,16 @@ const LocalitySlices = createSlice({
 export const fetchAllDataLocality = createAsyncThunk('api/fetchDataLocality', async () => {
     try {
         const response = await axios.get(`${url}/api/Locality/GetAllLocality`);
+        return response.data;
+    } catch (error) {
+        console.log("error ", error);
+        throw new Error(error.message);
+    }
+});
+
+export const fetchLoginDataLocality = createAsyncThunk('api/fetchLoginDataLocality', async (id) => {
+    try {
+        const response = await axios.get(`${url}/api/Locality/GetAllLocality/${id}`);
         return response.data;
     } catch (error) {
         console.log("error ", error);

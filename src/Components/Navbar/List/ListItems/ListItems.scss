@@ -5,7 +5,7 @@
     cursor: pointer;
 
     .sidebar_listItemsInner {
-        gap: 20px;
+        gap: 10px;
         justify-content: center;
 
         img {
@@ -50,4 +50,8 @@
             text-decoration: none;
         }
     }
+}
+
+.activeclass{
+    justify-content:start!important
 }

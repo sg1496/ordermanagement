@@ -6,7 +6,8 @@ import { fetchApiDataToppings } from "../../../../Store/Slice/ToppingSlices";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 
-function ToppingSelectionTable(props) {
+const ToppingSelectionTable = (props) =>{
+  console.log("props seleciton data", props   )
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -14,9 +15,9 @@ function ToppingSelectionTable(props) {
   // useState
   const [toppingCheckName, setToppingCheckName] = useState("");
   const [trial, setTrial] = useState([]);
-  const [trials, setTrials] = useState(false);
+
   console.log("bbbbb4444444", trial)
-  console.log("ssssssssshubham", trial)
+
   // useEffect
   useEffect(() => {
     setToppingCheckName(props.toppingNameData);
@@ -34,15 +35,22 @@ function ToppingSelectionTable(props) {
     const allda = [];
     if (variantSelectionTable && toppingCheckName && props.selectedToppingName.length > 0
     ) {
-      toppingCheckName.map((item2) => {
+      const addKeyCheck = JSON.parse(JSON.stringify(toppingCheckName));
+      addKeyCheck.map((item2) => {
+        item2.isDeleted = false
         let c = [];
+        let newData
 
-        let newData = {
-          mainToppingId: item2.toppingId,
-          mainToppingName: item2.toppingName,
-        };
+
         let idExist = props.selectedToppingName.filter(
-          (element) => element.combinationToppingId === item2.toppingId
+          (element) => {
+            if (element.combinationToppingId === item2.toppingId) {
+              newData = {
+                ...item2, selectionD: { toppingId: item2.toppingId, isDeleted: element.isDeleted }
+              };
+              return newData
+            }
+          }
         );
 
         if (idExist.length > 0) {
@@ -67,6 +75,12 @@ function ToppingSelectionTable(props) {
             });
           });
         } else {
+          newData = {
+            // mainToppingId: item2.toppingId,
+            // mainToppingName: item2.toppingName,
+            ...item2, selectionD: { toppingId: item2.toppingId, isDeleted: 0 }
+
+          };
           variantSelectionTable.map((item1) => {
             let dataas = {
               ...item1,
@@ -87,13 +101,14 @@ function ToppingSelectionTable(props) {
       });
       setTrial(allda);
     } else if (variantSelectionTable && toppingCheckName) {
-      toppingCheckName.map((item1) => {
+      const addKeyCheck = JSON.parse(JSON.stringify(toppingCheckName));
+      addKeyCheck.map((item1) => {
+        item1.isRemoved = false
         var c = [];
 
         var newData = {
-          mainToppingId: item1.toppingId,
-          mainToppingName: item1.toppingName,
-        };
+          ...item1, selectionD: { toppingId: item1.toppingId, isDeleted: 0 }
+      };
         variantSelectionTable.map((item) => {
           let dataas = {
             ...item,
@@ -118,7 +133,7 @@ function ToppingSelectionTable(props) {
 
   const combinationChangeHandler = (e, variantId, toppingId) => {
     let newArr = trial.map((item, i) => {
-      if (id && item.mainToppingId === toppingId) {
+      if (id && item.toppingId === toppingId) {
         var c = [];
         item.allTrailData.map((traildata, ind) => {
           console.log("************************************************************", traildata)
@@ -148,7 +163,7 @@ function ToppingSelectionTable(props) {
           }
         });
         return { ...item, allTrailData: c };
-      } else if (item.mainToppingId === toppingId) {
+      } else if (item.toppingId === toppingId) {
         var c = [];
         item.allTrailData.map((traildata, ind) => {
           if (traildata.variantId === variantId) {
@@ -188,6 +203,28 @@ function ToppingSelectionTable(props) {
     props.combinationDataSendParent(newArr);
   };
 
+  const toppingNameChangeHandler = (id, e, item) => {
+       
+    
+    let newArr = trial.map((topping) => {
+        if (topping.toppingId === id) {
+            return {
+                ...topping,
+                selectionD: {
+                    ...topping.selectionD,
+                    
+                    isDeleted: 1 // Not sure if this property is necessary for your case
+                }
+            };
+        }
+        return topping;
+    });
+
+    
+    setTrial(newArr);
+    props.combinationDataSendParent(newArr);
+};
+
   const deleteHandler = (id) => {
     // const deleteddata = trial.filter((item) => item.mainToppingId !== id);
     // console.log("pageeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", deleteddata)
@@ -195,7 +232,7 @@ function ToppingSelectionTable(props) {
     props.unCheckHandler(id);
   };
 
-  console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd222", trials)
+  // console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd222", trials)
 
   return (
     <>
@@ -222,7 +259,7 @@ function ToppingSelectionTable(props) {
                 return (
                   <tr key={index}>
                     <td className="pt-4">
-                      {item.mainToppingName}
+                      {item.toppingName}
                     </td>
 
                     {item?.allTrailData.map((data, ind) => {
@@ -247,7 +284,7 @@ function ToppingSelectionTable(props) {
                                   combinationChangeHandler(
                                     e,
                                     data.variantId,
-                                    item.mainToppingId
+                                    item.toppingId
                                   )
                                 }
                               />
@@ -260,7 +297,7 @@ function ToppingSelectionTable(props) {
                       <img
                         src={tablebin}
                         alt="Delete Icon"
-                        onClick={() => deleteHandler(item.mainToppingId)}
+                        onClick={() => (toppingNameChangeHandler(item.toppingId),props.unCheckHandler(item.toppingId))}
                       />
                     </td>
                   </tr>

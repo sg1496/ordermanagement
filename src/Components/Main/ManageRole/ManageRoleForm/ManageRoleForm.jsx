@@ -7,23 +7,23 @@ import Buttons from '../../ProductComponent/Buttons/NewButtons';
 import { fetchParentCategory } from '../../../../Store/Slice/CategorySlices';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchSaveUpdateDataRole, fetchSingleEditDataRole,resetStates  } from '../../../../Store/Slice/ManageRoleSlices';
-
-
+import verifyToken from '../../../SignIn/verifyToken';
 
 const ManageRoleForm = (props) => {
     const Navigate = useNavigate();
     const dispatch = useDispatch();
     dispatch(navTitle("Manage Role"));
     const edit = useParams();
-
-
+ 
+    const loginUser = useSelector(login=>login.LoginSlices.data)
+    // console.log(" first ddddddddddddddddddta", loginUser)
+ 
     const [manageRoleData, setManageRoleData] = useState({
         roleName: "",
-        parentCategoryID: "",
+        parentCategoryID: 16,
+        franchiseId:"",
         isAdmin:false,
-        multiList: [
-          
-        ]
+        multiList: [],
     })
 
     const parentCategory = useSelector((parent) => parent.categorySlices.parentCategories)
@@ -46,50 +46,23 @@ const ManageRoleForm = (props) => {
         !manageRoleSingleData ? setManageRoleData({
             ...manageRoleData
         }) : setManageRoleData({
-            roleName: manageRoleSingleData.roleName,
-            parentCategoryID: manageRoleSingleData.parentCategoryID,
-            isAdmin: manageRoleData.isAdmin,
-            multiList: [{
-                manageRolePrivilegeID: 5,
-                pageID: 1,
-                isView: true,
-                isEdit: true,
-                isDeleted: true
-            },
-            {
-                manageRolePrivilegeID: 6,
-                pageID: 2,
-                isView: false,
-                isEdit: true,
-                isDeleted: true
-            },
-            {
-                manageRolePrivilegeID: 7,
-                pageID: 3,
-                isView: false,
-                isEdit: true,
-                isDeleted: false
-            },
-            {
-                manageRolePrivilegeID: 8,
-                pageID: 4,
-                isView: true,
-                isEdit: false,
-                isDeleted: false
-            }
-            ]
+            roleName: manageRoleSingleData.roleSingleList[0].roleName,
+            parentCategoryID: manageRoleSingleData.roleSingleList[0].parentCategoryID,
+            isAdmin:  manageRoleSingleData.roleSingleList[0].isAdmin,
+            multiList:  manageRoleSingleData.multiList,
         })
         if (!edit.id) {
             setManageRoleData({
                 roleName: "",
                 parentCategoryID: "",
-                isAdmin: false
+                isAdmin: false,
+                multiList:[]
             })
         }
     }, [manageRoleSingleData])
 
 
-
+// console.log("check the state code in role function", manageRoleData )
 
 
     const changeHandler = (e) => {
@@ -103,9 +76,10 @@ const ManageRoleForm = (props) => {
         setManageRoleData({ ...manageRoleData, isAdmin: !manageRoleData.isAdmin })
     }
 
-    const manageRoleSendHandler =(data)=>{
+    const manageRoleSendHandler =(data)=>{ 
+        // console.log( "dddddddddddddata role", data)
         const datahandel =[]
-        data?.map((item)=> {
+        data?.map((item)=> { 
             datahandel.push(item.select)
         })
         setManageRoleData({ ...manageRoleData, multiList: datahandel })
@@ -113,26 +87,33 @@ const ManageRoleForm = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
+        const loginToken= verifyToken()
+       
+        
 
         let roleData;
         if (Object.keys(edit).length < 1) {
             roleData = {
                 ...manageRoleData,
-                parentCategoryID: parseInt(manageRoleData.parentCategoryID),
-                isAdmin: Number(manageRoleData.isAdmin)
+                // parentCategoryID: parseInt(manageRoleData.parentCategoryID),
+                parentCategoryID: parseInt(16),
+                isAdmin: Number(manageRoleData.isAdmin),
+                franchiseId:loginUser?.userDetails?.userID || loginToken.userID
             }
         }
         else {
             roleData = {
                 ...manageRoleData,
                 roleID: parseInt(edit.id),
-                parentCategoryID: parseInt(manageRoleData.parentCategoryID),
-                isAdmin: Number(manageRoleData.isAdmin)
+                // parentCategoryID: parseInt(manageRoleData.parentCategoryID),
+                parentCategoryID: parseInt(16),
+                isAdmin: Number(manageRoleData.isAdmin),
+                franchiseId:loginUser?.userDetails?.userID || loginToken.userID
             }
         }
-        console.log("ssssset data", roleData)
-        // dispatch(fetchSaveUpdateDataRole(roleData))
-        // dispatch(resetStates())
+        // console.log("ssssset data", roleData)
+        dispatch(fetchSaveUpdateDataRole(roleData))
+        dispatch(resetStates())
         Navigate(`/manageRoleTable`)
     }
 
@@ -201,9 +182,9 @@ const ManageRoleForm = (props) => {
                         </div>
 
                     </div>
-                    <ManageRoleTable
-                        passManangeRoleData={manageRoleData}
+                    <ManageRoleTable                    
                         manageRoleSendHandler={manageRoleSendHandler}
+                        passManangeRoleData={manageRoleData}
                     />
                     <div>
 

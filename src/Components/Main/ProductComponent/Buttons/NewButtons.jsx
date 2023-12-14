@@ -2,7 +2,7 @@ import React from 'react';
 import "./Buttons.scss";
 
 function Buttons({ saveButtonEnable = true, ...props }) {
-    console.log("firstaaaaaaaaaaaaaaaaa", saveButtonEnable)
+   
 
 
 

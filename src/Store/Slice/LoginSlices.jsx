@@ -27,13 +27,16 @@ const LoginSlices = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchSaveUpdateDataRole.pending, (state) => {
+            .addCase(fetchLoginPage.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchSaveUpdateDataRole.fulfilled, (state, action) => {
-                if (action.payload.status === 200 || action.payload.status === 201) {
+            .addCase(fetchLoginPage.fulfilled, (state, action) => {
+                console.log("response saveupdate dd", action.payload);
+                localStorage.setItem('token', action.payload.token)
+                if (action.payload.token) {
                     state.loading = false;
                     state.message = action.payload.message;
+                    state.data = action.payload;
                 }
                 else {
                     state.loading = false;
@@ -41,7 +44,7 @@ const LoginSlices = createSlice({
                     state.msg = "some error"
                 }
             })
-            .addCase(fetchSaveUpdateDataRole.rejected, (state, action) => {
+            .addCase(fetchLoginPage.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.msg = "some error";
@@ -50,12 +53,12 @@ const LoginSlices = createSlice({
 });
 
 
-export const fetchSaveUpdateDataRole = createAsyncThunk('api.fetchUpdateSaveDataRole', async (data) => {
+export const fetchLoginPage = createAsyncThunk('api.fetchLoginPage', async (data) => {
     try {
 
-        data.loginUserID = 9;
-        const response = await axios.post(`${url}/api/Role`, data);
-        console.log("response saveupdate", response.data);
+
+        const response = await axios.post(`${url}/api/Login`, data);
+
         return response.data
     } catch (error) {
         throw new Error(error.message)
