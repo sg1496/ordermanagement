@@ -125,9 +125,9 @@ const ProductSlices = createSlice({
     }
 });
 
-export const fetchApiDataProduct = createAsyncThunk('api/fetchApiDataProduct', async () => {
+export const fetchApiDataProduct = createAsyncThunk('api/fetchApiDataProduct', async (id) => {
     try {
-        const response = await axios.get(`${url}/product/GetAllProducts`);
+        const response = await axios.get(`${url}/product/GetAllProducts/${id}`);
         return response.data;
     } catch (error) {
         console.log("error ", error);

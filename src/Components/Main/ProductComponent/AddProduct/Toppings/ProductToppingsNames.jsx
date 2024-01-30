@@ -4,10 +4,11 @@ import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
 import ToppingSelectionTable from '../../../ToppingComponent/ToppingRequiredTable/ToppingSelectionTable';
 import { useParams } from 'react-router-dom';
 import ProductToppingSelectionTable from './ProductToppingSelectionTable';
+import verifyToken from '../../../../SignIn/verifyToken';
 
 function ToppingNames(props) {
    
-
+const loginToken = verifyToken()
     
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
@@ -15,7 +16,7 @@ function ToppingNames(props) {
 
 
     useEffect(() => {
-        dispatch(fetchApiDataToppings())
+        dispatch(fetchApiDataToppings(loginToken.userID))
     }, [])
    
     

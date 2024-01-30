@@ -25,16 +25,16 @@ const Categoryform = () => {
         categoryName: "",
         parentCategoryId: 0,
         isActive: false,
-        loginUserID: 0,
+        franchiseID: 0,
         displayOrder: 0,
-        franchiseID: 0
+        
     })
 
 
 
 
     useEffect(() => {
-        dispatch(fetchParentCategory())
+        dispatch(fetchParentCategory(loginToken.userID ))
         // dropdowndata()
         if (edit.id != undefined) {
             dispatch(fetchEditCategory(edit.id))
@@ -54,9 +54,8 @@ const Categoryform = () => {
                 categoryName: "",
                 parentCategoryId: 0,
                 isActive: false,
-                loginUserID: 0,
+                franchiseID: 0,
                 displayOrder: 0,
-                franchiseID: 0
             })
         }
     }, [editData])
@@ -99,13 +98,17 @@ const Categoryform = () => {
             categorySaveUpdateData = {
                 ...categoryData,
                 parentCategoryId: parseInt(categoryData.parentCategoryId),
+                franchiseID: loginToken.userID,
+                parentUserId: loginToken.parentUserId
 
             }
         } else {
             categorySaveUpdateData = {
                 ...categoryData,
                 parentCategoryId: parseInt(categoryData.parentCategoryId),
-                categoryId: parseInt(edit.id)
+                categoryId: parseInt(edit.id),
+                franchiseID: loginToken.userID,
+                parentUserId: loginToken.parentUserId
             }
         }
         dispatch(fetchSaveUpdateCategory(categorySaveUpdateData))
@@ -229,7 +232,7 @@ export default Categoryform;
 //     parentCategoryId: parseInt(categoryiesdata.parentCategoryId),
 //     isActive: categoryiesdata.isActive,
 //     categoryId: Object.keys(edit).length < 1 ? 0 : parseInt(categoryiesdata.categoryId),
-//     loginUserID: 0,
+//     franchiseID: 0,
 //     displayOrder: 0,
 //     franchiseID: 0
 // }

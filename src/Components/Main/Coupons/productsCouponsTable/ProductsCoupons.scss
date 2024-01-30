@@ -2,8 +2,8 @@
 
 .coupons_table{
     border: 1px solid black;
-    height: 200px ;
-    overflow-y: scroll;
+    max-height: 200px ;
+    overflow-y: auto;
     
     
     
@@ -25,9 +25,9 @@
                     line-height: 22px;
                     position: sticky;
 
-                    &:not(:last-child) {
-                        border-right: 1px solid $white;
-                    }
+                    // &:not(:last-child) {
+                    //     // border-right: 1px solid $white;
+                    // }
                 }
             }
         }

@@ -1,35 +1,101 @@
-import React,{useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Buttons from '../ProductComponent/Buttons/NewButtons';
 import plus from "../../../assets/svg/plus.svg"
 import subtract from "../../../assets/svg/subtract.svg"
 import "./MainCouponsform.scss";
 import CouponsTable from './CategoryCouponsTable/CouponsTable';
-import SelectedCoupns from './CategoryCouponsTable/SelectedCoupns';
 import ProductsCoupons from './productsCouponsTable/ProductsCoupons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../Store/Slice/NavSlices';
+import verifyToken from '../../SignIn/verifyToken';
+import { fetchALLDiscountTypeCoupon, fetchLimitationCoupon } from '../../../Store/Slice/CouponSlices';
+
 
 
 
 const MainCouponsform = () => {
-    const[Shows , setShows]= useState(false);
-    const[show , setShow]= useState(false);
-    const [couponData, setCouponData] = useState({
-        couponCode:"",
-        couponName:"",
-        discountValue:"",
-        discountStartDate:"",
-    })
-
-    const changeHandler = ()=>{
-
-    }
-
+    const loginToken = verifyToken()
     const dispatch = useDispatch();
     dispatch(navTitle("Coupons"));
-    console.log(show)
 
-    const {couponCode,couponName,discountValue,discountStartDate} = couponData
+    useEffect(() => {
+        dispatch(fetchALLDiscountTypeCoupon())
+        dispatch(fetchLimitationCoupon())
+    }, [])
+
+    const discountTypeData = useSelector((discountType) => discountType.CouponSlices.discountType)
+    const limitationData = useSelector((limitationstate) => limitationstate.CouponSlices.limitation)
+    console.log("aaaaaaaaaaaaaaa", limitationData)
+
+    const [couponData, setCouponData] = useState(
+        {
+            couponCode: "",
+            couponName: "",
+            isActive: true,
+            franchiseId: "",
+            parentUserId: "",
+            minimumTotalValue: 0,
+            discountTypeId: "",
+            discountPercentage: "",
+            discountStartDate: "",
+            discountEndDate: "",
+            discountLimitationId: "",
+            numberTimeDiscount:"",
+            isAppliedOnProducts: false,
+            isAppliedOnCategories: false,
+            isMinimumSubTotal: false,
+            couponCategories: [],
+            couponProducts: []
+        }
+    )
+
+    console.log("coupon state1", couponData)
+
+    const isAppliedOnCategories = (e) => {
+        setCouponData({ ...couponData, isAppliedOnCategories: !couponData.isAppliedOnCategories })
+    }
+
+    const isAppliedOnProducts = (e) => {
+        setCouponData({ ...couponData, isAppliedOnProducts: !couponData.isAppliedOnProducts })
+    }
+
+    const isMinimumSubTotal = (e) => {
+        setCouponData({ ...couponData, isMinimumSubTotal: !couponData.isMinimumSubTotal })
+    }
+
+    const categoryselectedHandler = (data) => {
+        console.log("check select valuedddddddddddddddddddddddddddddddddddddddddddddddd", data)
+        const selection = []
+        data.map((item)=>{
+            selection.push(item.select)
+        })
+        setCouponData({ ...couponData, couponCategories: selection })
+    }
+
+    const productSelectedHandler = (data) => {
+        console.log("check select valuedddddddddddddddddddddddddddddddddddddddddddddddd", data)
+        const selection = []
+        data.map((item)=>{
+            selection.push(item.select)
+        })
+        setCouponData({ ...couponData, couponProducts: selection })
+    }
+
+
+
+    const changeHandler = (e) => {
+        setCouponData({
+            ...couponData,
+            [e.target.name]: e.target.value
+        })
+    }
+
+
+
+
+
+
+    const { couponCode, couponName, discountTypeId, discountPercentage, discountStartDate, discountEndDate, discountLimitationId, minimumTotalValue,numberTimeDiscount } = couponData
     return (
         <>
             <div className="addProduct__basicTabs  ">
@@ -48,7 +114,7 @@ const MainCouponsform = () => {
                                 placeholder="Flat20coupon"
                                 name='couponCode'
                                 value={couponCode}
-                                onChange={(e)=> changeHandler(e)}
+                                onChange={(e) => changeHandler(e)}
                                 required
                             />
                         </div>
@@ -65,7 +131,7 @@ const MainCouponsform = () => {
                                 placeholder="Demo"
                                 name='couponName'
                                 value={couponName}
-                                onChange={(e)=> changeHandler(e)}
+                                onChange={(e) => changeHandler(e)}
                                 required
                             />
                         </div>
@@ -75,11 +141,24 @@ const MainCouponsform = () => {
                                 Discount Type:
                                 <span className="formRequired">*</span>
                             </label>
-                            <select className="form-select " id="taxClass" >
-                                <option defaultValue>demo</option>
-                                <option value="one">one</option>
-                                <option value="two">two</option>
-                                <option value="Three">three</option>
+                            <select
+                                className="form-select "
+                                id="taxClass"
+                                name='discountTypeId'
+                                value={discountTypeId}
+                                onChange={(e) => changeHandler(e)}
+                            >
+                                <option defaultValue>choose the one option</option>
+                                {discountTypeData?.map(discount => {
+                                    return <option
+                                        key={discount.discountTypeId}
+                                        value={discount.discountTypeId}>
+                                        {discount.discountName}
+                                    </option>
+                                }
+
+                                )}
+
                             </select>
                         </div>
 
@@ -95,9 +174,9 @@ const MainCouponsform = () => {
                                 id="product-name"
                                 className="form-control"
                                 placeholder="20%"
-                                name='discountValue'
-                                value={discountValue}
-                                onChange={(e)=> changeHandler(e)}
+                                name='discountPercentage'
+                                value={discountPercentage}
+                                onChange={(e) => changeHandler(e)}
                                 required
                             />
                         </div>
@@ -114,7 +193,7 @@ const MainCouponsform = () => {
                                 placeholder="14/02/2023"
                                 name='discountStartDate'
                                 value={discountStartDate}
-                                onChange={(e)=> changeHandler(e)}
+                                onChange={(e) => changeHandler(e)}
                                 required
                             />
                         </div>
@@ -129,9 +208,9 @@ const MainCouponsform = () => {
                                 id="product-name"
                                 className="form-control"
                                 placeholder="20/02/2023"
-                                name='discountStartDate'
-                                value={discountStartDate}
-                                onChange={(e)=> changeHandler(e)}
+                                name='discountEndDate'
+                                value={discountEndDate}
+                                onChange={(e) => changeHandler(e)}
                                 required
                             />
                         </div>
@@ -146,20 +225,41 @@ const MainCouponsform = () => {
                                 Discount Limitation:
                                 <span className="formRequired">*</span>
                             </label>
-                            <select className="form-select " id="taxClass" >
-                                <option defaultValue>demo</option>
-                                <option value="one">one</option>
-                                <option value="two">two</option>
-                                <option value="Three">three</option>
+                            <select
+                                className="form-select "
+                                id="taxClass"
+                                name='discountLimitationId'
+                                value={discountLimitationId}
+                                onChange={(e) => changeHandler(e)}
+                            >
+                                <option defaultValue>chose the one option</option>
+                                {limitationData?.map(limitation => {
+                                    return <option
+                                        key={limitation.discountLimitationId}
+                                        value={limitation.discountLimitationId}>
+                                        {limitation.discountLimitationName}
+                                    </option>
+                                })}
+
                             </select>
                         </div>
 
-                        <div style={{margin:"8px"}}>
-
-                            <Buttons fname="Save"
-                                Sname="Cancel" />
-
-                        </div>
+                        {couponData.discountLimitationId > 1 && <div className="addProduct__productNames">
+                            <label htmlFor="product-name" className="form-label inputForm__label">
+                                No of times discount Use:
+                                <span className="formRequired">*</span>
+                            </label>
+                            <input
+                                type="number"
+                                id="product-name"
+                                className="form-control"
+                                placeholder="No of times discount Use"
+                                name='numberTimeDiscount'
+                                value={numberTimeDiscount}
+                                onChange={(e) => changeHandler(e)}
+                                required
+                            />
+                        </div>}
 
                     </div>
 
@@ -167,7 +267,7 @@ const MainCouponsform = () => {
                     <div className='tag rounded-3 mb-5 '>
                         <div className='d-flex justify-content-between align-items-center '>
                             <div className='d-flex align-items-center '>
-                                <div className='tag_content'> <img src={plus} alt="plus" />  </div>
+                                <div className='tag_content'> <img src={couponData.isAppliedOnCategories?subtract:plus} alt="plus" />  </div>
                                 <div><p>Category</p></div>
                             </div>
                             <div className='d-flex align-items-center  '>
@@ -177,32 +277,38 @@ const MainCouponsform = () => {
                                         type="checkbox"
                                         id="isActive"
                                         className="form-check-input p-2 toggle_btn"
-                                        onClick={(e)=> setShow(!show)}
+                                        checked={couponData && couponData.isAppliedOnCategories}
+                                        onChange={isAppliedOnCategories}
                                     />
                                 </div>
                             </div>
 
                         </div>
                     </div>
-                    {show &&<div className='row d-flex '>
-                     <div className='col-6'><CouponsTable/></div>
-                    <div className='col-6'><SelectedCoupns/></div>
-                    </div>}
+                    {couponData.isAppliedOnCategories &&
+                        <div className='ToppingSelect_table me-5 '>
+                            <CouponsTable
+                                selectedHandler={categoryselectedHandler}
+                                
+                            />
+                        </div>}
 
                     <div className='tag rounded-3 mb-5'>
                         <div className='d-flex justify-content-between align-items-center '>
                             <div className='d-flex align-items-center '>
-                                <div className='tag_content'> <img src={subtract} alt="plus" />  </div>
+                                <div className='tag_content'> <img src={couponData.isAppliedOnProducts ?subtract:plus} alt="plus" />  </div>
                                 <div><p>Product</p></div>
                             </div>
                             <div className='d-flex align-items-center  '>
-                                <div><p>Enable Category Requirement</p></div>
+                                <div><p>Enable Product Requirement</p></div>
                                 <div className=" form-check form-switch pt-1 ms-4 abc" >
                                     <input
                                         type="checkbox"
                                         id="isActive"
                                         className="form-check-input p-2 toggle_btn"
-                                        onClick={(e)=>setShows(!Shows)}
+                                        checked={couponData && couponData.isAppliedOnProducts}
+                                        onChange={isAppliedOnProducts}
+
                                     />
                                 </div>
                             </div>
@@ -210,15 +316,15 @@ const MainCouponsform = () => {
                         </div>
                     </div>
 
-                    {Shows &&<div className='row d-flex '>
-                     <div className='col-6'><ProductsCoupons/></div>
-                    <div className='col-6'><SelectedCoupns/></div>
+                    {couponData.isAppliedOnProducts && <div className='ToppingSelect_table me-5 '>
+                        <ProductsCoupons
+                        productSelectedHandler={productSelectedHandler} />
                     </div>}
 
                     <div className='tag rounded-3 mb-5'>
                         <div className='d-flex justify-content-between align-items-center '>
                             <div className='d-flex align-items-center '>
-                                <div className='tag_content'> <img src={plus} alt="plus" />  </div>
+                                <div className='tag_content'> <img src={couponData.isMinimumSubTotal ?subtract:plus} alt="plus" />  </div>
                                 <div><p>Product</p></div>
                             </div>
                             <div className='d-flex align-items-center  '>
@@ -228,11 +334,38 @@ const MainCouponsform = () => {
                                         type="checkbox"
                                         id="isActive"
                                         className="form-check-input p-2 toggle_btn"
+                                        checked={couponData && couponData.isMinimumSubTotal}
+                                        onChange={isMinimumSubTotal}
                                     />
                                 </div>
                             </div>
 
                         </div>
+                    </div>
+
+                    {couponData.isMinimumSubTotal && <div className="addProduct__productNames">
+                        <label htmlFor="product-name" className="form-label inputForm__label">
+                            Minimum Value:
+                            <span className="formRequired">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            id="product-name"
+                            className="form-control"
+                            placeholder="minimum value"
+                            name='minimumTotalValue'
+                            value={minimumTotalValue}
+                            onChange={(e) => changeHandler(e)}
+                            required
+                        />
+                    </div>}
+
+
+                    <div style={{ margin: "8px" }}>
+
+                        <Buttons fname="Save"
+                            Sname="Cancel" />
+
                     </div>
 
                 </form >

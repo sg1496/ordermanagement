@@ -12,6 +12,8 @@ import LocalitySlices from "./Slice/LocalitySlices";
 import ManageUsers from "./Slice/ManageUsers";
 import ManageRoleSlices from "./Slice/ManageRoleSlices";
 import LoginSlices from "./Slice/LoginSlices";
+import CouponSlices from "./Slice/CouponSlices";
+
                                                                                                                                     
 
 // const sagaMiddleware = createSagaMiddleware();
@@ -29,6 +31,7 @@ const store = configureStore(
             LocalitySlices: LocalitySlices,
             ManageUserSlices: ManageUsers,
             ManageRoleSlices: ManageRoleSlices,
+            CouponSlices : CouponSlices
 
             
 

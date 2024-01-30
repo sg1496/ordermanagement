@@ -180,9 +180,9 @@ const ToppingSlices = createSlice({
     }
 
 });
-export const fetchApiDataToppings = createAsyncThunk('api/fetchDataToppings', async () => {
+export const fetchApiDataToppings = createAsyncThunk('api/fetchDataToppings', async (FranchiseId) => {
     try {
-        const response = await axios.get(`${url}/topping/GetAllToppings`);
+        const response = await axios.get(`${url}/topping/GetAllToppings/${FranchiseId}`);
         return response.data;
     } catch (error) {
         console.log("error ", error);

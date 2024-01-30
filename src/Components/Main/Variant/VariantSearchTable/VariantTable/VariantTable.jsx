@@ -2,22 +2,25 @@ import React, { useEffect, useState } from 'react';
 import images from '../../../../../assets/images';
 import { useNavigate } from "react-router-dom"
 import Spinner from '../../../../Spinner';
-import { useSelector, useDispatch } from 'react-redux'; 
-import {  fetchSingleApiData, deleteSingleApiData, resetStates } from '../../../../../Store/Slice/VariantSlices';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchSingleApiData, deleteSingleApiData, resetStates } from '../../../../../Store/Slice/VariantSlices';
 import { fetchApiData } from '../../../../../Store/Slice/VariantSlices';
+import verifyToken from '../../../../SignIn/verifyToken';
 
 
 function VariantTable(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate()
+    const loginToken = verifyToken()
+
     const message = useSelector((state) => state.variantSlices.message)
     useEffect(() => {
-        dispatch(fetchApiData());
+        dispatch(fetchApiData(loginToken.userID));
     }, [message])
 
     const variantsList = useSelector(state => state.variantSlices.data)
-    console.log("aaabbb",variantsList);
-    
+    console.log("aaabbb", variantsList);
+
 
     return (
         <>

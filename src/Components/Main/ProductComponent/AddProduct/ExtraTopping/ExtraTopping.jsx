@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
 import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
 import { fetchApiData } from '../../../../../Store/Slice/VariantSlices';
+import verifyToken from '../../../../SignIn/verifyToken';
 
 
 
@@ -10,7 +11,7 @@ import { fetchApiData } from '../../../../../Store/Slice/VariantSlices';
 
 
 const ExtraTopping = (props) => {
-   
+   const loginToken = verifyToken()
     const Navigate = useNavigate()
     const dispatch = useDispatch();
 
@@ -19,8 +20,8 @@ const ExtraTopping = (props) => {
 
 
     useEffect(() => {
-        dispatch(fetchApiDataToppings())
-        dispatch(fetchApiData())
+        dispatch(fetchApiDataToppings(loginToken.userID))
+        dispatch(fetchApiData(loginToken.userID))
     }, [])
 
 

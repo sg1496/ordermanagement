@@ -5,7 +5,7 @@ import { navTitle } from "../../../../Store/Slice/NavSlices";
 import Buttons from "../../ProductComponent/Buttons/NewButtons";
 import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import verifyToken from "../../../SignIn/VerifyToken";
+import verifyToken from "../../../SignIn/verifyToken";
 import { fetchSaveUpdateLocality, fetchSingleDataLocality, resetStates } from "../../../../Store/Slice/LocalitySlices";
 
 
@@ -21,7 +21,7 @@ function LocalityForm(props) {
 
     const [locatitySetData, setLocatitySetData] = useState({
         localityName: '',
-        loginUserID: "",
+        franchiseID: "",
     })
 
     useEffect(() => {
@@ -56,6 +56,7 @@ function LocalityForm(props) {
             [e.target.name]: e.target.value
         })
     }
+// -------------------------------------------------Save------------------------------------------------------------
 
     const onSubmit = (e) => {
         e.preventDefault();
@@ -65,13 +66,15 @@ function LocalityForm(props) {
         if (Object.keys(edit).length < 1) {
             localityData = {
                 ...locatitySetData,
-                loginUserID: loginToken.userID
+                franchiseID: loginToken.userID,
+                parentUserId:loginToken.parentUserId
             }
         } else {
             localityData = {
                 ...locatitySetData,
                 localityID: parseInt(edit.id),
-                loginUserID: loginToken.userID
+                franchiseID: loginToken.userID,
+                parentUserId:loginToken.parentUserId
             }
         }
 

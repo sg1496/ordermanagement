@@ -1,12 +1,12 @@
 @import "../../../../assets/css/untilities.scss";
 
 .coupons_table{
-    height: 200px ;
-    overflow-y: scroll;
+    max-height: 200px ;
+    overflow-y: auto;
     
     .table {
         
-        border: 1px solid black;
+        // border: 1px solid black;
         thead {
             border: 1px solid black;
             
@@ -22,9 +22,9 @@
                     line-height: 22px;
                     position: sticky;
 
-                    &:not(:last-child) {
-                        border-right: 1px solid $white;
-                    }
+                    // &:not(:last-child) {
+                    //     border-right: 1px solid $white;
+                    // }
                 }
             }
         }

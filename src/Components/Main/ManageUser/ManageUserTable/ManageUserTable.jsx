@@ -18,7 +18,7 @@ function ManageUserTable() {
 
 
     useEffect(() => {
-        dispatch(fetchLoginDataUsers({id : loginToken.userID, pid: loginToken.serTypeId}))
+        dispatch(fetchLoginDataUsers({id : loginToken.userID, pid: loginToken.parentUserId}))
     }, [manageUserMessage])
 
     // console.log("first", manageUserData)

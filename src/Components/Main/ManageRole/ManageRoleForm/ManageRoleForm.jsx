@@ -4,7 +4,7 @@ import ManageRoleTable from './ManageRoleTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
 import Buttons from '../../ProductComponent/Buttons/NewButtons';
-import { fetchParentCategory } from '../../../../Store/Slice/CategorySlices';
+// import { fetchParentCategory } from '../../../../Store/Slice/CategorySlices';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchSaveUpdateDataRole, fetchSingleEditDataRole,resetStates  } from '../../../../Store/Slice/ManageRoleSlices';
 import verifyToken from '../../../SignIn/verifyToken';
@@ -12,28 +12,29 @@ import verifyToken from '../../../SignIn/verifyToken';
 const ManageRoleForm = (props) => {
     const Navigate = useNavigate();
     const dispatch = useDispatch();
-    dispatch(navTitle("Manage Role"));
+    dispatch(navTitle("Manage Role Form"));
     const edit = useParams();
+    const loginToken = verifyToken()
  
     const loginUser = useSelector(login=>login.LoginSlices.data)
     // console.log(" first ddddddddddddddddddta", loginUser)
  
     const [manageRoleData, setManageRoleData] = useState({
         roleName: "",
-        parentCategoryID: 16,
+        roleLevel: "",
         franchiseId:"",
         isAdmin:false,
         multiList: [],
     })
 
-    const parentCategory = useSelector((parent) => parent.categorySlices.parentCategories)
+    // const parentCategory = useSelector((parent) => parent.categorySlices.parentCategories)
     const manageRoleSingleData = useSelector((roleSingleData) => roleSingleData.ManageRoleSlices.singleData)
     // console.log("firstddddddddddddddddddddddddddddddddddddmmmm", manageRoleSingleData)
 
-    useEffect(() => {
-        dispatch(fetchParentCategory())
+    // useEffect(() => {
+    //     dispatch(fetchParentCategory(loginToken.userID))
 
-    }, [])
+    // }, [])
 
     useEffect(() => {
         if (edit.id != undefined) {
@@ -47,14 +48,14 @@ const ManageRoleForm = (props) => {
             ...manageRoleData
         }) : setManageRoleData({
             roleName: manageRoleSingleData.roleSingleList[0].roleName,
-            parentCategoryID: manageRoleSingleData.roleSingleList[0].parentCategoryID,
+            roleLevel: manageRoleSingleData.roleSingleList[0].roleLevel,
             isAdmin:  manageRoleSingleData.roleSingleList[0].isAdmin,
             multiList:  manageRoleSingleData.multiList,
         })
         if (!edit.id) {
             setManageRoleData({
                 roleName: "",
-                parentCategoryID: "",
+                roleLevel: "",
                 isAdmin: false,
                 multiList:[]
             })
@@ -85,30 +86,27 @@ const ManageRoleForm = (props) => {
         setManageRoleData({ ...manageRoleData, multiList: datahandel })
     }
 
-    const onSubmit = (e) => {
-        e.preventDefault()
-        const loginToken= verifyToken()
-       
-        
+// -----------------------------------------------------Submit---------------------------------------------------------------
 
+    const onSubmit = (e) => {
+        e.preventDefault()                  
+        
         let roleData;
         if (Object.keys(edit).length < 1) {
             roleData = {
                 ...manageRoleData,
-                // parentCategoryID: parseInt(manageRoleData.parentCategoryID),
-                parentCategoryID: parseInt(16),
                 isAdmin: Number(manageRoleData.isAdmin),
-                franchiseId:loginUser?.userDetails?.userID || loginToken.userID
+                franchiseId:loginUser?.userDetails?.userID || loginToken.userID,
+                parentUserId: loginToken.parentUserId,
             }
         }
         else {
             roleData = {
                 ...manageRoleData,
                 roleID: parseInt(edit.id),
-                // parentCategoryID: parseInt(manageRoleData.parentCategoryID),
-                parentCategoryID: parseInt(16),
                 isAdmin: Number(manageRoleData.isAdmin),
-                franchiseId:loginUser?.userDetails?.userID || loginToken.userID
+                franchiseId:loginUser?.userDetails?.userID || loginToken.userID,
+                parentUserId:loginToken.parentUserId,
             }
         }
         // console.log("ssssset data", roleData)
@@ -122,7 +120,7 @@ const ManageRoleForm = (props) => {
     }
 
 
-    const { roleName, parentCategoryID } = manageRoleData
+    const { roleName, roleLevel } = manageRoleData
 
     return (
         <>
@@ -147,24 +145,20 @@ const ManageRoleForm = (props) => {
                             />
                         </div>
                         <div className="addProduct__productNamed">
-                            <label htmlFor="taxClass" className="form-label inputForm__label" >
+                            <label htmlFor="product-name" className="form-label inputForm__label">
                                 Role Level:
                                 <span className="formRequired">*</span>
                             </label>
-                            <select
-                                className="form-select "
-                                id="taxClass"
-                                name='parentCategoryID'
-                                value={parentCategoryID}
+                            <input
+                                type="text"
+                                id="product-name"
+                                className="form-control"
+                                placeholder="Level"
+                                name='roleLevel'
+                                value={roleLevel}
                                 onChange={changeHandler}
-                            >
-                                <option defaultValue>Select Category</option>
-                                {parentCategory?.map((item, ind) => {
-                                    return <option key={ind}
-                                        value={item.parentCategoryId}>{item.parentCategoryName}</option>
-                                })
-                                }
-                            </select>
+                                required
+                            />
                         </div>
 
                         <div className="addProduct__isActive form-check form-switch">

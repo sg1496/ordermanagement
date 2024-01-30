@@ -123,9 +123,9 @@ const SupplierSlices = createSlice({
     }
 
 });
-export const fetchAllDataSupplier = createAsyncThunk('api/fetchDataSupplier', async () => {
+export const fetchAllDataSupplier = createAsyncThunk('api/fetchDataSupplier', async (FranchiseId) => {
     try {
-        const response = await axios.get(`${url}/api/Supplier/GetAllSuppiler`);
+        const response = await axios.get(`${url}/api/Supplier/GetAllSuppiler/${FranchiseId}`);
         return response.data;
     } catch (error) {
         console.log("error ", error);

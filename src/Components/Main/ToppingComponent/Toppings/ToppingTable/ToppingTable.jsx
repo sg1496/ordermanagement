@@ -4,12 +4,14 @@ import images from '../../../../../assets/images';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings, fetchEditTopping, fetchDelApiDataToppings,resetStates } from '../../../../../Store/Slice/ToppingSlices';
 import { useNavigate } from 'react-router-dom';
+import verifyToken from '../../../../SignIn/verifyToken';
 
 
 function ToppingTable() {
 
     const navigate = useNavigate()
     const dispatch = useDispatch();
+    const loginToken = verifyToken()
     
     // useSelector
     const message = useSelector((state)=> state.ToppingSlices.message)
@@ -18,7 +20,7 @@ function ToppingTable() {
 
 // dispatch useEffect
     useEffect(() => {
-        dispatch(fetchApiDataToppings())
+        dispatch(fetchApiDataToppings(loginToken.userID))
     }, [message])
 
 

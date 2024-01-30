@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
 import { fetchApiData } from '../../../../../Store/Slice/VariantSlices';
 import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
+import verifyToken from '../../../../SignIn/verifyToken';
 
 function Variants(props) {
 
-    
+    const loginToken = verifyToken()
     const dispatch = useDispatch();
     dispatch(navTitle("Add Products"));
 
@@ -18,8 +19,8 @@ function Variants(props) {
     const toppingList = useSelector((topping) => topping.ToppingSlices.data)
 
     useEffect(() => {
-        dispatch(fetchApiData())
-        dispatch(fetchApiDataToppings())
+        dispatch(fetchApiData(loginToken.userID))
+        dispatch(fetchApiDataToppings(loginToken.userID))
     }, [])
 
     useEffect(() => {

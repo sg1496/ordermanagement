@@ -7,12 +7,14 @@ import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { fetchSingleApiData, saveUpdateVariant, resetStates } from "../../../../Store/Slice/VariantSlices";
 import { useEffect } from "react";
+import verifyToken from "../../../SignIn/verifyToken";
 
 
 function Variantform(props) {
 
     const selectordatas = useSelector((state) => state.variantSlices.singleData)
     const message = useSelector((state) => console.log("store ", state.variantSlices.message))
+    const loginToken = verifyToken()
     console.log("//////////////////", selectordatas);
 
     const edit = useParams()
@@ -25,21 +27,21 @@ function Variantform(props) {
         variantName: "",
         variantLevel: "",
         isActive: false,
-        loginUserID: 0,
-        franchiseID: 0
+        parentUserId: "",
+        franchiseID: ""
     })
 
-    console.log("svs sssss      ", Object.keys(edit), "*", typeof edit.id);
+    console.log("svs sssss", Object.keys(edit), "*", typeof edit.id);
 
     useEffect(() => {
-       
+
         if (edit.id != undefined) {
             dispatch(fetchSingleApiData(edit.id))
         }
     }, [edit])
 
     useEffect(() => {
-    
+
         !selectordatas ? setData({
             ...data
         }) : setData({
@@ -53,8 +55,7 @@ function Variantform(props) {
                 variantName: "",
                 variantLevel: "",
                 isActive: false,
-                loginUserID: 0,
-                franchiseID: 0
+
             })
         }
     }, [selectordatas])
@@ -72,16 +73,23 @@ function Variantform(props) {
     const toggleChange = (e) => {
         setData({ ...data, isActive: !data.isActive })
     }
-    const onSubmit =  (event) => {
+    const onSubmit = (event) => {
         event.preventDefault();
 
         let newdata
         if (Object.keys(edit).length < 1) {
-            newdata = { ...data, variantLevel: parseInt(data.variantLevel) }
+            newdata = {
+                ...data,
+                variantLevel: parseInt(data.variantLevel),
+                parentUserId: loginToken.parentUserId,
+                franchiseID: loginToken.userID
+            }
         } else {
             newdata = {
                 ...data,
                 variantLevel: parseInt(data.variantLevel),
+                parentUserId: loginToken.parentUserId,
+                franchiseID: loginToken.userID,
                 variantId: parseInt(edit.id)
             }
         }

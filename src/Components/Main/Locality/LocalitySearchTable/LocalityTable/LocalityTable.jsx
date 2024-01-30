@@ -2,15 +2,15 @@ import React, { useEffect } from 'react';
 import "./LocalityTable.scss";
 import images from "../../../../../assets/images"
 import { useDispatch, useSelector } from 'react-redux';
-import { navTitle } from '../../../../../Store/Slice/NavSlices';
 import { useNavigate } from 'react-router-dom';
 import {  fetchDeleteDataLocality, fetchLoginDataLocality, fetchSingleDataLocality, resetStates } from '../../../../../Store/Slice/LocalitySlices';
-import verifyToken from '../../../../SignIn/VerifyToken';
+import verifyToken from '../../../../SignIn/verifyToken';
+import { navTitle } from '../../../../../Store/Slice/NavSlices';
 
 const LocalityTable = () => {
     const dispatch = useDispatch();
+    dispatch(navTitle("Locality"))
     const navigate = useNavigate()
-    dispatch(navTitle("Manage Locality"));
     const loginToken= verifyToken()
 
     const LocalityMessage = useSelector((locality) => locality.LocalitySlices.message);

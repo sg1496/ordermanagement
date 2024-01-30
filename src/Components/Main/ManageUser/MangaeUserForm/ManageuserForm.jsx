@@ -5,7 +5,7 @@ import { navTitle } from '../../../../Store/Slice/NavSlices';
 import Buttons from '../../ProductComponent/Buttons/NewButtons';
 import { fetchAllDataUsers, fetchSaveUpdateDataUser, fetchSingleEditDataUser, resetStates } from '../../../../Store/Slice/ManageUsers';
 import { useNavigate, useParams } from 'react-router-dom';
-import {  fetchLoginDataRolepage } from '../../../../Store/Slice/ManageRoleSlices';
+import { fetchLoginDataRolepage } from '../../../../Store/Slice/ManageRoleSlices';
 import verifyToken from '../../../SignIn/verifyToken';
 
 const ManageuserForm = () => {
@@ -13,7 +13,7 @@ const ManageuserForm = () => {
     dispatch(navTitle("Manage User"));
     const navigate = useNavigate()
     const edit = useParams()
-    const loginToken= verifyToken()
+    const loginToken = verifyToken()
 
     const [checkPass, setcheckPass] = useState(true)
     const [manageUser, setManageUser] = useState({
@@ -21,22 +21,22 @@ const ManageuserForm = () => {
         firstName: "",
         lastName: "",
         mobileNo: "",
-        roleId:"",
+        roleId: "",
         // userTypeID: 1,
         franchiseId: "",
         confirmPassword: "",
         passKey: "",
-        parentUserId:""
+        parentUserId: ""
     })
 
     const singleDataManageUser = useSelector((manageUser) => manageUser.ManageUserSlices.singleData)
-    const roleData =  useSelector((role)=> role.ManageRoleSlices.loginData)
+    const roleData = useSelector((role) => role.ManageRoleSlices.loginData)
     console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddda", roleData)
 
     useEffect(() => {
-      dispatch(fetchLoginDataRolepage(loginToken.userID))
+        dispatch(fetchLoginDataRolepage(loginToken.userID))
     }, [])
-    
+
 
 
     useEffect(() => {
@@ -61,7 +61,7 @@ const ManageuserForm = () => {
                 firstName: '',
                 lastName: "",
                 mobileNo: "",
-                roleId:"",
+                roleId: "",
                 userTypeID: "",
                 franchiseId: "",
             })
@@ -84,8 +84,44 @@ const ManageuserForm = () => {
         }
     }
 
+    const parentUserIDHandler = (loginTokenValue) => {
+        console.log("ddddddddddddddddddddddddd55------------------------", loginTokenValue)
+        
+       let parentUserIdCheck = 0
+        if (loginTokenValue == 0) {
+            return parentUserIdCheck = 1;
+          console.log("parnetUSerIDcheck",parentUserIdCheck)
+          
+        } else if (loginTokenValue == 1) {
+          parentUserIdCheck = 2;
+        } else if (loginTokenValue == 2) {
+          parentUserIdCheck = 3;
+        } else if (loginTokenValue == 3) {
+          parentUserIdCheck = 4;
+        }
+        return parentUserIdCheck;
+      };
+      
+
+
+
     const onSubmit = (e) => {
         e.preventDefault()
+        let parentUserIdCheck = parentUserIDHandler(loginToken.parentUserId);
+        // const parentUserIDHandler = (loginToken) => {
+        //     let parentUserIdCheck = 0
+        //     if (loginToken === 0) {
+        //         parentUserIdCheck = 1
+        //     } else if (loginToken === 1) {
+        //         parentUserIdCheck = 2
+        //     } else if (loginToken === 2) {
+        //         parentUserIdCheck = 3
+        //     } else if (loginToken === 3) {
+        //         parentUserIdCheck = 4
+        //     }
+        //     return parentUserIdCheck
+        // }
+        // parentUserIDHandler(loginToken.abcd)
 
         let manageUserdata
         if (checkPass) {
@@ -94,7 +130,7 @@ const ManageuserForm = () => {
                     ...manageUser,
                     roleId: parseInt(manageUser.roleId),
                     franchiseId: parseInt(loginToken.userID),
-                    parentUserId:1
+                    parentUserId: parentUserIdCheck
                 }
             } else {
                 manageUserdata = {
@@ -102,7 +138,7 @@ const ManageuserForm = () => {
                     userId: parseInt(edit.id),
                     roleId: parseInt(manageUser.roleId),
                     franchiseId: parseInt(loginToken.userID),
-                    parentUserId:1
+                    parentUserId:parentUserIdCheck
 
                 }
             }
@@ -144,7 +180,7 @@ const ManageuserForm = () => {
         })
     }
 
-    const { email, firstName, lastName, mobileNo,roleId, passKey, confirmPassword } = manageUser
+    const { email, firstName, lastName, mobileNo, roleId, passKey, confirmPassword } = manageUser
 
     return (
         <>

@@ -3,6 +3,7 @@ import "./Category.scss";
 import images from "../../../../assets/images"
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom"
+import verifyToken from '../../../SignIn/verifyToken';
 import { fetchApiDataCategory, fetchDelApiDataCategory, fetchEditCategory, resetStates } from "../../../../Store/Slice/CategorySlices";
 
 
@@ -11,12 +12,13 @@ import { fetchApiDataCategory, fetchDelApiDataCategory, fetchEditCategory, reset
 const TableCategory = () => {
   const Navigate = useNavigate()
   const dispatch = useDispatch();
+  const loginToken = verifyToken()
 
   const deleteMessage = useSelector((state) => state.categorySlices.message)
 
 
   useEffect(() => {
-    dispatch(fetchApiDataCategory())
+    dispatch(fetchApiDataCategory(loginToken.userID))
   }, [deleteMessage]);
   const categoryDatas1 = useSelector(state => state)
   console.log("///////////////////////////",categoryDatas1);

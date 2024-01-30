@@ -6,11 +6,11 @@ import { fetchEditTopping } from '../../../../Store/Slice/ToppingSlices';
 import { useState } from 'react';
 import { useParams } from "react-router-dom"
 import { faCommentsDollar } from '@fortawesome/free-solid-svg-icons';
-
+import verifyToken from '../../../SignIn/verifyToken';
 
 function ToppingPriceList(props) {
 
-    
+    const loginToken = verifyToken()
     const { id } = useParams()
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
     const toppingPrice = useSelector((state) => state.variantSlices.data)
@@ -21,7 +21,7 @@ console.log("ddddddddddddddddddddddddd45", toppingData)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchApiData())
+        dispatch(fetchApiData(loginToken.userID))
     }, [])
 
     useEffect(() => {

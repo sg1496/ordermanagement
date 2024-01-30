@@ -4,17 +4,19 @@ import images from "../../../../../assets/images"
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataProduct, fetchDelApiDataProduct, fetchEditProduct, resetStates } from "../../../../../Store/Slice/ProductSlices"
 import { useNavigate } from 'react-router-dom';
+import verifyToken from '../../../../SignIn/verifyToken';
 
 function ProductTable() {
     const dispatch = useDispatch()
     const navigate =  useNavigate()
+    const loginToken = verifyToken()
 
     const productList = useSelector((state) => state.ProductSlices.data)
     const productMessage = useSelector((product) => product.ProductSlices.message)
 
 
     useEffect(() => {
-        dispatch(fetchApiDataProduct())
+        dispatch(fetchApiDataProduct(loginToken.userID))
     }, [productMessage])
 
     console.log("first", productMessage)

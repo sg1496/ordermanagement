@@ -3,17 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings } from '../../../../Store/Slice/ToppingSlices';
 import ToppingSelectionTable from "../ToppingRequiredTable/ToppingSelectionTable";
 import { useParams } from 'react-router-dom';
-
+import verifyToken from '../../../SignIn/verifyToken';
 
 function ToppingNames(props) {
-    console.log(console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddataaa55", props.combinationHandler.toppingCombinatiomQuantityList));
     const dispatch = useDispatch()
+    const loginToken = verifyToken()
     const combinationPropsData = props.combinationHandler
     const { id } = useParams();
 
 
+
     useEffect(() => {
-        dispatch(fetchApiDataToppings())
+        dispatch(fetchApiDataToppings(loginToken.userID))
     }, [])
    
     

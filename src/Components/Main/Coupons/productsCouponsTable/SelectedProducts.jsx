@@ -1,43 +1,39 @@
 
-import React from 'react';
-import './CouponsTable.scss'
-const SelectedProducts=()=> {
-    return (
-        <>
+// import React from 'react';
+// // import './CouponsTable.scss'
+// const SelectedProducts = (props) => {
 
-            <div className='coupons_table mt-3 mb-5 '>
-                <table className='table m-0'>
-                    <thead>
+//     console.log("444444444", props)
+//     return (
+//         <>
 
-                        <tr>                           
-                                <th scope="col">All Categories</th>                            
-                        </tr>
+//             {props.selectedproducts < 1 ? (
+//                 ""
+//             ) : (<div className='coupons_table mt-3 mb-5 '>
 
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td scope="row">non-veg</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">veg</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">veg</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">non-veg</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">veg</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">veg</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div >
-        </>
-    )
-}
+//                 <table className='table m-0'>
+//                     <thead>
 
-export default SelectedProducts;
+//                         <tr>
+//                             <th scope="col">Selected Product(s)</th>
+//                         </tr>
+
+//                     </thead>
+//                     <tbody>
+//                         {props.selectedproducts?.map((selectedCat, index) => {
+//                             return <tr>
+//                                 <td scope="row">{selectedCat.productName}</td>
+//                             </tr>
+
+//                         })
+//                         }
+//                     </tbody>
+//                 </table>
+
+//             </div >
+//             )}
+//         </>
+//     )
+// }
+
+// export default SelectedProducts;

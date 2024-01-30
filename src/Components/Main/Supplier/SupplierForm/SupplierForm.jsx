@@ -5,12 +5,14 @@ import { navTitle } from '../../../../Store/Slice/NavSlices';
 import Buttons from '../../ProductComponent/Buttons/NewButtons';
 import { useNavigate, useParams } from "react-router-dom"
 import { fetchAllDataState, fetchSaveUpdateSupplier, fetchSingleDataSupplier, resetStates } from '../../../../Store/Slice/SupplierSlices';
+import verifyToken from '../../../SignIn/verifyToken';
 
 const SupplierForm = () => {
     const Navigate = useNavigate()
     const dispatch = useDispatch()
     dispatch(navTitle("Supplier"))
     const edit = useParams()
+    const loginToken = verifyToken()
 
 
     const [supplierData, setSupplierData] = useState({
@@ -23,7 +25,8 @@ const SupplierForm = () => {
         mobileNumber: "",
         phoneNumber: "",
         gstin: "",
-        loginUserId: 5,
+        franchiseId: "",
+        parentUserId: "",
     })
     const stateListData = useSelector((stateLiData) => stateLiData.SupplierSlices.statelistdata)
     const supplierSingleData = useSelector((singleData) => singleData.SupplierSlices.singleData)
@@ -88,11 +91,18 @@ const SupplierForm = () => {
 
         let SupplierSetData
         if (Object.keys(edit).length < 1) {
-            SupplierSetData = { ...supplierData }
+            SupplierSetData = {
+                ...supplierData,
+                franchiseId: loginToken.userID,
+                parentUserId: loginToken.parentUserId,
+            }
         }
         else {
-            SupplierSetData = { ...supplierData ,
+            SupplierSetData = {
+                ...supplierData,
                 suppilerID: parseInt(edit.id),
+                franchiseId: loginToken.userID,
+                parentUserId: loginToken.parentUserId,
             }
         }
         dispatch(fetchSaveUpdateSupplier(SupplierSetData))

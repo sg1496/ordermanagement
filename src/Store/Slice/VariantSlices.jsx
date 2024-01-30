@@ -113,9 +113,9 @@ export const saveUpdateVariant = createAsyncThunk('api/saveUpdateData', async (d
         throw new Error(error.message);
     }
 });
-export const fetchApiData = createAsyncThunk('api/fetchData', async () => {
+export const fetchApiData = createAsyncThunk('api/fetchData', async (FranchiseId) => {
     try {
-        const response = await axios.get(`${url}/variant/GetAllVariants`);
+        const response = await axios.get(`${url}/variant/GetAllVariants/${FranchiseId}`);
 
         return response.data;
     } catch (error) {

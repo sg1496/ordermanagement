@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-
+import plus from "../../../../assets/svg/plus.svg"
+import subtract from "../../../../assets/svg/subtract.svg"
 
 
 
@@ -19,11 +20,10 @@ function FormTable() {
             <div className='productSection__table mt-5'>
                 <table className='table m-0 text-center'>
                     <thead >
-                        <tr style={{width: "100%"}}>
+                        <tr style={{ width: "100%" }}>
                             <th style={{ border: "Transparent", width: "20%" }} >
-
                             </th>
-                            <th scope="col" style={{ width: "10%" }} >
+                            <th scope="col"  >
                                 Category
                             </th>
                             <th scope="col" style={{ width: "20%" }}>
@@ -32,16 +32,122 @@ function FormTable() {
                             <th scope="col" style={{ width: "20%" }}>
                                 Variant
                             </th>
-                            <th scope="col" style={{ width: "15%" }}>
+                            <th scope="col" style={{ width: "20%" }}>
                                 Quantity
                             </th>
-                            <th scope="col" style={{ width: "15%" }}>
+                            <th style={{ border: "Transparent", width: "20%" }}>
                                 Price
+                            </th>
+                            <th scope="col">
+
                             </th>
                         </tr>
                     </thead>
                     <tbody className='text-center'>
-                        <tr className='text-center'>
+                        <tr>
+                            <td  >
+
+                                <div className="addProduct__productName  ">
+                                    <select className=" inputForm__inputField " value={selectedvalue1} onChange={changeHandler1} id="taxClass" >
+                                        <option value="And">And</option>
+                                        <option value="Or">Or</option>
+                                    </select>
+
+                                </div>
+                            </td>
+                            <td  >
+
+                                {selectedvalue1 === 'And' && <div className="addProduct__productName ">
+                                    <select className=" inputForm__inputField" id="taxClass" >
+                                        <option defaultValue>pizza</option>
+                                        <option value="one">one</option>
+                                        <option value="two">two</option>
+                                        <option value="Three">three</option>
+                                    </select>
+                                </div>}
+                            </td>
+                            <td className='text-center'>
+                                <div className="addProduct__productName text-center">
+                                    <select className="inputForm__inputField " id="taxClass" >
+                                        <option defaultValue>Margerita</option>
+                                        <option value="one">one</option>
+                                        <option value="two">two</option>
+                                        <option value="Three">three</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td className='text-center'>
+                                <div className="addProduct__productName text-center">
+                                    <select className="inputForm__inputField" id="taxClass" >
+                                        <option defaultValue>Extra cheeze</option>
+                                        <option value="one">one</option>
+                                        <option value="two">two</option>
+                                        <option value="Three">three</option>
+                                    </select>
+                                </div>
+                            </td>
+
+                            <td >
+                                <div className="addProduct__productName text-center">
+
+                                    <input
+                                        type="number"
+                                        id="product-name"
+                                        className=" inputForm__inputField "
+                                        placeholder="5"
+                                        required
+                                    />
+                                </div>
+                            </td>
+                            <td >
+                                {selectedvalue1 === "Or" && <div className="addProduct__productName">
+
+                                    <input
+                                        type="number"
+                                        id="product-name"
+                                        className=" inputForm__inputField"
+                                        placeholder="285/-"
+                                        required
+                                    />
+                                </div>}
+                            </td>
+                            <td>
+                                <div className="addProduct__productName d-flex justify-content-center text-center">
+                                    <span>
+                                        <img
+                                            src={plus}
+                                            alt="Edit Icon"
+                                            onClick={() => (dispatch(fetchSingleEditDataUser(item.userId), navigate(`/manageuserform/${item.userId}`)))}
+
+                                        />
+                                    </span>
+                                    <span>
+                                        <img
+                                            src={subtract}
+                                            alt="Delete Icon"
+                                            onClick={() => (dispatch(fetchDelDataUser(item.userId)), dispatch(resetStates()))}
+                                        />
+                                    </span>
+                                </div>
+                            </td>
+
+                        </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        {/* <tr className='text-center'>
                             <td></td>
                             <td  >
 
@@ -89,12 +195,14 @@ function FormTable() {
                             </td>
                             <td></td>
 
-                        </tr>
+                        </tr> */}
+
+
                         <tr>
                             <td  >
 
                                 <div className="addProduct__productName  ">
-                                    <select className=" inputForm__inputField " value={selectedvalue1} onChange={changeHandler1} id="taxClass" >
+                                    <select className=" inputForm__inputField " value={selectedvalue2} onChange={changeHandler2} id="taxClass" >
                                         <option value="And">And</option>
                                         <option value="Or">Or</option>
                                     </select>
@@ -103,77 +211,7 @@ function FormTable() {
                             </td>
                             <td  >
 
-                                {selectedvalue1 === 'Or' && <div className="addProduct__productName ">
-                                    <select className=" inputForm__inputField" id="taxClass" >
-                                        <option defaultValue>pizza</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>}
-                            </td>
-                            <td className='text-center'>
-                                <div className="addProduct__productName">
-                                    <select className="inputForm__inputField " id="taxClass" >
-                                        <option defaultValue>Margerita</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td className='text-center'>
-                                <div className="addProduct__productName">
-                                    <select className="inputForm__inputField" id="taxClass" >
-                                        <option defaultValue>Extra cheeze</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>
-                            </td>
-
-                            <td className='text-center'>
-                                <div className="addProduct__productName">
-
-                                    <input
-                                        type="number"
-                                        id="product-name"
-                                        className=" inputForm__inputField"
-                                        placeholder="5"
-                                        required
-                                    />
-                                </div>
-                            </td>
-                            <td className='text-center'>
-                                {selectedvalue1 === "And" && <div className="addProduct__productNamed">
-
-                                    <input
-                                        type="number"
-                                        id="product-name"
-                                        className=" inputForm__inputField"
-                                        placeholder="285/-"
-                                        required
-                                    />
-                                </div>}
-                            </td>
-
-                        </tr>
-                        
-                        <tr>
-                            <td  >
-
-                                <div className="addProduct__productName  ">
-                                    <select className=" inputForm__inputField " value={selectedvalue2} onChange={changeHandler2} id="taxClass" >                                       
-                                        <option value="And">And</option>
-                                        <option value="Or">Or</option>
-                                    </select>
-
-                                </div>
-                            </td>
-                            <td  >
-
-                            {selectedvalue2 === 'Or' && <div className="addProduct__productName ">
+                                {selectedvalue2 === 'Or' && <div className="addProduct__productName ">
                                     <select className=" inputForm__inputField" id="taxClass" >
                                         <option defaultValue>pizza</option>
                                         <option value="one">one</option>
@@ -216,7 +254,7 @@ function FormTable() {
                                 </div>
                             </td>
                             <td className='text-center'>
-                                {selectedvalue2 === "And" && <div className="addProduct__productNamed">
+                                {selectedvalue2 === "And" && <div className="addProduct__productName">
 
                                     <input
                                         type="number"
@@ -226,6 +264,25 @@ function FormTable() {
                                         required
                                     />
                                 </div>}
+                            </td>
+                            <td>
+                            <div className="addProduct__productName d-flex justify-content-center text-center">
+                                    <span>
+                                        <img
+                                            src={plus}
+                                            alt="Edit Icon"
+                                            onClick={() => (dispatch(fetchSingleEditDataUser(item.userId), navigate(`/manageuserform/${item.userId}`)))}
+
+                                        />
+                                    </span>
+                                    <span>
+                                        <img
+                                            src={subtract}
+                                            alt="Delete Icon"
+                                            onClick={() => (dispatch(fetchDelDataUser(item.userId)), dispatch(resetStates()))}
+                                        />
+                                    </span>
+                                </div>
                             </td>
 
                         </tr>

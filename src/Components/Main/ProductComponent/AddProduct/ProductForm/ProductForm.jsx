@@ -9,9 +9,12 @@ import ExtraTopping from '../ExtraTopping/ExtraTopping'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchEditProduct } from '../../../../../Store/Slice/ProductSlices'
+import { fetchEditProduct, fetchSaveUpdateProduct } from '../../../../../Store/Slice/ProductSlices'
+import verifyToken from '../../../../SignIn/verifyToken'
+import { resetStates } from '../../../../../Store/Slice/CategorySlices'
 
 const ProductForm = (props) => {
+    const loginToken = verifyToken()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const edit = useParams()
@@ -23,8 +26,8 @@ const ProductForm = (props) => {
         isTaxable: false,
         taxClassId: '',
         foodTypeId: '',
-        loginUserID: 5,
         showInKitchen: false,
+        parentCategoryId: 0,
         productDescription: "",
         editProductCategory: [],
         productVariantList: [],
@@ -53,7 +56,7 @@ const ProductForm = (props) => {
             isTaxable: singleEditDataProduct.singleProductList[0].isTaxable,
             taxClassId: singleEditDataProduct.singleProductList[0].taxClassId,
             foodTypeId: singleEditDataProduct.singleProductList[0].foodTypeId,
-            loginUserID: 5,
+            parentCategoryId: singleEditDataProduct.singleProductList[0].parentCategoryId,
             showInKitchen: singleEditDataProduct.singleProductList[0].showInKitchen,
             productDescription: singleEditDataProduct.productDescriptsionList[0].productDescription,
             editProductCategory: singleEditDataProduct.editProductCategory,
@@ -87,11 +90,20 @@ const ProductForm = (props) => {
     }
 
     const categoriesDataHandler = (data) => {
+        // console.log("check semi final data", data)
         const categoriesList = [];
         data?.map((catagory) => {
             categoriesList.push(catagory.selectcategory)
         })
-        setProductFormData({ ...productFormData, editProductCategory: categoriesList })
+        setProductFormData({ ...productFormData,
+             editProductCategory: categoriesList
+             })
+    }
+
+    const parentCategoriesDataHandler = (data) => {        
+        setProductFormData({ ...productFormData,
+             parentCategoryId: data.parentCategoryId
+             })
     }
 
     const variantDataHandler = (vdata) => {
@@ -125,6 +137,26 @@ const ProductForm = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
+        let finalProductData
+        if (Object.keys(edit).length < 1) {
+            finalProductData = {
+                ...productFormData,     
+                parentCategoryId: parseInt(productFormData.parentCategoryId),          
+                franchiseID: loginToken.userID,
+                parentUserId: loginToken.parentUserId
+
+            }
+        } else {
+            finalProductData = {
+                ...productFormData,                
+                productId: parseInt(edit.id),
+                parentCategoryId: parseInt(productFormData.parentCategoryId),
+                franchiseID: loginToken.userID,
+                parentUserId: loginToken.parentUserId
+            }
+        }
+        dispatch(fetchSaveUpdateProduct(finalProductData))
+        dispatch(resetStates())
     }
 
     const cancelHandler = () => {
@@ -146,7 +178,7 @@ const ProductForm = (props) => {
                     <ExtraTopping extraToppingDataHandler={extraToppingDataHandler} /> */}
                     {props.step === 1 && <Basic basicFormDataHandler={basicFormDataHandler} productFormState={productFormData} setProductFormData={setProductFormData} />}
                     {props.step === 2 && <Description descriptionDataHandler={handleDescriptionData} productFormState={productFormData} />}
-                    {props.step === 3 && <Categories categoriesDataHandler={categoriesDataHandler} productFormState={productFormData} />}
+                    {props.step === 3 && <Categories categoriesDataHandler={categoriesDataHandler} parentCategoriesDataHandler={parentCategoriesDataHandler}  productFormState={productFormData} />}
                     {props.step === 4 && <Variants variantDataHandler={variantDataHandler} productFormState={productFormData} />}
                     {props.step === 5 && <ProductToppingsNames
                         combinationDataNameSend={combinationDataNameSend}

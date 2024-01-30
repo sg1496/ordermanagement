@@ -7,7 +7,7 @@ import { navTitle } from '../../../../Store/Slice/NavSlices';
 
 function ManageTable() {
     const dispatch = useDispatch();
-    dispatch(navTitle("Manage User"));
+    dispatch(navTitle("Manage Users"));
     return (
         <>
             <div className="productOuter p-3">

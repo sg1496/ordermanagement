@@ -7,7 +7,7 @@ import { navTitle } from '../../../../Store/Slice/NavSlices';
 import Buttons from '../../ProductComponent/Buttons/NewButtons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchEditTopping, fetchSaveUpdateToppings, GetAllMeasuremenType, fetchFoodTypeTopping, GetAllOrderType, resetStates } from '../../../../Store/Slice/ToppingSlices';
-
+import verifyToken from '../../../SignIn/verifyToken';
 
 
 
@@ -17,6 +17,7 @@ const ToppingForm = (props) => {
     dispatch(navTitle("Toppings"));
     const Navigate = useNavigate();
     const edit = useParams();
+    const loginToken = verifyToken()
 
     // Send Data Api state
     const [orderType, setOrderTypeData] = useState([])
@@ -27,17 +28,17 @@ const ToppingForm = (props) => {
         isActive: true,
         isToppingAllowed: false,
         foodTypeId: "",
-        loginUserID: Number(5),
+        parentUserId: "",
         measurementTypeId: "",
         isCombination: false,
-        franchiseID: 5,
+        franchiseId: "",
         orderTypes: [],
         toppingsPrices: [],
         toppingCombinatiomQuantityList: []
     })
 
-    
-// useEffect Dispatch data
+
+    // useEffect Dispatch data
     useEffect(() => {
         dispatch(GetAllMeasuremenType())
         dispatch(fetchFoodTypeTopping())
@@ -49,7 +50,7 @@ const ToppingForm = (props) => {
     const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
     const foodType = useSelector((state) => state.ToppingSlices.foodType)
     const orderTypeTemp = useSelector((state) => state.ToppingSlices.orderTypes)
-   
+
 
     // useEffect function
     useEffect(() => {
@@ -132,7 +133,7 @@ const ToppingForm = (props) => {
     }
 
     const combinationDataNameSend = (combinationdata) => {
-        
+
         const combinationDataList = [];
         combinationdata && combinationdata.map((combination) => {
             combination.allTrailData.map((combinationTrail) => {
@@ -143,7 +144,7 @@ const ToppingForm = (props) => {
                 }
             })
         })
-        
+
         setData({ ...data, toppingCombinatiomQuantityList: combinationDataList })
     }
 
@@ -176,7 +177,8 @@ const ToppingForm = (props) => {
         if (Object.keys(edit).length < 1) {
             ToppingSaveUpdateData = {
                 ...data,
-                loginUserID: parseInt(data.loginUserID),
+                parentUserId: loginToken.parentUserId,
+                franchiseId: loginToken.userID,
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
                 orderTypes: newArr
@@ -185,11 +187,11 @@ const ToppingForm = (props) => {
 
             ToppingSaveUpdateData = {
                 ...data,
-                // loginUserID: 2,
+                parentUserId: loginToken.parentUserId,
+                franchiseId: loginToken.userID,
                 toppingId: parseInt(edit.id),
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
-                loginUserID: parseInt(data.loginUserID),
                 orderTypes: newArr
             }
         }
@@ -202,11 +204,9 @@ const ToppingForm = (props) => {
             isActive: false,
             isToppingAllowed: false,
             foodTypeId: "",
-            loginUserID: 2,
             measurementTypeId: "",
             isCombination: false,
             categoryId: 9,
-            franchiseID: 0,
             orderTypes: [],
             toppingsPrices: [],
             toppingCombinatiomQuantityList: []
@@ -223,11 +223,9 @@ const ToppingForm = (props) => {
             isActive: false,
             isToppingAllowed: false,
             foodTypeId: "",
-            loginUserID: 2,
             measurementTypeId: "",
             isCombination: false,
             categoryId: 9,
-            franchiseID: 0,
             orderTypes: [],
             toppingsPrices: [],
             toppingCombinatiomQuantityList: []
@@ -360,7 +358,7 @@ const ToppingForm = (props) => {
                         <div className="row ms-1">
                             {orderType && orderType.map((item, ind) => (
                                 <div className="addProduct__subcategoryCheckboxes d-flex align-items-center col-md-1 " key={ind}>
-                                    <input className="form-check-input " 
+                                    <input className="form-check-input "
                                         type="checkbox"
                                         name="toppingType"
                                         checked={item.IsChecked}

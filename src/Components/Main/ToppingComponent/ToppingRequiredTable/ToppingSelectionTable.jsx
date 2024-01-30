@@ -5,9 +5,11 @@ import { fetchApiData } from "../../../../Store/Slice/VariantSlices";
 import { fetchApiDataToppings } from "../../../../Store/Slice/ToppingSlices";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
+import verifyToken from "../../../SignIn/verifyToken";
 
 const ToppingSelectionTable = (props) =>{
   console.log("props seleciton data", props   )
+  const loginToken = verifyToken()
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -24,8 +26,8 @@ const ToppingSelectionTable = (props) =>{
   }, [props.toppingNameData]);
 
   useEffect(() => {
-    dispatch(fetchApiData());
-    dispatch(fetchApiDataToppings());
+    dispatch(fetchApiData(loginToken.userID));
+    dispatch(fetchApiDataToppings(loginToken.userID));
   }, []);
 
   const variantSelectionTable = useSelector((state) => state.variantSlices.data);

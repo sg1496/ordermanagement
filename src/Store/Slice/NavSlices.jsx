@@ -2,7 +2,7 @@ import React from 'react'
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {   
-    navTitle: "Products",
+    navTitle: "",
     // -------------------------------
     jobs: [],
     searchedJobs: [],
@@ -13,11 +13,8 @@ const NavSlices = createSlice({
     initialState: initialState,
     reducers: {
         navTitle(state, action) {
-            // console.log("nav title ", action.payload);
+            console.log("nav title ", action.payload);
             state.navTitle=action.payload
-
-
-
         }
     },
 

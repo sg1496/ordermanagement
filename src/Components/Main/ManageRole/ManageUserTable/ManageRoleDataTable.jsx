@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-
 import images from "../../../../assets/images"
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import verifyToken from '../../../SignIn/VerifyToken';
+import verifyToken from '../../../SignIn/verifyToken';
 import { fetchAllDataRole, fetchDelDataRole, fetchLoginDataRolepage, fetchSingleEditDataRole,resetStates } from '../../../../Store/Slice/ManageRoleSlices';
 
 const ManageRoleDataTable = () => {

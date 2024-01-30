@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { useCallback } from 'react';
 import axios from "axios"
 let url = import.meta.env.VITE_APP_FOODS_API
 
@@ -22,11 +21,7 @@ const CategorySlices = createSlice({
             state.error = null;
             state.message = null
         },
-        searchstates(state, action) {
-            state.searchcategory = []
-            const data = state.searchcategory.push(action.payload)
-            console.log("data", data);
-        },
+       
     },
     extraReducers: (builder) => {
         builder
@@ -126,9 +121,9 @@ const CategorySlices = createSlice({
     }
 
 });
-export const fetchApiDataCategory = createAsyncThunk('api/fetchData', async () => {
+export const fetchApiDataCategory = createAsyncThunk('api/fetchData', async (FranchiseId) => {
     try {
-        const response = await axios.get(`${url}/category/GetAllCategories`);
+        const response = await axios.get(`${url}/category/GetAllCategories/${FranchiseId}`);
         return response.data;
     } catch (error) {
         console.log("error ", error);
@@ -157,7 +152,6 @@ export const fetchDelApiDataCategory = createAsyncThunk('api.fetchDelData', asyn
 export const fetchSaveUpdateCategory = createAsyncThunk('api.fetchUpdateSave', async (data) => {
     try {
         const response = await axios.post(`${url}/category/SaveupdateCategory`, data);
-        console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
@@ -176,9 +170,9 @@ export const fetchEditCategory = createAsyncThunk("api.fetchedit", async (id) =>
     }
 });
 
-export const fetchParentCategory = createAsyncThunk('fetchParentCategory', async () => {
+export const fetchParentCategory = createAsyncThunk('fetchParentCategory', async (FranchiseId) => {
     try {
-        const response = await axios.get(`${url}/api/ParentCategory`);
+        const response = await axios.get(`${url}/api/ParentCategory/GetAllparentCategory/${FranchiseId}`);
         console.log(response.data);
         return response.data;
     } catch (error) {

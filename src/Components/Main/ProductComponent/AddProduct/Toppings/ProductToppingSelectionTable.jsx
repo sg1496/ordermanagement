@@ -6,10 +6,11 @@ import { fetchApiData } from "../../../../../Store/Slice/VariantSlices";
 import { fetchApiDataToppings } from "../../../../../Store/Slice/ToppingSlices";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
+import verifyToken from "../../../../SignIn/verifyToken";
 
 function ProductToppingSelectionTable(props) {
     
-
+const loginToken = verifyToken()
     const dispatch = useDispatch();
     const { id } = useParams();
 
@@ -24,8 +25,8 @@ function ProductToppingSelectionTable(props) {
     }, [props.toppingNameData]);
 
     useEffect(() => {
-        dispatch(fetchApiData());
-        dispatch(fetchApiDataToppings());
+        dispatch(fetchApiData(loginToken.userID));
+        dispatch(fetchApiDataToppings(loginToken.userID));
     }, []);
 
     const variantSelectionTable = useSelector((state) => state.variantSlices.data);
@@ -91,7 +92,7 @@ function ProductToppingSelectionTable(props) {
                         let dataas = {
                             ...item1,
                             selection: {
-                                productCombinationId: -1,
+                                productCombinationId: 0,
                                 combinationProductId: item2.toppingId,
                                 quantity: 0,
                                 variantId: item1.variantId,
@@ -123,7 +124,7 @@ function ProductToppingSelectionTable(props) {
                         let dataas = {
                             ...item,
                             selection: {
-                                productCombinationId: -1,
+                                productCombinationId: 0,
                                 combinationProductId: item1.toppingId,
                                 quantity: 0,
                                 variantId: item.variantId,
@@ -275,7 +276,7 @@ function ProductToppingSelectionTable(props) {
                         var t = {
                             ...traildata,
                             selection: {
-                                productCombinationId: -1,
+                                productCombinationId: 0,
                                 combinationProductId: toppingId,
                                 quantity: parseInt(e.target.value),
                                 variantId: traildata.variantId,
@@ -287,7 +288,7 @@ function ProductToppingSelectionTable(props) {
                         var t = {
                             ...traildata,
                             selection: {
-                                productCombinationId: -1,
+                                productCombinationId: 0,
                                 combinationProductId: toppingId,
                                 quantity: traildata.selection.quantity,
                                 variantId: traildata.variantId,

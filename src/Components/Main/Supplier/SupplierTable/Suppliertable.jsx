@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import images from "../../../../assets/images";
 import { useNavigate } from 'react-router-dom';
+import verifyToken from '../../../SignIn/verifyToken';
 import { fetchAllDataSupplier, fetchDeleteDataSupplier,fetchSingleDataSupplier,resetStates } from '../../../../Store/Slice/SupplierSlices';
 
 
@@ -9,10 +10,12 @@ function SupplierTable() {
   const navigate = useNavigate()
 const dispatch = useDispatch()
 
+const loginToken = verifyToken()
+
 const message = useSelector((supplierdata)=>supplierdata.SupplierSlices.message)
 
 useEffect(() => {
-  dispatch(fetchAllDataSupplier())
+  dispatch(fetchAllDataSupplier(loginToken.userID))
    }, [message])
 
 const AllDataSupplier = useSelector((supplierdata) => supplierdata.SupplierSlices.data)
