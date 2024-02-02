@@ -155,7 +155,7 @@ const ManageRoleForm = (props) => {
                                 className="form-control"
                                 placeholder="Level"
                                 name='roleLevel'
-                                value={roleLevel}
+                                value={roleLevel && roleLevel }
                                 onChange={changeHandler}
                                 required
                             />

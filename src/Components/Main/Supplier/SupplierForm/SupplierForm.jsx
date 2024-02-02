@@ -93,16 +93,16 @@ const SupplierForm = () => {
         if (Object.keys(edit).length < 1) {
             SupplierSetData = {
                 ...supplierData,
-                franchiseId: loginToken.userID,
-                parentUserId: loginToken.parentUserId,
+                franchiseId: parseInt(loginToken.userID),
+                parentUserId: parseInt(loginToken.parentUserId),
             }
         }
         else {
             SupplierSetData = {
                 ...supplierData,
                 suppilerID: parseInt(edit.id),
-                franchiseId: loginToken.userID,
-                parentUserId: loginToken.parentUserId,
+                franchiseId: parseInt(loginToken.userID),
+                parentUserId: parseInt(loginToken.parentUserId),
             }
         }
         dispatch(fetchSaveUpdateSupplier(SupplierSetData))

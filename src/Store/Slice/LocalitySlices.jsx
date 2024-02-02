@@ -4,15 +4,16 @@ import { flushSync } from 'react-dom';
 let url = import.meta.env.VITE_APP_FOODS_API
 
 const initialState = {
-    loginData:null,
+    loginData: null,
     data: null,
     loading: false,
     error: null,
     message: null,
     singleData: null,
-  
-    
-   
+    search: ""
+
+
+
 }
 
 const LocalitySlices = createSlice({
@@ -24,6 +25,9 @@ const LocalitySlices = createSlice({
             state.error = null;
             state.message = null
         },
+        searchStates:(state, action) =>{
+            state.search = action.payload
+        }
 
     },
     extraReducers: (builder) => {
@@ -66,7 +70,7 @@ const LocalitySlices = createSlice({
             })
             .addCase(fetchDeleteDataLocality.pending, (state) => {
                 state.loading = true;
-            })            
+            })
             .addCase(fetchDeleteDataLocality.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
                     state.loading = false;
@@ -120,8 +124,8 @@ const LocalitySlices = createSlice({
                 state.error = true;
                 state.msg = "some error"
             })
-         
-           
+
+
     }
 
 });
@@ -145,7 +149,7 @@ export const fetchLoginDataLocality = createAsyncThunk('api/fetchLoginDataLocali
     }
 });
 
-export const fetchDeleteDataLocality = createAsyncThunk('api.fetchDeleteDataLocality', async (id) => {   
+export const fetchDeleteDataLocality = createAsyncThunk('api.fetchDeleteDataLocality', async (id) => {
     try {
         const response = await axios.delete(`${url}/api/Locality/DeleteLocality/${id}`, {
             headers: {
@@ -170,7 +174,7 @@ export const fetchSaveUpdateLocality = createAsyncThunk('api.fetchUpdateSaveLoca
 });
 
 export const fetchSingleDataLocality = createAsyncThunk("api.fetchSingleDataLocality", async (id) => {
-      
+
     try {
         const response = await axios.get(`${url}/api/Locality/GetSingleLocality/${id}`)
         console.log(response.data);
@@ -183,4 +187,4 @@ export const fetchSingleDataLocality = createAsyncThunk("api.fetchSingleDataLoca
 
 
 export default LocalitySlices.reducer;
-export const { resetStates } = LocalitySlices.actions;
+export const { resetStates, searchStates } = LocalitySlices.actions;
