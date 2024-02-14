@@ -13,8 +13,8 @@ function Categories(props) {
     const loginToken = verifyToken()
 
 
-    const categoryList = useSelector((category) => category.categorySlices.data)
-    const parentCategories = useSelector(state => state.categorySlices.parentCategories)
+    const categoryList = useSelector((category) => category.CategorySlices.data)
+    const parentCategories = useSelector(state => state.CategorySlices.parentCategories)
     useEffect(() => {
         dispatch(fetchParentCategory(loginToken.userID))
         dispatch(fetchApiDataCategory(loginToken.userID))
@@ -26,14 +26,14 @@ function Categories(props) {
 
     useEffect(() => {
         const newdata = [];
-      
+
         if (categoryList && props.productFormState.editProductCategory.length > 0) {
           const ToppingDatafinaltemp = JSON.parse(JSON.stringify(categoryList));
-      
+
           ToppingDatafinaltemp?.map((item) => {
             item.IsChecked = false;
             let dataas;
-      
+
             props.productFormState.editProductCategory.map((selectcategory) => {
               if (selectcategory.categoryId === item.categoryId) {
                 item.IsChecked = true;
@@ -42,14 +42,14 @@ function Categories(props) {
                 dataas = { ...item, selectcategory: { categoryId: item.categoryId } };
               }
             });
-      
+
             dataas = { ...dataas };
             newdata.push(dataas);
           });
           setCategoryData(newdata);
         } else if (categoryList) {
           const ToppingDatafinaltemp = JSON.parse(JSON.stringify(categoryList));
-      
+
           ToppingDatafinaltemp?.map((item) => {
             item.IsChecked = false;
             let dataas = { ...item, selectcategory: { categoryId: item.categoryId } };
@@ -58,6 +58,7 @@ function Categories(props) {
           setCategoryData(newdata);
         }
       }, [categoryList, props.productFormState.editProductCategory]);
+
 
     // chang for checkbox
     const categoryChangeHandler = (check, categoryId, items) => {
@@ -79,6 +80,8 @@ function Categories(props) {
         })
         props.categoriesDataHandler(abc)
     }
+
+    
 
 
 
@@ -120,8 +123,9 @@ function Categories(props) {
 
                     <div className="col-12 mt-4 mb-4">
                         <div className="row ms-1">
-                            {categoryData?.map((item, ind) => (
-                                <div className="addProduct__subcategoryCheckboxes d-flex align-items-center col-md-auto" key={ind}>
+                            {categoryData?.map((item, ind) => {
+                                console.log("check category", item)
+                                return <div className="addProduct__subcategoryCheckboxes d-flex align-items-center col-md-auto" key={ind}>
                                     <input
                                         className="form-check-input"
                                         type="checkbox"
@@ -133,7 +137,7 @@ function Categories(props) {
                                         {item.categoryName}
                                     </label>
                                 </div>
-                            ))
+                            })
                             }
                         </div>
                     </div>

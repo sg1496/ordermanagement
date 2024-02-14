@@ -14,15 +14,10 @@ const ManageRoleDataTable = () => {
     const manageLoginRoleData = useSelector((manageRole) => manageRole.ManageRoleSlices.loginData);
     const manageRoleMessage = useSelector((manageRole) => manageRole.ManageRoleSlices.message);
 
-    console.log("save/edit",  manageRoleMessage)
-
-
     useEffect(() => {
         // dispatch(fetchAllDataRole())
         dispatch(fetchLoginDataRolepage(loginToken.userID))
     }, [manageRoleMessage])
-
-    // console.log("first", manageUserData)
 
     return (
         <>

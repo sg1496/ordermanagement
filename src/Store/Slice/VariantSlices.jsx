@@ -16,13 +16,13 @@ async function deleteVarient1(id) {
         }
         const datas = await response.json();
         resolve(datas)
-    });  
+    });
 }
 
 
 
 const initialState = {
-    data: null,
+    data: null,  //  variant
     loading: false,
     error: null,
     message: null,
@@ -63,7 +63,6 @@ const VariantSlices = createSlice({
                 state.loading = true;
             })
             .addCase(fetchSingleApiData.fulfilled, (state, action) => {
-                console.log("single", action);
                 if (action.payload.status === 200) {
                     state.loading = false;
                     state.singleData = action.payload.singleVariant;
@@ -79,7 +78,6 @@ const VariantSlices = createSlice({
                 state.msg = "some error";
             })
             .addCase(deleteSingleApiData.fulfilled, (state, action) => {
-                console.log("delete", action);
                 if (action.payload.status === 200) {
                     state.loading = false;
                     state.message = action.payload.message;
@@ -90,7 +88,7 @@ const VariantSlices = createSlice({
                 }
             })
             .addCase(saveUpdateVariant.fulfilled, (state, action) => {
-                
+
                 if (action.payload.status === 200) {
                     state.loading = false;
                     state.message = action.payload.message;
@@ -103,44 +101,38 @@ const VariantSlices = createSlice({
     },
 });
 
-export const saveUpdateVariant = createAsyncThunk('api/saveUpdateData', async (data) => {
+export const saveUpdateVariant = createAsyncThunk('api/saveUpdateDatavariant', async (data) => {
     try {
         const response = await axios.post(`${url}/variant/saveUpdateVariant`, data)
-        console.log("savs response ", response.data);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
-export const fetchApiData = createAsyncThunk('api/fetchData', async (FranchiseId) => {
+export const fetchApiData = createAsyncThunk('variants/fetchVariantsData', async (FranchiseId) => {
     try {
         const response = await axios.get(`${url}/variant/GetAllVariants/${FranchiseId}`);
-
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const fetchSingleApiData = createAsyncThunk('api/fetchSingleData', async (id) => {
+
+export const fetchSingleApiData = createAsyncThunk('api/fetchSingleDatavarinat', async (id) => {
     try {
         const response = await axios.get(`${url}/variant/GetSingleVariant/${id}`)
 
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
-export const deleteSingleApiData = createAsyncThunk('api/deleteSingleData', async (id) => {
+export const deleteSingleApiData = createAsyncThunk('api/deleteSingleDatavariant', async (id) => {
     try {
         const result = await deleteVarient1(id)
-        console.log("delete api id: ", id, result);
         return result;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });

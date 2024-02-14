@@ -14,12 +14,8 @@ function CouponsTable(props) {
         dispatch(fetchApiDataCategory(loginToken.userID))
     }, [])
 
-    const categorData = useSelector((category) => category.categorySlices.data)
-    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", categorData)
-
+    const categorData = useSelector((category) => category.CategorySlices.data)
     const [categoryCoupons, setCategoryCoupons] = useState([])
-
-    console.log("check my state 5555555555", categoryCoupons)
 
     useEffect(() => {
         const allda = []
@@ -47,7 +43,6 @@ function CouponsTable(props) {
     const categorySelectionHandler = (id, item) => {
 
         const itemselected = [...categoryCoupons];
-        console.log(itemselected)
         if (id) {
             item.IsChecked = true;
         }
@@ -65,7 +60,6 @@ function CouponsTable(props) {
     const categorySelectionHandlers = (id, item) => {
 
         const itemselected = [...categoryCoupons];
-        console.log(itemselected)
         if (id) {
             item.IsChecked = false;
         }

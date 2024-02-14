@@ -30,8 +30,6 @@ const SupplierForm = () => {
     })
     const stateListData = useSelector((stateLiData) => stateLiData.SupplierSlices.statelistdata)
     const supplierSingleData = useSelector((singleData) => singleData.SupplierSlices.singleData)
-    console.log("**********************************", supplierSingleData)
-
 
     useEffect(() => {
         if (edit.id !== undefined) {
@@ -55,7 +53,6 @@ const SupplierForm = () => {
             gstin: supplierSingleData.gstin,
         })
         if (!edit.id) {
-            console.log("-------------------------------------------------");
             setSupplierData({
                 suppilerName: "",
                 addressLine1: "",

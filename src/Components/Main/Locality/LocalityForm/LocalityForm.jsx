@@ -17,8 +17,6 @@ function LocalityForm(props) {
     const edit = useParams();
 
     const loginUserId = useSelector(login => login.LoginSlices)
-    console.log("loginUserId", loginUserId)
-
     const [locatitySetData, setLocatitySetData] = useState({
         localityName: '',
         franchiseID: "",
@@ -31,7 +29,6 @@ function LocalityForm(props) {
     }, [edit])
 
     const localitySingleData = useSelector((locality) => locality.LocalitySlices.singleData)
-    console.log("first", localitySingleData)
 
     useEffect(() => {
         !localitySingleData ? setLocatitySetData({

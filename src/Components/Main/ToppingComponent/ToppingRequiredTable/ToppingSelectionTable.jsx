@@ -8,7 +8,6 @@ import { useState } from "react";
 import verifyToken from "../../../SignIn/verifyToken";
 
 const ToppingSelectionTable = (props) =>{
-  console.log("props seleciton data", props   )
   const loginToken = verifyToken()
 
   const dispatch = useDispatch();
@@ -17,8 +16,6 @@ const ToppingSelectionTable = (props) =>{
   // useState
   const [toppingCheckName, setToppingCheckName] = useState("");
   const [trial, setTrial] = useState([]);
-
-  console.log("bbbbb4444444", trial)
 
   // useEffect
   useEffect(() => {
@@ -30,7 +27,7 @@ const ToppingSelectionTable = (props) =>{
     dispatch(fetchApiDataToppings(loginToken.userID));
   }, []);
 
-  const variantSelectionTable = useSelector((state) => state.variantSlices.data);
+  const variantSelectionTable = useSelector((state) => state.VariantSlices.data);
 
 
   useEffect(() => {
@@ -129,7 +126,6 @@ const ToppingSelectionTable = (props) =>{
       });
 
       setTrial(allda);
-      console.log("page 74", allda)
     }
   }, [variantSelectionTable, toppingCheckName]);
 
@@ -138,7 +134,6 @@ const ToppingSelectionTable = (props) =>{
       if (id && item.toppingId === toppingId) {
         var c = [];
         item.allTrailData.map((traildata, ind) => {
-          console.log("************************************************************", traildata)
           if (traildata.variantId === variantId) {
             var t = {
               ...traildata,
@@ -226,15 +221,6 @@ const ToppingSelectionTable = (props) =>{
     setTrial(newArr);
     props.combinationDataSendParent(newArr);
 };
-
-  const deleteHandler = (id) => {
-    // const deleteddata = trial.filter((item) => item.mainToppingId !== id);
-    // console.log("pageeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", deleteddata)
-    // setTrials(deleteddata);
-    props.unCheckHandler(id);
-  };
-
-  // console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd222", trials)
 
   return (
     <>

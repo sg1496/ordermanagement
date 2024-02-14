@@ -16,7 +16,7 @@ const ExtraTopping = (props) => {
     const dispatch = useDispatch();
 
     const toppingList = useSelector((topping) => topping.ToppingSlices.data)
-    const variantList = useSelector((variant) => variant.variantSlices.data)
+    const variantList = useSelector((variant) => variant.VariantSlices.data)
 
 
     useEffect(() => {
@@ -29,91 +29,30 @@ const ExtraTopping = (props) => {
 
 
     useEffect(() => {
-        const newdata = []
-        if (toppingList && variantList && props.productFormState.productExtraToppingsList.length > 0) {
-            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(variantList));
-            toppingList?.map((item) => {
-                
-                var a = []
-                var newData
-
-                let idExist = props.productFormState.productExtraToppingsList.filter(
-                    (element) => {
-                        
-                        if (element.combinationExtraToppingId === item.toppingId) {
-                            newData = {
-                                ...item
-                            };
-                            return newData
-                        }
-                    }
-                );
-
-                if (idExist.length > 0) {
-                    ToppingDatafinaltemp.map((item1) => {
-                        
-                        item1.IsChecked = false;
-                        props.productFormState.productExtraToppingsList.filter((selectedData) => {
-                            
-                            if (selectedData.variantId === item1.variantId && selectedData.combinationExtraToppingId === item.toppingId) {
-                                item1.IsChecked = true;
-                                let dataas = {
-                                    ...item1,
-                                    selection: {
-                                        combinationToppingId: item.toppingId,
-                                        variantId: item1.variantId,
-                                    },
-                                };
-                                a.push(dataas);
-                            }
-                        })
-                    });
-                } else {
-                    newData = {
-                        ...item
-                    };
-                    ToppingDatafinaltemp.map((item1) => {
-                        item1.IsChecked = false;
-                        let dataas = {
-                            ...item1,
-                            selection: {
-                                combinationToppingId: item.toppingId,
-                                variantId: item1.variantId,
-                            },
-                        };
-                        a.push(dataas);
-                    });
+        if (!toppingList || !variantList) return;
+    
+        const newdata = toppingList.map(topping => {
+            const a = variantList.map(variant => ({
+                ...variant,
+                IsChecked: props.productFormState.productExtraToppingsList.some(
+                    selectedData =>
+                        selectedData.variantId === variant.variantId &&
+                        selectedData.combinationExtraToppingId === topping.toppingId
+                ),
+                selection: {
+                    combinationExtraToppingId: topping.toppingId,
+                    variantId: variant.variantId,
                 }
-                newData = { ...newData, allTrailData: a };
-                newdata.push(newData);
-            });
-            setExtraToppingData(newdata)
-        }
-        else if (toppingList && variantList) {
-
-            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(variantList));
-            toppingList?.map((item) => {
-                var a = []
-                var newData = {
-                    ...item
-                }
-                ToppingDatafinaltemp.map((item1) => {
-                    item1.IsChecked = false;
-                    let dataas = {
-                        ...item1,
-                        selection: {
-                            combinationToppingId: item.toppingId,
-                            variantId: item1.variantId,
-                        },
-                    };
-                    a.push(dataas);
-                });
-                newData = { ...newData, allTrailData: a };
-                newdata.push(newData);
-            });
-            setExtraToppingData(newdata)
-        }
-    }, [toppingList, variantList])
+            }));
+    
+            return {
+                ...topping,
+                allTrailData: a,
+            };
+        });
+    
+        setExtraToppingData(newdata);
+    }, [toppingList, variantList, props.productFormState.productExtraToppingsList]);
 
 
 
@@ -146,7 +85,8 @@ const ExtraTopping = (props) => {
         const selectedData = updatedExtraToppingData.flatMap((topping) => {
             return topping.allTrailData.filter((variant) => variant.IsChecked)
                 .map((variant) => ({
-                    combinationToppingId: topping.toppingId,
+                    toppingExtraCombinationId:0,
+                    combinationExtraToppingId: topping.toppingId,
                     variantId: variant.variantId,
                 }));              
         });

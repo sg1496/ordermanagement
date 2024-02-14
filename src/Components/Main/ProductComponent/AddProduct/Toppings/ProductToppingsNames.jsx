@@ -1,15 +1,18 @@
-import { useState, useEffect, } from 'react';
+import { useState, useEffect, useContext, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
 import ToppingSelectionTable from '../../../ToppingComponent/ToppingRequiredTable/ToppingSelectionTable';
 import { useParams } from 'react-router-dom';
 import ProductToppingSelectionTable from './ProductToppingSelectionTable';
 import verifyToken from '../../../../SignIn/verifyToken';
+import { productData } from '../ProductForm/ProductForm';
 
 function ToppingNames(props) {
-   
-const loginToken = verifyToken()
-    
+    const data = useContext(productData)
+
+    console.log("cgec props22", data)
+    const loginToken = verifyToken()
+
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
     const { id } = useParams();
@@ -18,40 +21,36 @@ const loginToken = verifyToken()
     useEffect(() => {
         dispatch(fetchApiDataToppings(loginToken.userID))
     }, [])
-   
-    
+
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
-
-
     const [ToppingDatafinal, setToppingDatafinal] = useState([])
-   
 
     useEffect(() => {
-    if (ToppingData) {
-        const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
-        ToppingDatafinaltemp.map((e) => {
-            e.IsChecked = false;
-            // props.combinationHandler.toppingCombinatiomQuantityList
-            var tempmatch = props.combinationHandler.productToppingsList.filter(x => x.combinationProductId === e.toppingId);
-            if (tempmatch.length > 0 && id > 0) {
-                e.IsChecked = true;
-            }
-        });
-        setToppingDatafinal(ToppingDatafinaltemp);
-    }
-}, [ToppingData])
+        if (ToppingData || props.combinationHandler.productToppingsList.length > 0) {
+            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
+            ToppingDatafinaltemp.map((e) => {
+                e.IsChecked = false;
+                // props.combinationHandler.toppingCombinatiomQuantityList
+                var tempmatch = props.combinationHandler.productToppingsList.filter(x => x.combinationProductId === e.toppingId);
+                if (tempmatch.length > 0 && id > 0) {
+                    e.IsChecked = true;
+                }
+            });
+            setToppingDatafinal(ToppingDatafinaltemp);
+        }
+    }, [ToppingData])
 
-const toppingNameChangeHandler = (check, id, item) => {
-    const itemselected = [...ToppingDatafinal];
-    if (check) {
-        item.IsChecked = true;
+    const toppingNameChangeHandler = (check, id, item) => {
+        const itemselected = [...ToppingDatafinal];
+        if (check) {
+            item.IsChecked = true;
+        }
+        else {
+            item.IsChecked = false;
+        }
+        itemselected.filter(x => x.toppingId === id).IsChecked = check;
+        setToppingDatafinal(itemselected);
     }
-    else {
-        item.IsChecked = false;
-    }
-    itemselected.filter(x => x.toppingId === id).IsChecked = check;
-    setToppingDatafinal(itemselected);
-}
 
     const unCheckHandler = (id) => {
         const updatedData = ToppingDatafinal.map(item => {
@@ -60,11 +59,11 @@ const toppingNameChangeHandler = (check, id, item) => {
             }
             return item;
         });
-        
+
         setToppingDatafinal(updatedData);
     }
 
-   
+
     const combinationDataSendParent = (data) => {
         props.combinationDataNameSend(data)
     }
@@ -85,7 +84,7 @@ const toppingNameChangeHandler = (check, id, item) => {
 
                     <tbody>
                         {ToppingDatafinal.map((item, index) => {
-                           
+
                             return <tr key={index}>
                                 <td className='text-center addProduct__subcategoryCheckboxes'>
                                     <input className="form-check-input"

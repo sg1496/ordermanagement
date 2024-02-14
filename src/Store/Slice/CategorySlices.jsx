@@ -8,8 +8,8 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
-    parentCategories:null,
-    searchcategory: []
+    parentCategories: null,
+    searchcategory: [],
 }
 
 const CategorySlices = createSlice({
@@ -20,8 +20,8 @@ const CategorySlices = createSlice({
             state.loading = false;
             state.error = null;
             state.message = null
-        },
-       
+        }  
+      
     },
     extraReducers: (builder) => {
         builder
@@ -121,17 +121,16 @@ const CategorySlices = createSlice({
     }
 
 });
-export const fetchApiDataCategory = createAsyncThunk('api/fetchData', async (FranchiseId) => {
+export const fetchApiDataCategory = createAsyncThunk('api/fetchDataCategory', async (FranchiseId) => {
     try {
         const response = await axios.get(`${url}/category/GetAllCategories/${FranchiseId}`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const fetchDelApiDataCategory = createAsyncThunk('api.fetchDelData', async (id) => {
+export const fetchDelApiDataCategory = createAsyncThunk('api.fetchDelDataCategory', async (id) => {
     let data = JSON.stringify({
         "categoryId": id
     });
@@ -149,7 +148,7 @@ export const fetchDelApiDataCategory = createAsyncThunk('api.fetchDelData', asyn
     }
 });
 
-export const fetchSaveUpdateCategory = createAsyncThunk('api.fetchUpdateSave', async (data) => {
+export const fetchSaveUpdateCategory = createAsyncThunk('api.fetchUpdateSaveCategory', async (data) => {
     try {
         const response = await axios.post(`${url}/category/SaveupdateCategory`, data);
         return response.data
@@ -158,11 +157,9 @@ export const fetchSaveUpdateCategory = createAsyncThunk('api.fetchUpdateSave', a
     }
 });
 
-export const fetchEditCategory = createAsyncThunk("api.fetchedit", async (id) => {
-    console.log("categoryid", id);
+export const fetchEditCategory = createAsyncThunk("api.fetcheditCategory", async (id) => {
     try {
         const response = await axios.get(`${url}/category/GetSingleCategory/${id}`)
-        console.log(response.data);
         return response.data
 
     } catch (error) {
@@ -173,10 +170,8 @@ export const fetchEditCategory = createAsyncThunk("api.fetchedit", async (id) =>
 export const fetchParentCategory = createAsyncThunk('fetchParentCategory', async (FranchiseId) => {
     try {
         const response = await axios.get(`${url}/api/ParentCategory/GetAllparentCategory/${FranchiseId}`);
-        console.log(response.data);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
@@ -184,4 +179,4 @@ export const fetchParentCategory = createAsyncThunk('fetchParentCategory', async
 
 
 export default CategorySlices.reducer;
-export const { resetStates, searchstates } = CategorySlices.actions;
+export const { resetStates} = CategorySlices.actions;

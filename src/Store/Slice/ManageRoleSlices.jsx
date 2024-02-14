@@ -149,7 +149,6 @@ export const fetchAllDataRole = createAsyncThunk('api/fetchAllDatarole', async (
         const response = await axios.get(`${url}/api/Role/GetAllRole`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
@@ -158,7 +157,6 @@ export const fetchAllDataRolepage = createAsyncThunk('api/fetchAllDatarolepage',
         const response = await axios.get(`${url}/api/Role/GetAllPAgeType`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
@@ -168,21 +166,17 @@ export const fetchLoginDataRolepage = createAsyncThunk('api/fetchLoginDatarolepa
         const response = await axios.get(`${url}/api/Role/GetAllRole/${id}`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const fetchDelDataRole = createAsyncThunk('api.fetchDelDataRole', async (id) => {
-    console.log("dafsafasfasd",id);
-   
+export const fetchDelDataRole = createAsyncThunk('api.fetchDelDataRole', async (id) => {   
     try {
         const response = await axios.delete(`${url}/api/Role/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-        console.log("response", response.data)
         return response.data
 
     } catch (error) {
@@ -195,18 +189,16 @@ export const fetchSaveUpdateDataRole = createAsyncThunk('api.fetchUpdateSaveData
         
         
         const response = await axios.post(`${url}/api/Role`, data);
-        console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const fetchSingleEditDataRole = createAsyncThunk("api.fetchSingleEditDataUser", async (id) => {
+export const fetchSingleEditDataRole = createAsyncThunk("api.fetchSingleEditDataRoleUser", async (id) => {
     
     try {
         const response = await axios.get(`${url}/api/Role/GetSingleRole/${id}`)
-        console.log(response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)

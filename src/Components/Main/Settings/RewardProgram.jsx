@@ -7,7 +7,6 @@ const RewardProgram = () => {
     const [checked, setchecked] = useState(false)
     const dispatch = useDispatch()
     dispatch(navTitle("Settings"))
-    console.log(checked);
     return (
         <>
             <div className="addProduct__basicTab">

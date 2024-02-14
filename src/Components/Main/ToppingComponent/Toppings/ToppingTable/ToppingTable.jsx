@@ -2,26 +2,33 @@ import React, { useEffect, useState } from 'react';
 import "./ToppingTable.scss";
 import images from '../../../../../assets/images';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchApiDataToppings, fetchEditTopping, fetchDelApiDataToppings,resetStates } from '../../../../../Store/Slice/ToppingSlices';
+import { fetchApiDataToppings, fetchEditTopping, fetchDelApiDataToppings, resetStates } from '../../../../../Store/Slice/ToppingSlices';
 import { useNavigate } from 'react-router-dom';
 import verifyToken from '../../../../SignIn/verifyToken';
+import { useSearchData } from '../../../CustomHook/useSearchData';
+import { searchStates } from '../../../../../Store/Slice/LocalitySlices';
 
 
 function ToppingTable() {
-
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const loginToken = verifyToken()
-    
+
     // useSelector
-    const message = useSelector((state)=> state.ToppingSlices.message)
+    const message = useSelector((state) => state.ToppingSlices.message)
     const toppings = useSelector((state) => state.ToppingSlices.data)
+    const searchdata = useSelector((state) => state.LocalitySlices.search)
     
 
-// dispatch useEffect
+
+    // dispatch useEffect
     useEffect(() => {
         dispatch(fetchApiDataToppings(loginToken.userID))
+        dispatch(searchStates(""))
     }, [message])
+
+   const search = useSearchData(toppings,searchdata, "toppingName")
+
 
 
 
@@ -44,7 +51,7 @@ function ToppingTable() {
                     <tbody>
 
                         {
-                            toppings && toppings.map((item, id) => {
+                            search?.map((item, id) => {
                                 return <tr key={id}>
                                     <td scope="row">{item.toppingName}</td>
                                     <td>{item.toppingAbbr}</td>

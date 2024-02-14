@@ -14,14 +14,12 @@ function ManageUserTable() {
     const manageLoginUserData = useSelector((manageuser) => manageuser.ManageUserSlices.loginData);
     const manageUserMessage = useSelector((manageuser) => manageuser.ManageUserSlices.message);
 
-    console.log("save/edit---------", loginToken.serTypeId)
 
 
     useEffect(() => {
         dispatch(fetchLoginDataUsers({id : loginToken.userID, pid: loginToken.parentUserId}))
     }, [manageUserMessage])
 
-    // console.log("first", manageUserData)
 
     return (
         <>

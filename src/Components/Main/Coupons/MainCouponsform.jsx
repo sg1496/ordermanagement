@@ -25,7 +25,7 @@ const MainCouponsform = () => {
 
     const discountTypeData = useSelector((discountType) => discountType.CouponSlices.discountType)
     const limitationData = useSelector((limitationstate) => limitationstate.CouponSlices.limitation)
-    console.log("aaaaaaaaaaaaaaa", limitationData)
+
 
     const [couponData, setCouponData] = useState(
         {
@@ -49,8 +49,6 @@ const MainCouponsform = () => {
         }
     )
 
-    console.log("coupon state1", couponData)
-
     const isAppliedOnCategories = (e) => {
         setCouponData({ ...couponData, isAppliedOnCategories: !couponData.isAppliedOnCategories })
     }
@@ -64,7 +62,6 @@ const MainCouponsform = () => {
     }
 
     const categoryselectedHandler = (data) => {
-        console.log("check select valuedddddddddddddddddddddddddddddddddddddddddddddddd", data)
         const selection = []
         data.map((item) => {
             selection.push(item.select)
@@ -73,7 +70,6 @@ const MainCouponsform = () => {
     }
 
     const productSelectedHandler = (data) => {
-        console.log("check select valuedddddddddddddddddddddddddddddddddddddddddddddddd", data)
         const selection = []
         data.map((item) => {
             selection.push(item.select)
@@ -103,9 +99,6 @@ const MainCouponsform = () => {
             parentUserId: parseInt(loginToken.parentUserId),
             franchiseId: parseInt(loginToken.userID),
         }
-
-
-        console.log("check my data state", couponDatas)
     }
 
     const cancelHandler = () => { }

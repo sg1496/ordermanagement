@@ -4,12 +4,11 @@ import { flushSync } from 'react-dom';
 let url = import.meta.env.VITE_APP_FOODS_API
 
 const initialState = {
-    data: null,
+    data: null, //product
     loading: false,
     error: null,
     message: null,
     singleData: null,
-   
 }
 
 const ProductSlices = createSlice({
@@ -24,7 +23,6 @@ const ProductSlices = createSlice({
         searchstates(state, action) {
             state.searchcategory = []
             const data = state.searchcategory.push(action.payload)
-            console.log("data", data);
         },
     },
     extraReducers: (builder) => {
@@ -130,12 +128,11 @@ export const fetchApiDataProduct = createAsyncThunk('api/fetchApiDataProduct', a
         const response = await axios.get(`${url}/product/GetAllProducts/${id}`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const fetchDelApiDataProduct = createAsyncThunk('api.fetchDelData', async (id) => {
+export const fetchDelApiDataProduct = createAsyncThunk('api.fetchDelDataProduct', async (id) => {
     let data = JSON.stringify({
         "productId": id
     });
@@ -153,19 +150,16 @@ export const fetchDelApiDataProduct = createAsyncThunk('api.fetchDelData', async
     }
 });
 
-export const fetchSaveUpdateProduct = createAsyncThunk('api.fetchUpdateSave', async (data) => {
-    console.log("daata", data);
+export const fetchSaveUpdateProduct = createAsyncThunk('api.fetchUpdateSaveProduct', async (data) => {
     try {
         const response = await axios.post(`${url}/product/SaveupdateProduct`, data);
-        console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const fetchEditProduct = createAsyncThunk("api.fetchedit", async (id) => {
-    console.log(id);
+export const fetchEditProduct = createAsyncThunk("api.fetcheditProduct", async (id) => {
     try {
         const response = await axios.get(`${url}/product/GetSingleProduct/${id}`)
         return response.data
@@ -175,7 +169,7 @@ export const fetchEditProduct = createAsyncThunk("api.fetchedit", async (id) => 
     }
 });
 
-export const fetchCombinationDelApiDataProduct = createAsyncThunk('api.fetchCombinationDelData', async (id) => {
+export const fetchCombinationDelApiDataProduct = createAsyncThunk('api.fetchCombinationDelDataProduct', async (id) => {
     try {
         const response = await axios.delete(`${url}/product/DeleteCombinationProduct/${id}`, {
             headers: {

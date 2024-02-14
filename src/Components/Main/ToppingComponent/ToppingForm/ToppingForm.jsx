@@ -164,6 +164,7 @@ const ToppingForm = (props) => {
 
     const submitHandler = async (event) => {
         event.preventDefault();
+        
 
         let newArr = []
         orderType.map(obj => {
@@ -171,6 +172,15 @@ const ToppingForm = (props) => {
                 newArr.push(obj.orderTypeId)
             }
         })
+
+        const newArray = [];
+
+        data.toppingsPrices?.filter((item)=>{
+            if(item.price >0 || item.quantity>0){
+                newArray.push(item)
+            }
+        })
+        
 
         let ToppingSaveUpdateData
 
@@ -181,6 +191,7 @@ const ToppingForm = (props) => {
                 franchiseId: loginToken.userID,
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
+                toppingsPrices: newArray,
                 orderTypes: newArr
             }
         } else {
@@ -192,6 +203,7 @@ const ToppingForm = (props) => {
                 toppingId: parseInt(edit.id),
                 foodTypeId: parseInt(data.foodTypeId),
                 measurementTypeId: parseInt(data.measurementTypeId),
+                toppingsPrices: newArray,
                 orderTypes: newArr
             }
         }

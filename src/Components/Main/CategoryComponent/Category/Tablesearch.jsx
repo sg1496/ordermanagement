@@ -3,39 +3,21 @@ import "./TableSearch.scss";
 import { faSearch, faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchApiDataCategory, searchstates } from "../../../../Store/Slice/CategorySlices"
+import {useDispatch, useSelector} from 'react-redux';
+import { searchStates } from '../../../../Store/Slice/LocalitySlices';
 
 
 
-function Tablesearch() {
+function Tablesearch() { 
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        dispatch(fetchApiDataCategory())
-    }, [])
-
+    const useBut = useSelector((aa)=>aa.CategorySlices.XyzPro)
     
-    const [filteredData1, setFilteredData1] = useState(null);
-
-    console.log("searched data ", filteredData1);
-
-    const handleSearch = (text) => {
-        const query = text.toLowerCase();
-        if (!categoryDatas) {
-            return
-        }
-        const newData = categoryDatas.filter((item) =>
-            item.categoryName.toLowerCase().includes(query)
-        );
-        setFilteredData1(newData);
-        // setSearchQuery(text);
-    };
 
     return (
         <div className='product_searchField d-flex justify-content-between'>
             <div className="product__innerSearchInput position-relative w-100">
-                <input type="search" className='w-100' onChange={e=>dispatch(searchstates(e.target.value))} placeholder='Search...' />
+                <input type="search" className='w-100'  placeholder='Search...' onChange={(e)=>dispatch(searchStates(e.target.value))} />
                 <FontAwesomeIcon icon={faSearch} className='product__innerSearchInputIcon position-absolute' />
             </div>
             <div className="product__innerAddnewButtons">

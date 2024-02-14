@@ -29,7 +29,7 @@ const loginToken = verifyToken()
         dispatch(fetchApiDataToppings(loginToken.userID));
     }, []);
 
-    const variantSelectionTable = useSelector((state) => state.variantSlices.data);
+    const variantSelectionTable = useSelector((state) => state.VariantSlices.data);
 
     useEffect(() => {
         const allda = [];

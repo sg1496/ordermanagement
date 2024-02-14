@@ -12,7 +12,6 @@ const ManageRoleTable = (props) => {
     const { id } = useParams()
     const managePageRole = useSelector((manageRole) => manageRole.ManageRoleSlices.pageData)
     const [manageRoleData, setManageRoleData] = useState([])
-    console.log("state check manageRoleData", props.passManangeRoleData.multiList)
 
     useEffect(() => {
         dispatch(fetchAllDataRolepage())
@@ -29,7 +28,6 @@ const ManageRoleTable = (props) => {
                     }
                 })
             })
-            console.log("check the new array", finalRole)
             setManageRoleData(finalRole)
         } else if (managePageRole) {
             const managekeyEdit = JSON.parse(JSON.stringify(managePageRole));
@@ -69,7 +67,6 @@ const ManageRoleTable = (props) => {
             })
 
         } else {
-            console.log("newArr data------------", manageRoleData)
             newArr = manageRoleData.map((item) => {
                 if (item.pageID == id) {
                     return {

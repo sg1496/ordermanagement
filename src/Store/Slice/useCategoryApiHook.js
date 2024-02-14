@@ -7,7 +7,6 @@ useEffect(() => {
             const response = await axios.get(`${url}/category/GetAllCategories`);
             return response.data;
         } catch (error) {
-            console.log("error ", error);
             throw new Error(error.message);
         }
     });

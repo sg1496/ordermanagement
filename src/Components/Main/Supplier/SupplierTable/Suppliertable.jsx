@@ -4,22 +4,24 @@ import images from "../../../../assets/images";
 import { useNavigate } from 'react-router-dom';
 import verifyToken from '../../../SignIn/verifyToken';
 import { fetchAllDataSupplier, fetchDeleteDataSupplier,fetchSingleDataSupplier,resetStates } from '../../../../Store/Slice/SupplierSlices';
+import { useSearchData } from '../../CustomHook/useSearchData';
 
 
 function SupplierTable() {
   const navigate = useNavigate()
 const dispatch = useDispatch()
-
 const loginToken = verifyToken()
 
 const message = useSelector((supplierdata)=>supplierdata.SupplierSlices.message)
+const AllDataSupplier = useSelector((supplierdata) => supplierdata.SupplierSlices.data)
+
+const search = useSearchData(AllDataSupplier, "suppilerName")
 
 useEffect(() => {
   dispatch(fetchAllDataSupplier(loginToken.userID))
    }, [message])
 
-const AllDataSupplier = useSelector((supplierdata) => supplierdata.SupplierSlices.data)
-console.log("first",AllDataSupplier)
+
 
   
   return (
@@ -34,7 +36,7 @@ console.log("first",AllDataSupplier)
             </tr>
           </thead>
           <tbody> 
-           {AllDataSupplier?.map((item, index)=>{ console.log("11", item)
+           {search?.map((item, index)=>{
             return <tr key={index}>
               <td scope="row">{item.suppilerName}</td>
               <td >

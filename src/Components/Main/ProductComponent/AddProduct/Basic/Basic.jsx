@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Basic.scss";
 import { useDispatch } from "react-redux";
 import { navTitle } from "../../../../../Store/Slice/NavSlices";
 import { fetchSaveUpdateProduct } from "../../../../../Store/Slice/ProductSlices"
 import { useNavigate, useParams } from "react-router-dom";
 import Buttons from "../../Buttons/NewButtons";
+import { productData } from "../ProductForm/ProductForm";
 
 const Basic = (props) => {
+
+    const data = useContext(productData)
+
+    console.log("first22", data)
     
     const dispatch = useDispatch();
     dispatch(navTitle("Add Products"));

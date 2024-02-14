@@ -1,23 +1,83 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import plus from "../../../../assets/svg/plus.svg"
 import subtract from "../../../../assets/svg/subtract.svg"
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchApiDataCategory } from '../../../../Store/Slice/CategorySlices';
+import verifyToken from '../../../SignIn/verifyToken';
+import { fetchApiDataProduct } from '../../../../Store/Slice/ProductSlices';
+import { fetchApiData } from '../../../../Store/Slice/VariantSlices';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 
 
 
-function FormTable() {
+function FormTable(props) {
+    const loginToken = verifyToken()
+    const dispatch = useDispatch()
+    const [firsts, setfirsts] = useState([
+        {
+            optionalId: "",
+            categoryID: "",
+            productId: "",
+            variantID: "",
+            quantity: "",
+        },
+        {
+            optionalId: "",
+            categoryID: "",
+            productId: "",
+            variantID: "",
+            quantity: "",
+        }
+    ])
 
-    const [selectedvalue1, setselectedvalue1] = useState("And")
-    const [selectedvalue2, setselectedvalue2] = useState("And")
+    console.log("check object combo", firsts)
 
-    const changeHandler1 = (e) => {
-        setselectedvalue1(e.target.value);
-    };
-    const changeHandler2 = (e) => {
-        setselectedvalue2(e.target.value);
-    };
+
+    useEffect(() => {
+        dispatch(fetchApiData(loginToken.userID))
+        dispatch(fetchApiDataCategory(loginToken.userID))
+        dispatch(fetchApiDataProduct(loginToken.userID))
+    }, [])
+
+    const categoryDatas = useSelector(category => category.CategorySlices.data)
+    const productDatas = useSelector(category => category.ProductSlices.data)
+    const variantDatas = useSelector(category => category.VariantSlices.data)
+
+    const changeHandler = (e, i) => {
+        const { name, value } = e.target;
+        const onChangeValue = [...firsts]
+        onChangeValue[i][name] = parseInt(value);
+        setfirsts(onChangeValue)
+
+        props.comboTableData(onChangeValue)
+    }
+
+    const addHandler = () => {
+        setfirsts([...firsts, {}])
+    }
+
+    const deleteHandler = (i) => {
+        const deleteVal = [...firsts]
+        deleteVal.splice(i, 1)
+        setfirsts(deleteVal)
+    }
+
+
+
+
     return (
         <>
             <div className='productSection__table mt-5'>
+                <div className='product_searchField d-flex justify-content-end'>
+                    <button type='button' style={{ backgroundColor: "#C53705", border: "none", borderRadius: "8px", color: "white" }} className='mb-2 px-3 py-2' onClick={addHandler}>
+                        <div className="product__innerAddnewButtons">
+                            <FontAwesomeIcon icon={faSquarePlus} />
+                            <span className='ps-2'>Add New</span>
+                        </div>
+                    </button>
+
+                </div >
                 <table className='table m-0 text-center'>
                     <thead >
                         <tr style={{ width: "100%" }}>
@@ -44,248 +104,89 @@ function FormTable() {
                         </tr>
                     </thead>
                     <tbody className='text-center'>
-                        <tr>
-                            <td  >
+                        {firsts?.map((item, index) => {
+                            return <tr key={index}>
+                                <td  >
 
-                                <div className="addProduct__productName  ">
-                                    <select className=" inputForm__inputField " value={selectedvalue1} onChange={changeHandler1} id="taxClass" >
-                                        <option value="And">And</option>
-                                        <option value="Or">Or</option>
-                                    </select>
+                                    <div className="addProduct__productName  ">
+                                        <select className=" inputForm__inputField " id="taxClass" name='optionalId' onChange={(e) => changeHandler(e, index)} required >
+                                            <option disabled selected value="">-- select an option --</option>
+                                            <option value="1">And</option>
+                                            <option value="2">Or</option>
+                                        </select>
 
-                                </div>
-                            </td>
-                            <td  >
+                                    </div>
+                                </td>
+                                <td  >
+                                    {firsts[index].optionalId == 1 && <div className="addProduct__productName ">
+                                        <select className=" inputForm__inputField" name="categoryID" id="cars" required onChange={(e) => changeHandler(e, index)}>
+                                            <option disabled selected value="">-- select a Category --</option>
+                                            {categoryDatas?.map((category) => {
+                                                return <option key={category.categoryId}
+                                                    value={category.categoryId}>{category.categoryName}</option>
+                                            })}
+                                        </select>
+                                    </div>}
+                                </td>
+                                <td className='text-center'>
+                                    <div className="addProduct__productName text-center" >
+                                        <select className="inputForm__inputField " name='productId' onChange={(e) => changeHandler(e, index)} required>
+                                            <option disabled selected value="">-- select a Product --</option>
+                                            {productDatas?.map((product) => {
+                                                return <option
+                                                    key={product.productId}
+                                                    value={product.productId}
+                                                >
+                                                    {product.productName}
+                                                </option>
+                                            })}
+                                        </select>
+                                    </div>
+                                </td>
+                                <td className='text-center'>
+                                    <div className="addProduct__productName text-center">
+                                        <select className="inputForm__inputField" name='variantID' onChange={(e) => changeHandler(e, index)} required >
+                                            <option disabled selected value="">-- select a Variant --</option>
+                                            {variantDatas && variantDatas.map((variant) => {
+                                                return <option
+                                                    key={variant.variantId}
+                                                    value={variant.variantId}
+                                                >
+                                                    {variant.variantName}
+                                                </option>
+                                            })}
+                                        </select>
+                                    </div>
+                                </td>
 
-                                {selectedvalue1 === 'And' && <div className="addProduct__productName ">
-                                    <select className=" inputForm__inputField" id="taxClass" >
-                                        <option defaultValue>pizza</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>}
-                            </td>
-                            <td className='text-center'>
-                                <div className="addProduct__productName text-center">
-                                    <select className="inputForm__inputField " id="taxClass" >
-                                        <option defaultValue>Margerita</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td className='text-center'>
-                                <div className="addProduct__productName text-center">
-                                    <select className="inputForm__inputField" id="taxClass" >
-                                        <option defaultValue>Extra cheeze</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>
-                            </td>
+                                <td >
+                                    <div className="addProduct__productName text-center">
 
-                            <td >
-                                <div className="addProduct__productName text-center">
-
-                                    <input
-                                        type="number"
-                                        id="product-name"
-                                        className=" inputForm__inputField "
-                                        placeholder="5"
-                                        required
-                                    />
-                                </div>
-                            </td>
-                            <td >
-                                {selectedvalue1 === "Or" && <div className="addProduct__productName">
-
-                                    <input
-                                        type="number"
-                                        id="product-name"
-                                        className=" inputForm__inputField"
-                                        placeholder="285/-"
-                                        required
-                                    />
-                                </div>}
-                            </td>
-                            <td>
-                                <div className="addProduct__productName d-flex justify-content-center text-center">
-                                    <span>
-                                        <img
-                                            src={plus}
-                                            alt="Edit Icon"
-                                            onClick={() => (dispatch(fetchSingleEditDataUser(item.userId), navigate(`/manageuserform/${item.userId}`)))}
-
+                                        <input
+                                            type="number"
+                                            id="product-name"
+                                            className=" inputForm__inputField "
+                                            placeholder="5"
+                                            name='quantity'
+                                            onChange={(e) => changeHandler(e, index)}
+                                            required
                                         />
-                                    </span>
+                                    </div>
+                                </td>
+                                <td >
+                                    255
+                                </td>
+                                <td>
                                     <span>
                                         <img
                                             src={subtract}
                                             alt="Delete Icon"
-                                            onClick={() => (dispatch(fetchDelDataUser(item.userId)), dispatch(resetStates()))}
+                                            onClick={() => { deleteHandler(index) }}
                                         />
                                     </span>
-                                </div>
-                            </td>
-
-                        </tr>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        {/* <tr className='text-center'>
-                            <td></td>
-                            <td  >
-
-                                <div className="addProduct__productName text-center">
-                                    <select className=" inputForm__inputField " id="taxClass" >
-                                        <option defaultValue>Pizza</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td  >
-                            <div className="addProduct__productName text-center ">
-                                <select className=" inputForm__inputField " id="taxClass" >
-                                    <option defaultValue>Margerita</option>
-                                    <option value="one">one</option>
-                                    <option value="two">two</option>
-                                    <option value="Three">three</option>
-                                </select>
-                                </div>
-                            </td>
-                            <td className='text-center'>
-                                <div className="addProduct__productName text-center">
-                                    <select className=" inputForm__inputField " id="taxClass" >
-                                        <option defaultValue>Extra Cheeze</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>
-                            </td>
-
-                            <td className='text-center'>
-                                <div className="addProduct__productName text-center">
-
-                                    <input
-                                        type="number"
-                                        id="product-name"
-                                        className=" inputForm__inputField"
-                                        placeholder="5"
-                                        required
-                                    />
-                                </div>
-                            </td>
-                            <td></td>
-
-                        </tr> */}
-
-
-                        <tr>
-                            <td  >
-
-                                <div className="addProduct__productName  ">
-                                    <select className=" inputForm__inputField " value={selectedvalue2} onChange={changeHandler2} id="taxClass" >
-                                        <option value="And">And</option>
-                                        <option value="Or">Or</option>
-                                    </select>
-
-                                </div>
-                            </td>
-                            <td  >
-
-                                {selectedvalue2 === 'Or' && <div className="addProduct__productName ">
-                                    <select className=" inputForm__inputField" id="taxClass" >
-                                        <option defaultValue>pizza</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>}
-                            </td>
-
-                            <td className='text-center'>
-                                <div className="addProduct__productName">
-                                    <select className=" inputForm__inputField" id="taxClass" >
-                                        <option defaultValue>Margerita</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td className='text-center'>
-                                <div className="addProduct__productName">
-                                    <select className=" inputForm__inputField" id="taxClass" >
-                                        <option defaultValue>Extra Cheeze</option>
-                                        <option value="one">one</option>
-                                        <option value="two">two</option>
-                                        <option value="Three">three</option>
-                                    </select>
-                                </div>
-                            </td>
-
-                            <td className='text-center'>
-                                <div className="addProduct__productName">
-                                    <input
-                                        type="Number"
-                                        id="product-name"
-                                        className=" inputForm__inputField"
-                                        placeholder="5"
-                                        required
-                                    />
-                                </div>
-                            </td>
-                            <td className='text-center'>
-                                {selectedvalue2 === "And" && <div className="addProduct__productName">
-
-                                    <input
-                                        type="number"
-                                        id="product-name"
-                                        className=" inputForm__inputField"
-                                        placeholder="285/-"
-                                        required
-                                    />
-                                </div>}
-                            </td>
-                            <td>
-                            <div className="addProduct__productName d-flex justify-content-center text-center">
-                                    <span>
-                                        <img
-                                            src={plus}
-                                            alt="Edit Icon"
-                                            onClick={() => (dispatch(fetchSingleEditDataUser(item.userId), navigate(`/manageuserform/${item.userId}`)))}
-
-                                        />
-                                    </span>
-                                    <span>
-                                        <img
-                                            src={subtract}
-                                            alt="Delete Icon"
-                                            onClick={() => (dispatch(fetchDelDataUser(item.userId)), dispatch(resetStates()))}
-                                        />
-                                    </span>
-                                </div>
-                            </td>
-
-                        </tr>
+                                </td>
+                            </tr>
+                        })}
 
                     </tbody>
                 </table>

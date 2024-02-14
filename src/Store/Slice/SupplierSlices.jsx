@@ -128,21 +128,17 @@ export const fetchAllDataSupplier = createAsyncThunk('api/fetchDataSupplier', as
         const response = await axios.get(`${url}/api/Supplier/GetAllSuppiler/${FranchiseId}`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const fetchDeleteDataSupplier = createAsyncThunk('api.fetchDeleteDataSupplier', async (id) => {
-    console.log("dafsafasfasd",id);
-   
+export const fetchDeleteDataSupplier = createAsyncThunk('api.fetchDeleteDataSupplier', async (id) => {   
     try {
         const response = await axios.delete(`${url}/api/Supplier/DeleteSuppiler/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-        console.log("response", response.data)
         return response.data
 
     } catch (error) {
@@ -154,7 +150,6 @@ export const fetchSaveUpdateSupplier = createAsyncThunk('api.fetchUpdateSaveSupp
     try {
         data.loginUserID = 9;
         const response = await axios.post(`${url}/api/Supplier/SaveupdateSuppiler`, data);
-        console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
@@ -165,19 +160,17 @@ export const fetchSingleDataSupplier = createAsyncThunk("api.fetchSingleDataSupp
       
     try {
         const response = await axios.get(`${url}/api/Supplier/GetSingleSuppiler/${id}`)
-        console.log(response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const fetchAllDataState = createAsyncThunk('api/fetchDataState', async () => {
+export const fetchAllDataState = createAsyncThunk('api/fetchDataStateSupplier', async () => {
     try {
         const response = await axios.get(`${url}/api/CommonApi/GetAllState`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });

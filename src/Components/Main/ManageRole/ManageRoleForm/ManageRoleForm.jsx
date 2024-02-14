@@ -17,7 +17,6 @@ const ManageRoleForm = (props) => {
     const loginToken = verifyToken()
  
     const loginUser = useSelector(login=>login.LoginSlices.data)
-    // console.log(" first ddddddddddddddddddta", loginUser)
  
     const [manageRoleData, setManageRoleData] = useState({
         roleName: "",
@@ -27,14 +26,7 @@ const ManageRoleForm = (props) => {
         multiList: [],
     })
 
-    // const parentCategory = useSelector((parent) => parent.categorySlices.parentCategories)
     const manageRoleSingleData = useSelector((roleSingleData) => roleSingleData.ManageRoleSlices.singleData)
-    // console.log("firstddddddddddddddddddddddddddddddddddddmmmm", manageRoleSingleData)
-
-    // useEffect(() => {
-    //     dispatch(fetchParentCategory(loginToken.userID))
-
-    // }, [])
 
     useEffect(() => {
         if (edit.id != undefined) {
@@ -63,9 +55,6 @@ const ManageRoleForm = (props) => {
     }, [manageRoleSingleData])
 
 
-// console.log("check the state code in role function", manageRoleData )
-
-
     const changeHandler = (e) => {
         setManageRoleData({
             ...manageRoleData,
@@ -78,7 +67,6 @@ const ManageRoleForm = (props) => {
     }
 
     const manageRoleSendHandler =(data)=>{ 
-        // console.log( "dddddddddddddata role", data)
         const datahandel =[]
         data?.map((item)=> { 
             datahandel.push(item.select)
@@ -109,7 +97,6 @@ const ManageRoleForm = (props) => {
                 parentUserId:loginToken.parentUserId,
             }
         }
-        // console.log("ssssset data", roleData)
         dispatch(fetchSaveUpdateDataRole(roleData))
         dispatch(resetStates())
         Navigate(`/manageRoleTable`)

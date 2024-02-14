@@ -15,7 +15,6 @@ function List(props) {
 
     const [first, setfirst] = useState(false)
     
-    console.log("ddddddddddddddddddddddddd", first)
     return (
         <>
        <div className={`${props.drawerData === true ? "sidebar__width" : 'sidebar_pannel'}`} onMouseLeave={()=>props.drawerHandlers()} onClick={()=>props.drawerClick()} >

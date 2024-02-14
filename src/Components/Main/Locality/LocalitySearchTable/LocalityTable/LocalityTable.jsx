@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchDeleteDataLocality, fetchLoginDataLocality, fetchSingleDataLocality, resetStates, searchStates } from '../../../../../Store/Slice/LocalitySlices';
 import verifyToken from '../../../../SignIn/verifyToken';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
+import { useSearchData } from '../../../CustomHook/useSearchData';
 
 const LocalityTable = () => {
     const dispatch = useDispatch();
@@ -15,29 +16,13 @@ const LocalityTable = () => {
 
     const LocalityMessage = useSelector((locality) => locality.LocalitySlices.message);
     const LocalityAllData = useSelector((locality) => locality.LocalitySlices.loginData);
-    const searchdata2 = useSelector((ser) => ser.LocalitySlices.search)
-
-    const [first, setFirst] = useState(LocalityAllData);
 
     useEffect(() => {
         dispatch(fetchLoginDataLocality(loginToken.userID))
-    }, [LocalityMessage,])
-
-    useEffect(() => {
-        if (searchdata2 === "") {
-            setFirst(LocalityAllData);
-            return;
-        }
-
-        const searchData = LocalityAllData?.filter((item) => {
-            return item.localityName.toLowerCase().indexOf(searchdata2.toLowerCase()) !== -1;
-        });
-        setFirst(searchData)
-    }, [searchdata2, LocalityAllData, LocalityMessage]);
-
-
-
-
+        dispatch(searchStates(""))
+    }, [LocalityMessage])
+        
+    const search = useSearchData(LocalityAllData,"localityName" );
 
     return (
         <>
@@ -50,7 +35,7 @@ const LocalityTable = () => {
                         </tr>
                     </thead>
                     <tbody >
-                        {first?.map((item, index) => {
+                        {search?.map((item, index) => {
                             return <tr key={index}>
                                 <td scope="row" >{item.localityName}</td>
 

@@ -12,10 +12,8 @@ import verifyToken from "../../../SignIn/verifyToken";
 
 function Variantform(props) {
 
-    const selectordatas = useSelector((state) => state.variantSlices.singleData)
-    const message = useSelector((state) => console.log("store ", state.variantSlices.message))
+    const selectordatas = useSelector((state) => state.VariantSlices.singleData)
     const loginToken = verifyToken()
-    console.log("//////////////////", selectordatas);
 
     const edit = useParams()
     const Navigate = useNavigate()
@@ -30,8 +28,6 @@ function Variantform(props) {
         parentUserId: "",
         franchiseID: ""
     })
-
-    console.log("svs sssss", Object.keys(edit), "*", typeof edit.id);
 
     useEffect(() => {
 
@@ -50,12 +46,10 @@ function Variantform(props) {
             isActive: selectordatas.isActive
         })
         if (!edit.id) {
-            console.log("-------------------------------------------------");
             setData({
                 variantName: "",
                 variantLevel: "",
                 isActive: false,
-
             })
         }
     }, [selectordatas])

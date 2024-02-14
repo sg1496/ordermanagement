@@ -14,11 +14,9 @@ const Categoryform = () => {
     const edit = useParams()
     const loginToken= verifyToken()
 
-    console.log("check the verify token", loginToken)
-
-    const editData = useSelector((state) => state.categorySlices.singleData)
-    const categoryDatas = useSelector(state => state.categorySlices.data)
-    const parentCategories = useSelector(state => state.categorySlices.parentCategories)
+    const editData = useSelector((state) => state.CategorySlices.singleData)
+    const categoryDatas = useSelector(state => state.CategorySlices.data)
+    const parentCategories = useSelector(state => state.CategorySlices.parentCategories)
 
 
     const [categoryData, setCategoryData] = useState({
@@ -205,46 +203,3 @@ const Categoryform = () => {
     )
 }
 export default Categoryform;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const submitHandler = async (event) => {
-//     event.preventDefault();
-// const categoryiesdata = { ...categoryData };
-// console.log("cllllickkkkkkkk");
-
-// url = `${url}/category/SaveupdateCategory`
-// const datas = {
-//     categoryName: categoryiesdata.categoryName,
-//     parentCategoryId: parseInt(categoryiesdata.parentCategoryId),
-//     isActive: categoryiesdata.isActive,
-//     categoryId: Object.keys(edit).length < 1 ? 0 : parseInt(categoryiesdata.categoryId),
-//     franchiseID: 0,
-//     displayOrder: 0,
-//     franchiseID: 0
-// }
-
-// console.log("data ", datas);
-// const result = await axios.post(url, datas)
-// console.log(result);
-// Navigate(`/categorytable`)
-
-// setCategoryData({
-//     categoryName: "",
-//     parentCategoryId
-//         : "",
-//     isActive: false
-// })

@@ -1,11 +1,13 @@
-import { useState, useEffect, } from 'react';
+import { useState, useEffect, useContext, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings } from '../../../../Store/Slice/ToppingSlices';
 import ToppingSelectionTable from "../ToppingRequiredTable/ToppingSelectionTable";
 import { useParams } from 'react-router-dom';
 import verifyToken from '../../../SignIn/verifyToken';
+import { productData } from '../../ProductComponent/AddProduct/ProductForm/ProductForm';
 
 function ToppingNames(props) {
+  
     const dispatch = useDispatch()
     const loginToken = verifyToken()
     const combinationPropsData = props.combinationHandler
@@ -15,16 +17,11 @@ function ToppingNames(props) {
 
     useEffect(() => {
         dispatch(fetchApiDataToppings(loginToken.userID))
-    }, [])
-   
+    }, [])  
     
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
 
-
-    const [ToppingDatafinal, setToppingDatafinal] = useState([])
-    console.log("toppingname all data", ToppingDatafinal)
-   
-
+    const [ToppingDatafinal, setToppingDatafinal] = useState([])  
 
     useEffect(() => {
        

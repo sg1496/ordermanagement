@@ -13,7 +13,6 @@ const NavSlices = createSlice({
     initialState: initialState,
     reducers: {
         navTitle(state, action) {
-            console.log("nav title ", action.payload);
             state.navTitle=action.payload
         }
     },

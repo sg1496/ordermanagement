@@ -27,7 +27,7 @@ const LocalitySlices = createSlice({
         },
         searchStates:(state, action) =>{
             state.search = action.payload
-        }
+        }    
 
     },
     extraReducers: (builder) => {
@@ -134,7 +134,6 @@ export const fetchAllDataLocality = createAsyncThunk('api/fetchDataLocality', as
         const response = await axios.get(`${url}/api/Locality/GetAllLocality`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
@@ -144,7 +143,6 @@ export const fetchLoginDataLocality = createAsyncThunk('api/fetchLoginDataLocali
         const response = await axios.get(`${url}/api/Locality/GetAllLocality/${id}`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
@@ -166,7 +164,6 @@ export const fetchDeleteDataLocality = createAsyncThunk('api.fetchDeleteDataLoca
 export const fetchSaveUpdateLocality = createAsyncThunk('api.fetchUpdateSaveLocality', async (data) => {
     try {
         const response = await axios.post(`${url}/api/Locality/SaveupdateLocality`, data);
-        console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
@@ -177,7 +174,6 @@ export const fetchSingleDataLocality = createAsyncThunk("api.fetchSingleDataLoca
 
     try {
         const response = await axios.get(`${url}/api/Locality/GetSingleLocality/${id}`)
-        console.log(response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)

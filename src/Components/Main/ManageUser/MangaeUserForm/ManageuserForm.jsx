@@ -31,7 +31,6 @@ const ManageuserForm = () => {
 
     const singleDataManageUser = useSelector((manageUser) => manageUser.ManageUserSlices.singleData)
     const roleData = useSelector((role) => role.ManageRoleSlices.loginData)
-    console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddda", roleData)
 
     useEffect(() => {
         dispatch(fetchLoginDataRolepage(loginToken.userID))
@@ -85,23 +84,19 @@ const ManageuserForm = () => {
     }
 
     const parentUserIDHandler = (loginTokenValue) => {
-        console.log("ddddddddddddddddddddddddd55------------------------", loginTokenValue)
-        
-       let parentUserIdCheck = 0
+        let parentUserIdCheck = 0
         if (loginTokenValue == 0) {
             return parentUserIdCheck = 1;
-          console.log("parnetUSerIDcheck",parentUserIdCheck)
-          
         } else if (loginTokenValue == 1) {
-          parentUserIdCheck = 2;
+            parentUserIdCheck = 2;
         } else if (loginTokenValue == 2) {
-          parentUserIdCheck = 3;
+            parentUserIdCheck = 3;
         } else if (loginTokenValue == 3) {
-          parentUserIdCheck = 4;
+            parentUserIdCheck = 4;
         }
         return parentUserIdCheck;
-      };
-      
+    };
+
 
 
 
@@ -138,7 +133,7 @@ const ManageuserForm = () => {
                     userId: parseInt(edit.id),
                     roleId: parseInt(manageUser.roleId),
                     franchiseId: parseInt(loginToken.userID),
-                    parentUserId:parentUserIdCheck
+                    parentUserId: parentUserIdCheck
 
                 }
             }

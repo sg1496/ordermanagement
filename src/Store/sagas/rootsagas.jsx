@@ -6,14 +6,9 @@ function* workGetCatsFetch() {
     const response = yield call(()=> fetch(`${url}/variant/GetAllVariants`));
     const formattedresponse = yield response.json();
     yield put(fetchApiData(formattedresponse)) 
-    
-    console.log("api data",response);
 }
 
  export function* watcherSaga() {
-    console.log("watchersaga");
-    yield takeEvery('api/fetchApiData', workGetCatsFetch);
-    
-    
+    yield takeEvery('api/fetchApiData', workGetCatsFetch);    
 }
 

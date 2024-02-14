@@ -47,8 +47,6 @@ function App() {
 
   }, [localStorage.getItem('token'), isUser, setisUser])
 
-  // console.log('isUser', isLogin);
-
   return (
     <div className='mainDiv'>
 

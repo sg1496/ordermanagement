@@ -89,7 +89,6 @@ const ToppingSlices = createSlice({
             })
             .addCase(fetchEditTopping.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
-                    console.log("======================================================================================", action.payload)
                     state.loading = false;
                     state.singleData = action.payload;
                 }
@@ -185,7 +184,6 @@ export const fetchApiDataToppings = createAsyncThunk('api/fetchDataToppings', as
         const response = await axios.get(`${url}/topping/GetAllToppings/${FranchiseId}`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
@@ -195,13 +193,11 @@ export const fetchFoodTypeTopping = createAsyncThunk('api/fetchFoodTypeToppings'
         const response = await axios.get(`${url}/api/FoodType/GetAllFoodType`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const fetchDelApiDataToppings = createAsyncThunk('api.fetchDelData', async (id) => {
-    console.log(id);
+export const fetchDelApiDataToppings = createAsyncThunk('api.fetchDelDataToppings', async (id) => {
     let data = JSON.stringify({
         "ToppingId": id
     });
@@ -219,53 +215,45 @@ export const fetchDelApiDataToppings = createAsyncThunk('api.fetchDelData', asyn
     }
 });
 
-export const fetchSaveUpdateToppings = createAsyncThunk('api.fetchUpdateSave', async (data) => {
+export const fetchSaveUpdateToppings = createAsyncThunk('api.fetchUpdateSaveToppings', async (data) => {
     try {
-        
-        data.loginUserID = 9;
         const response = await axios.post(`${url}/topping/SaveupdateTopping`, data);
-        console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const fetchEditTopping = createAsyncThunk("api.fetchedit", async (id) => {
-    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiid",id);
+export const fetchEditTopping = createAsyncThunk("api.fetcheditToppings", async (id) => {
     try {
         const response = await axios.get(`${url}/topping/GetSingleTopping/${id}`)
-        console.log(response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const GetAllMeasuremenType = createAsyncThunk('api/fetchdropdown', async () => {
+export const GetAllMeasuremenType = createAsyncThunk('api/fetchdropdownToppings', async () => {
     try {
         const response = await axios.get(`${url}/api/Measurement/GetAllMeasuremenType`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const GetAllOrderType = createAsyncThunk('api/fetchorderTypes', async () => {
+export const GetAllOrderType = createAsyncThunk('api/fetchorderTypesToppings', async () => {
     try {
         const response = await axios.get(`${url}/topping/GetAllOrderType`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const ToppingCombinationDelete = createAsyncThunk('api/ToppingCombinationDelete', async (id) => {
+export const ToppingCombinationDelete = createAsyncThunk('api/ToppingCombinationDeleteToppings', async (id) => {
     try {
         const response = await axios.get(`${url}/topping/DeleteCombinationTopping/${id}`)
-        console.log(response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)

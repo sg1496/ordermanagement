@@ -31,7 +31,6 @@ const LoginSlices = createSlice({
                 state.loading = true;
             })
             .addCase(fetchLoginPage.fulfilled, (state, action) => {
-                console.log("response saveupdate dd", action.payload);
                 localStorage.setItem('token', action.payload.token)
                 if (action.payload.token) {
                     state.loading = false;

@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './GeneralForm.scss';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../Store/Slice/NavSlices';
 import Buttons from '../ProductComponent/Buttons/NewButtons';
+import { fetchApiData } from '../../../Store/Slice/VariantSlices';
+import verifyToken from '../../SignIn/verifyToken';
+import { fetchApiDataCategory } from '../../../Store/Slice/CategorySlices';
+import { fetchApiDataProduct } from '../../../Store/Slice/ProductSlices';
 const GeneralForm = () => {
+  let loginToken = verifyToken()  
 const dispatch = useDispatch()
 dispatch(navTitle("Settings"))
+
+
+
+
     return (
         <>
             <div className="addProduct__basicTab">

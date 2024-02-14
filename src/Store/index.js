@@ -13,6 +13,7 @@ import ManageUsers from "./Slice/ManageUsers";
 import ManageRoleSlices from "./Slice/ManageRoleSlices";
 import LoginSlices from "./Slice/LoginSlices";
 import CouponSlices from "./Slice/CouponSlices";
+import ComboSlices from "./Slice/ComboSlices";
 
                                                                                                                                     
 
@@ -23,18 +24,16 @@ const store = configureStore(
         {
             LoginSlices: LoginSlices,
             navheader: NavSlices,
-            categorySlices: CategorySlices,
-            variantSlices: apiSlices,
+            CategorySlices: CategorySlices,
+            VariantSlices: apiSlices,
             ToppingSlices: ToppingSlices,
             ProductSlices: ProductSlices,
             SupplierSlices: SupplierSlices,
             LocalitySlices: LocalitySlices,
             ManageUserSlices: ManageUsers,
             ManageRoleSlices: ManageRoleSlices,
-            CouponSlices : CouponSlices
-
-            
-
+            CouponSlices : CouponSlices,
+            ComboSlices : ComboSlices       
         },
  
         // middleware: [sagaMiddleware]

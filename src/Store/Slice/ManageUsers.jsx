@@ -125,28 +125,25 @@ const ManageUserSlices = createSlice({
 
 });
 
-export const fetchAllDataUsers = createAsyncThunk('api/fetchAllDataUsers', async () => {
+export const fetchAllDataUsers = createAsyncThunk('api/fetchAllDataUsersManageUser', async () => {
     try {
         const response = await axios.get(`${url}/users/GetAllUsersDetails`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const fetchLoginDataUsers = createAsyncThunk('api/fetchLoginDataUsers', async (obj) => {
+export const fetchLoginDataUsers = createAsyncThunk('api/fetchLoginDataUsersManageUser', async (obj) => {
     try {
         const response = await axios.get(`${url}/users/GetAllUsersDetails/${obj.id}/${obj.pid}`);
         return response.data;
     } catch (error) {
-        console.log("error ", error);
         throw new Error(error.message);
     }
 });
 
-export const fetchDelDataUser = createAsyncThunk('api.fetchDeleteDataUser', async (id) => {
-    console.log(id);
+export const fetchDelDataUser = createAsyncThunk('api.fetchDeleteDataUserManageUser', async (id) => {
     let data = JSON.stringify({
         "userId": id
     });
@@ -164,23 +161,21 @@ export const fetchDelDataUser = createAsyncThunk('api.fetchDeleteDataUser', asyn
     }
 });
 
-export const fetchSaveUpdateDataUser = createAsyncThunk('api.fetchUpdateSaveDataUser', async (data) => {
+export const fetchSaveUpdateDataUser = createAsyncThunk('api.fetchUpdateSaveDataManageUser', async (data) => {
     try {
         data.userTypeID = 3;
         
         const response = await axios.post(`${url}/users/saveUpdateUserDetails`, data);
-        console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const fetchSingleEditDataUser = createAsyncThunk("api.fetchSingleEditDataUser", async (id) => {
+export const fetchSingleEditDataUser = createAsyncThunk("api.fetchSingleEditDataManageUser", async (id) => {
     
     try {
         const response = await axios.get(`${url}/users/getSingleUserDetails/${id}`)
-        console.log(response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)

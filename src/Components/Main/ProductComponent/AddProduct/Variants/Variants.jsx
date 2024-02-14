@@ -13,9 +13,10 @@ function Variants(props) {
     dispatch(navTitle("Add Products"));
 
     const [variantData, setVariantData] = useState([])
-    
+    const [mergedVariants, setMergedVariants] = useState([])
 
-    const variantList = useSelector((variant) => variant.variantSlices.data)
+
+    const variantList = useSelector((variant) => variant.VariantSlices.data)
     const toppingList = useSelector((topping) => topping.ToppingSlices.data)
 
     useEffect(() => {
@@ -24,32 +25,33 @@ function Variants(props) {
     }, [])
 
     useEffect(() => {
-        const varntdata = []
-        if (variantList && props.productFormState.productVariantList.length > 0) {
-            variantList?.map((item) => {
-                
-                props.productFormState.productVariantList.filter((selectvariant) => {
-                    
-                    if (selectvariant.variantId === item.variantId) {
-                        const newItem = { ...item, selectvariant }
-                        varntdata.push(newItem)
-                    }
-                })
-            })
-            setVariantData(varntdata)
-        }
-        else if (variantList) {
-            variantList?.map((item) => {
-                const newItem = { ...item, selectvariant: { price: 0, variantId: item.variantId, salePrice: 0, toppingId: "", isActive: false } }
-                varntdata.push(newItem)
-            })
-            setVariantData(varntdata)
-        }
-    }, [variantList])
+        if (!variantList || !props.productFormState.productVariantList) return;
+    
+        const mergedVariants = variantList.map(variant => {
+            const selectvariant = props.productFormState.productVariantList.find(item => item.variantId === variant.variantId) || { price: 0, salePrice: 0, toppingId: "", isActive: false };
+            return { ...variant, ...selectvariant };
+        });
+        setMergedVariants(mergedVariants);
+    
+    }, [variantList, props.productFormState.productVariantList]);
+    
+    console.log("Merged variants:", mergedVariants);
+    
+    useEffect(() => {
+        if (!variantList || !mergedVariants) return;
+    
+        const variantData = variantList.map(variantItem => {
+            const selectvariant = mergedVariants.find(item => item.variantId === variantItem.variantId) || { price: 0, salePrice: 0, toppingId: "", isActive: false };
+            return { ...variantItem, selectvariant };
+        });
+    
+        setVariantData(variantData);
+    
+    }, [variantList, mergedVariants]);
 
     const changeHandler = (e, id) => {
         let newArr = variantData?.map((item) => {
-           
+
             if (item.variantId === id) {
                 return {
                     ...item,
@@ -65,10 +67,9 @@ function Variants(props) {
                 return item;
             }
         })
-        const finalVariantData = newArr.filter((x) => x.selectvariant.toppingId !== "")
         setVariantData(newArr)
-        
-        props.variantDataHandler(finalVariantData)
+
+        props.variantDataHandler(newArr)
     }
 
 
@@ -76,7 +77,7 @@ function Variants(props) {
 
 
 
-    
+
     return (
         <>
             <div className='addProduct__variantsTab'>
@@ -95,7 +96,7 @@ function Variants(props) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {variantData?.map((item, index) => {
+                                    {variantData?.map((item, index) => {console.log("check avtive", item)
 
                                         return <tr key={index}>
                                             <th scope="row">{index + 1}</th>

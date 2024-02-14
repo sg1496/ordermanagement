@@ -13,14 +13,13 @@ function VariantTable(props) {
     const navigate = useNavigate()
     const loginToken = verifyToken()
 
-    const message = useSelector((state) => state.variantSlices.message)
+    const message = useSelector((state) => state.VariantSlices.message)
     useEffect(() => {
         dispatch(fetchApiData(loginToken.userID));
     }, [message])
 
-    const variantsList = useSelector(state => state.variantSlices.data)
-    console.log("aaabbb", variantsList);
-
+    const variantsList = useSelector(state => state.VariantSlices.data)
+    const variantsLists = useSelector(state => state)
 
     return (
         <>

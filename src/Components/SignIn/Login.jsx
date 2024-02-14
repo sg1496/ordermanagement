@@ -19,10 +19,6 @@ const Login = () => {
         password: ""
     });
 
-    console.log(textarr)
-
-
-
     useEffect(() => {
 
         if (localStorage.getItem('token')) {
@@ -30,36 +26,22 @@ const Login = () => {
         } else {
             navigate(`/`)
         }
-        console.log("ttt", localStorage.getItem('token'));
-
     }, [localStorage.getItem('token')])
 
 
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-    // const handleMouseDownPassword = (event) => {
-    //     event.preventDefault();
-    // };
-
-
-
     const ChangeHandler = (e) => {
         const name = e.target.name;
         const value = e.target.value;
         settextarr({ ...textarr, [name]: value })
-
-
-
     }
 
     const submitHandler = (e) => {
         e.preventDefault();
-        // console.log("loging save id")
-
 
         const data = { ...textarr }
-        console.log("loging save id", data)
         dispatch(fetchLoginPage(data))
         navigate(`/localityTable`)
 

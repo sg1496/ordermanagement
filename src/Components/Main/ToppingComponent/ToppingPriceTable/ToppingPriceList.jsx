@@ -2,80 +2,61 @@ import React, { useEffect } from 'react';
 import './ToppingPriceList.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiData } from "../../../../Store/Slice/VariantSlices"
-import { fetchEditTopping } from '../../../../Store/Slice/ToppingSlices';
 import { useState } from 'react';
-import { useParams } from "react-router-dom"
-import { faCommentsDollar } from '@fortawesome/free-solid-svg-icons';
 import verifyToken from '../../../SignIn/verifyToken';
 
 function ToppingPriceList(props) {
 
     const loginToken = verifyToken()
-    const { id } = useParams()
-    const singleEditTopping = useSelector((state) => state.ToppingSlices.singleData)
-    const toppingPrice = useSelector((state) => state.variantSlices.data)
+    const toppingPrice = useSelector((state) => state.VariantSlices.data)
     const [toppingData, setToppingData] = useState([])
-    
-console.log("ddddddddddddddddddddddddd45", toppingData)
 
     const dispatch = useDispatch()
-
     useEffect(() => {
         dispatch(fetchApiData(loginToken.userID))
     }, [])
 
+
+    const [first, setfirst] = useState([])
     useEffect(() => {
-        dispatch(fetchEditTopping())
-    }, [])
+        if (!toppingPrice || !props.allToppingData.toppingsPrices) return;
+    
+        const mergedArray = toppingPrice.map(obj1 => {
+            const obj2 = props.allToppingData.toppingsPrices.find(obj2 => obj2.variantId === obj1.variantId) || { price: 0, quantity: 0 };
+            return { ...obj1, ...obj2 };
 
-
-
+        });      
+    
+        setfirst(mergedArray);
+    }, [toppingPrice, props.allToppingData.toppingsPrices]);
+    
     useEffect(() => {
-        const finalToppingData = []
-        console.log('props.allToppingData.toppingsPrices88888888888888888888888888888888888888888888888',props.allToppingData.toppingsPrices)
-        if (toppingPrice && props.allToppingData.toppingsPrices.length > 0) {
-
-            toppingPrice.map((item) => {
-                props.allToppingData.toppingsPrices.filter((seletedTopping) => {
-                    if (seletedTopping.variantId == item.variantId) {
-                        const newItem = { ...item, seletedTopping }
-                        finalToppingData.push(newItem)
-                        
-                        
-                    }
-
-                })
-            })
-            setToppingData(finalToppingData)
-        } else if (toppingPrice) {
-            toppingPrice.map((item) => {
-                const newItem = { ...item, seletedTopping: { price: 0, variantId: item.variantId, quantity: 0 }}
-                finalToppingData.push(newItem)
-            })
-            setToppingData(finalToppingData)
-            
-        }
-    }, [toppingPrice])
-
+        if (!toppingPrice) return;
+    
+        const finalToppingData = toppingPrice.map(item => {
+            const seletedTopping = first.find(selected => selected.variantId === item.variantId) || { price: 0, quantity: 0 };
+            return { ...item, seletedTopping };
+        });
+    
+        setToppingData(finalToppingData);
+    }, [toppingPrice, first]);
 
     const toppingPriceQuantityHandler = (e, variantId) => {
-        let newArr = toppingData.map((item, i) => {
-            if (item.variantId == variantId) {
-                return { ...item, seletedTopping: { price: e.target.name == 'price' ? parseInt(e.target.value) : item.seletedTopping.price, variantId: item.variantId, quantity: e.target.name == 'quantity' ? parseInt(e.target.value) : item.seletedTopping.quantity } };
-            } 
-            else {
+        const { name, value } = e.target;
+    
+        const newArr = toppingData.map(item => {
+            if (item.variantId === variantId) {
+                const price = name === 'price' ? parseInt(value) : item.seletedTopping.price;
+                const quantity = name === 'quantity' ? parseInt(value) : item.seletedTopping.quantity;
+                return { ...item, seletedTopping: { price, variantId, quantity } };
+            } else {
                 return item;
             }
         });
-       
-        setToppingData(newArr)
-        console.log(toppingData);
+    
+        setToppingData(newArr);
         props.toppingPriceHandler(newArr);
-    }
-    console.log("aaaaaaaaaaabb4",toppingData);
-
-
-
+    };
 
     return (
         <>
@@ -96,14 +77,14 @@ console.log("ddddddddddddddddddddddddd45", toppingData)
                                 <td>{item.variantName}</td>
                                 <td>
                                     <input type='number'
-                                        placeholder='50'
+                                        placeholder='0'
                                         name='price'
                                         value={item.seletedTopping.price}
                                         onChange={(e) => toppingPriceQuantityHandler(e, item.variantId)} />
                                 </td>
                                 <td>
                                     <input type='number'
-                                        placeholder='50'
+                                        placeholder='0'
                                         name='quantity'
                                         value={item.seletedTopping.quantity}
                                         onChange={(e) => toppingPriceQuantityHandler(e, item.variantId)} />
@@ -111,7 +92,6 @@ console.log("ddddddddddddddddddddddddd45", toppingData)
                             </tr>
                         }
                         )}
-
                     </tbody>
                 </table>
             </div >

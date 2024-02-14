@@ -6,24 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { searchStates } from '../../../../../Store/Slice/LocalitySlices';
 
 function LocalitySearch() {
-    const dispatch = useDispatch()    
-
-    const searchHandler = (e)=> {
-        dispatch(searchStates(e.target.value))
-    }
-
-    const searchdata = useSelector((ser)=>ser.LocalitySlices.search)
-
-    console.log("searcha",searchdata)
-
-
-
+    const dispatch = useDispatch()
+    
     return (
         <>
-            <div className='product_searchField d-flex justify-content-end'>                
+            <div className='product_searchField d-flex justify-content-end'>
                 <div className="product__innerSearchInput position-relative w-100">
-                    <input type="search" className='w-100' placeholder='Search...' onChange={searchHandler} />
+                    <input type="search" className='w-100' placeholder='Search...' onChange={(e) => { dispatch(searchStates(e.target.value))}} />                    
                     <FontAwesomeIcon icon={faSearch} className='product__innerSearchInputIcon position-absolute' />
+                    
                 </div>
 
 
