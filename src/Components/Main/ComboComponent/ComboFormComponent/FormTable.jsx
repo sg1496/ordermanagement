@@ -8,12 +8,15 @@ import { fetchApiDataProduct } from '../../../../Store/Slice/ProductSlices';
 import { fetchApiData } from '../../../../Store/Slice/VariantSlices';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router-dom';
 
 
 
 function FormTable(props) {
+    console.log("props", props.comboStateData.comboProductDetail)
     const loginToken = verifyToken()
     const dispatch = useDispatch()
+    const comboID = useParams()
     const [firsts, setfirsts] = useState([
         {
             optionalId: "",
@@ -21,6 +24,7 @@ function FormTable(props) {
             productId: "",
             variantID: "",
             quantity: "",
+            isDeleted: 0,
         },
         {
             optionalId: "",
@@ -28,10 +32,36 @@ function FormTable(props) {
             productId: "",
             variantID: "",
             quantity: "",
+            isDeleted: 0,
         }
     ])
 
-    console.log("check object combo", firsts)
+    useEffect(() => {
+
+
+        let checkOptionid = props.comboStateData.comboProductDetail.map((item, index) => {
+            if (item.categoryID) {
+                return {
+                    optionalId: 1,
+                    categoryID: item.categoryID,
+                    productId: item.productId,
+                    variantID: item.variantID,
+                    quantity: item.quantity,
+                    isDeleted: 0,
+                }
+            } else {
+                return item
+            }
+        })
+        console.log("cehek state12121", checkOptionid)
+        if (comboID.id) {
+            setfirsts([...checkOptionid,
+            ])
+        }
+    }, [props.comboStateData.comboProductDetail])
+
+    console.log("cehek state", firsts)
+
 
 
     useEffect(() => {
@@ -57,11 +87,16 @@ function FormTable(props) {
         setfirsts([...firsts, {}])
     }
 
-    const deleteHandler = (i) => {
-        const deleteVal = [...firsts]
-        deleteVal.splice(i, 1)
-        setfirsts(deleteVal)
+    const removeHandler = (e, i) => {
+
+        const { name, checked } = e.target;
+        const onChangeValue = [...firsts]
+        onChangeValue[i][name] = checked;
+        console.log("check state", { name, checked })
+        // setfirsts(onChangeValue)
     }
+
+
 
 
 
@@ -109,7 +144,7 @@ function FormTable(props) {
                                 <td  >
 
                                     <div className="addProduct__productName  ">
-                                        <select className=" inputForm__inputField " id="taxClass" name='optionalId' onChange={(e) => changeHandler(e, index)} required >
+                                        <select className=" inputForm__inputField " id="taxClass" name='optionalId' value={firsts[index].optionalId} onChange={(e) => changeHandler(e, index)} required >
                                             <option disabled selected value="">-- select an option --</option>
                                             <option value="1">And</option>
                                             <option value="2">Or</option>
@@ -119,7 +154,7 @@ function FormTable(props) {
                                 </td>
                                 <td  >
                                     {firsts[index].optionalId == 1 && <div className="addProduct__productName ">
-                                        <select className=" inputForm__inputField" name="categoryID" id="cars" required onChange={(e) => changeHandler(e, index)}>
+                                        <select className=" inputForm__inputField" name="categoryID" id="cars" value={firsts[index].categoryID} required onChange={(e) => changeHandler(e, index)}>
                                             <option disabled selected value="">-- select a Category --</option>
                                             {categoryDatas?.map((category) => {
                                                 return <option key={category.categoryId}
@@ -130,7 +165,7 @@ function FormTable(props) {
                                 </td>
                                 <td className='text-center'>
                                     <div className="addProduct__productName text-center" >
-                                        <select className="inputForm__inputField " name='productId' onChange={(e) => changeHandler(e, index)} required>
+                                        <select className="inputForm__inputField " name='productId' value={firsts[index].productId} onChange={(e) => changeHandler(e, index)} required>
                                             <option disabled selected value="">-- select a Product --</option>
                                             {productDatas?.map((product) => {
                                                 return <option
@@ -145,7 +180,7 @@ function FormTable(props) {
                                 </td>
                                 <td className='text-center'>
                                     <div className="addProduct__productName text-center">
-                                        <select className="inputForm__inputField" name='variantID' onChange={(e) => changeHandler(e, index)} required >
+                                        <select className="inputForm__inputField" name='variantID' value={firsts[index].variantID} onChange={(e) => changeHandler(e, index)} required >
                                             <option disabled selected value="">-- select a Variant --</option>
                                             {variantDatas && variantDatas.map((variant) => {
                                                 return <option
@@ -166,8 +201,9 @@ function FormTable(props) {
                                             type="number"
                                             id="product-name"
                                             className=" inputForm__inputField "
-                                            placeholder="5"
+                                            placeholder="0"
                                             name='quantity'
+                                            value={firsts[index].quantity}
                                             onChange={(e) => changeHandler(e, index)}
                                             required
                                         />
@@ -181,7 +217,10 @@ function FormTable(props) {
                                         <img
                                             src={subtract}
                                             alt="Delete Icon"
-                                            onClick={() => { deleteHandler(index) }}
+                                            type="checkbox"
+                                            name='isDeleted'
+                                            checked={true}
+                                            onClick={(e) => removeHandler(e, index)}
                                         />
                                     </span>
                                 </td>

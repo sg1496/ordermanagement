@@ -33,6 +33,7 @@ import LocalityForm from './Locality/LocalityForm/LocalityForm';
 import ProductForm from './ProductComponent/AddProduct/ProductForm/ProductForm';
 import Manage from './ManageRole/ManageRolecombine/Manage';
 import ManageRoleForm from './ManageRole/ManageRoleForm/ManageRoleForm';
+import ComboMainTable from './ComboComponent/ComboTableComponent/ComboMainTable/ComboMainTable';
 
 
 
@@ -69,6 +70,9 @@ function Main() {
                         <Route path='variant_table' element={<VariantsMain />} />
                         <Route path='variant_form' element={<Variantform />} />
                         <Route path='variant_form/:id' element={<Variantform />} />
+                        <Route path='combo_table' element={<ComboMainTable/>}/>
+                        <Route path='combo_form' element={<ComboForm/>}/>
+                        <Route path='combo_form/:id' element={<ComboForm/>}/>
 
 
                         <Route path='add-product' element={<AddProduct />}>

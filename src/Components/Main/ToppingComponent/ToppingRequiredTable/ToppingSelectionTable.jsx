@@ -208,8 +208,7 @@ const ToppingSelectionTable = (props) =>{
             return {
                 ...topping,
                 selectionD: {
-                    ...topping.selectionD,
-                    
+                    ...topping.selectionD,                    
                     isDeleted: 1 // Not sure if this property is necessary for your case
                 }
             };

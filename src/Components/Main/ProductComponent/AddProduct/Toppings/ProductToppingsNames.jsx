@@ -1,47 +1,49 @@
-import { useState, useEffect, useContext, } from 'react';
+import { useState, useEffect, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
 import ToppingSelectionTable from '../../../ToppingComponent/ToppingRequiredTable/ToppingSelectionTable';
 import { useParams } from 'react-router-dom';
 import ProductToppingSelectionTable from './ProductToppingSelectionTable';
 import verifyToken from '../../../../SignIn/verifyToken';
-import { productData } from '../ProductForm/ProductForm';
 
 function ToppingNames(props) {
-    const data = useContext(productData)
-
-    console.log("cgec props22", data)
+    console.log("check props data", props.topingname)
     const loginToken = verifyToken()
-
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
     const { id } = useParams();
 
+    const ToppingData = useSelector((state) => state.ToppingSlices.data)
 
     useEffect(() => {
         dispatch(fetchApiDataToppings(loginToken.userID))
     }, [])
 
-    const ToppingData = useSelector((state) => state.ToppingSlices.data)
-    const [ToppingDatafinal, setToppingDatafinal] = useState([])
-
     useEffect(() => {
-        if (ToppingData || props.combinationHandler.productToppingsList.length > 0) {
+        if (ToppingData) {
             const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
             ToppingDatafinaltemp.map((e) => {
                 e.IsChecked = false;
-                // props.combinationHandler.toppingCombinatiomQuantityList
-                var tempmatch = props.combinationHandler.productToppingsList.filter(x => x.combinationProductId === e.toppingId);
-                if (tempmatch.length > 0 && id > 0) {
-                    e.IsChecked = true;
+                if (id) {
+                    var tempmatch = props.combinationHandler.productToppingsList.filter(x => x.combinationProductId === e.toppingId);
+                    if (tempmatch.length > 0 && id > 0) {
+                        e.IsChecked = true;
+                    }
+                } else {
+                    var tempmatch = props.topingname.filter(x => x.toppingId === e.toppingId && x.IsChecked == true);
+                    if (tempmatch.length > 0) {
+                        e.IsChecked = true;
+                    }
                 }
             });
-            setToppingDatafinal(ToppingDatafinaltemp);
+            console.log("check effect data", ToppingDatafinaltemp)
+            props.toppingnameData(ToppingDatafinaltemp)
+            
         }
     }, [ToppingData])
 
     const toppingNameChangeHandler = (check, id, item) => {
-        const itemselected = [...ToppingDatafinal];
+        const itemselected = [...props.topingname];
         if (check) {
             item.IsChecked = true;
         }
@@ -49,18 +51,17 @@ function ToppingNames(props) {
             item.IsChecked = false;
         }
         itemselected.filter(x => x.toppingId === id).IsChecked = check;
-        setToppingDatafinal(itemselected);
+        props.toppingnameData(itemselected)
     }
 
     const unCheckHandler = (id) => {
-        const updatedData = ToppingDatafinal.map(item => {
+        const updatedData = props.topingname.map(item => {
             if (item.toppingId === id) {
                 return { ...item, IsChecked: false };
             }
             return item;
         });
-
-        setToppingDatafinal(updatedData);
+        props.toppingnameData(updatedData)
     }
 
 
@@ -83,7 +84,7 @@ function ToppingNames(props) {
                     </thead>
 
                     <tbody>
-                        {ToppingDatafinal.map((item, index) => {
+                        {props.topingname?.map((item, index) => {
 
                             return <tr key={index}>
                                 <td className='text-center addProduct__subcategoryCheckboxes'>
@@ -107,7 +108,7 @@ function ToppingNames(props) {
             </div >
             <div className='ToppingSelect_table mx-5' style={{ width: "70%" }} >
                 <ProductToppingSelectionTable
-                    toppingNameData={ToppingDatafinal.filter(x => x.IsChecked == true)}
+                    toppingNameData={props.topingname.filter(x => x.IsChecked == true)}
                     selectedToppingName={props.combinationHandler.productToppingsList}
                     unCheckHandler={unCheckHandler}
                     combinationPropsData={combinationPropsData}

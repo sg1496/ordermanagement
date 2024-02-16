@@ -21,7 +21,7 @@ const ProductForm = (props) => {
     const navigate = useNavigate()
     const edit = useParams()
 
-
+    const [ToppingDatafinal, setToppingDatafinal] = useState([])
     const [productFormData, setProductFormData] = useState({
 
         productName: "",
@@ -140,6 +140,11 @@ const ProductForm = (props) => {
         setProductFormData({ ...productFormData, productToppingsList: combinationDataList })
     }
 
+    const toppingnameData = (data) =>{
+        console.log("****************************",data)
+        setToppingDatafinal([...data])
+    }
+
     const onSubmit = (e) => {
         e.preventDefault()
 
@@ -174,7 +179,7 @@ const ProductForm = (props) => {
             }
         }
         console.log("final product", finalProductData)
-        // dispatch(fetchSaveUpdateProduct(finalProductData))
+        dispatch(fetchSaveUpdateProduct(finalProductData))
         dispatch(resetStates())
     }
 
@@ -203,11 +208,14 @@ const ProductForm = (props) => {
                         {props.step === 5 && <ProductToppingsNames
                             combinationDataNameSend={combinationDataNameSend}
                             combinationHandler={productFormData}
+                            toppingnameData={toppingnameData}
+                            topingname = {ToppingDatafinal}
                         />}
                         {props.step === 6 && <ExtraTopping
                             extraToppingDataHandler={extraToppingDataHandler}
                             productFormState={productFormData}
                             setProductFormData={setProductFormData}
+
                         />}
                     </productData.Provider>
 

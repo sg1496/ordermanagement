@@ -1,22 +1,52 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FormTable from './FormTable';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
 import Buttons from '../../ProductComponent/Buttons/NewButtons';
-import { SaveUpdataCombo } from '../../../../Store/Slice/ComboSlices';
+import { ComboGetById, SaveUpdataCombo } from '../../../../Store/Slice/ComboSlices';
 import verifyToken from '../../../SignIn/verifyToken';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ComboForm = (props) => {
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     dispatch(navTitle("Combo Products"))
     const loginToken = verifyToken()
+    const comboID = useParams()
 
     const [comboData, setComboData] = useState({
         comboName: "",
         comboPrice: 0,
         comboProductDetail: []
-
     })
+
+    useEffect(() => {
+        if (comboID.id !== undefined) {
+            dispatch(ComboGetById(comboID.id))
+        }
+    }, [comboID])
+
+    const comboDatabyID = useSelector((item) => item.ComboSlices.singleData)
+
+    useEffect(() => {
+
+        !comboDatabyID ? setComboData({
+            ...comboData
+        }) : setComboData({
+            comboName: comboDatabyID.singleComboProduct[0].comboName,
+            comboPrice: comboDatabyID.singleComboProduct[0].comboPrice,
+            comboProductDetail: comboDatabyID.comboProductVariantList
+        })
+        if (!comboID.id) {
+            setComboData({
+                comboName: "",
+                comboPrice: 0,
+                comboProductDetail: []
+            })
+        }
+    }, [comboDatabyID])
+
+    console.log("check kro data", comboDatabyID)
 
     const comboTableData = (data) => {
         setComboData({ ...comboData, comboProductDetail: data })
@@ -32,15 +62,43 @@ const ComboForm = (props) => {
     const submitHandler = (e) => {
         e.preventDefault()
 
-        let ComboDatafulfield = {
-            ...comboData,
-            franchiseId: loginToken.userID,
-            parentUserId: loginToken.parentUserId,
+        let ComboDatafulfield
+        if (Object.keys(comboID).length < 1) {
+            ComboDatafulfield = {
+                ...comboData,
+                isActive: true,
+                franchiseId: loginToken.userID,
+                parentUserId: loginToken.parentUserId,
+            }
+        } else {
+            ComboDatafulfield = {
+                ...comboData,
+                comboProductID: parseInt(comboID.id),
+                isActive: true,
+                franchiseId: loginToken.userID,
+                parentUserId: loginToken.parentUserId,
+            }
         }
 
         console.log("findal", ComboDatafulfield)
 
-        // dispatch(SaveUpdataCombo(ComboDatafulfield ))
+        dispatch(SaveUpdataCombo(ComboDatafulfield))
+        navigate(`/combotable`)
+
+        setComboData({
+            comboName: "",
+            comboPrice: 0,
+            comboProductDetail: []
+        })
+    }
+
+    const cancelHandler = () => {
+        setComboData({
+            comboName: "",
+            comboPrice: 0,
+            comboProductDetail: []
+        })
+        navigate(`/combotable`)
     }
 
 
@@ -65,6 +123,7 @@ const ComboForm = (props) => {
                                 className="form-control"
                                 placeholder="Pizza"
                                 name='comboName'
+                                value={comboData.comboName}
                                 onChange={changeHandler}
                                 required
                             />
@@ -81,6 +140,7 @@ const ComboForm = (props) => {
                                 className="form-control"
                                 placeholder="Pizza"
                                 name='comboPrice'
+                                value={comboData.comboPrice}
                                 onChange={changeHandler}
                                 required
                             />
@@ -92,16 +152,15 @@ const ComboForm = (props) => {
                     </div>
                     <FormTable
                         comboTableData={comboTableData}
+                        comboStateData={comboData}
                     />
-                    {/* <Buttons 
-                    fname="Save"
-                    Sname="Cancel"/> */}
-
                     <div>
 
                         <Buttons
                             fname="Save"
-                            Sname="Cancel" />
+                            Sname="Cancel"
+                            cancelHandler={cancelHandler}
+                        />
 
                     </div>
                 </form>
