@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import plus from "../../../../assets/svg/plus.svg"
 import subtract from "../../../../assets/svg/subtract.svg"
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataCategory } from '../../../../Store/Slice/CategorySlices';
@@ -13,56 +12,34 @@ import { useParams } from 'react-router-dom';
 
 
 function FormTable(props) {
-    console.log("props", props.comboStateData.comboProductDetail)
     const loginToken = verifyToken()
     const dispatch = useDispatch()
     const comboID = useParams()
     const [firsts, setfirsts] = useState([
         {
             optionalId: "",
-            categoryID: "",
-            productId: "",
-            variantID: "",
+            categoryID: 0,
+            productId: 0,
+            variantID: 0,
             quantity: "",
             isDeleted: 0,
         },
         {
             optionalId: "",
-            categoryID: "",
-            productId: "",
-            variantID: "",
+            categoryID: 0,
+            productId: 0,
+            variantID: 0,
             quantity: "",
             isDeleted: 0,
         }
     ])
 
     useEffect(() => {
-
-
-        let checkOptionid = props.comboStateData.comboProductDetail.map((item, index) => {
-            if (item.categoryID) {
-                return {
-                    optionalId: 1,
-                    categoryID: item.categoryID,
-                    productId: item.productId,
-                    variantID: item.variantID,
-                    quantity: item.quantity,
-                    isDeleted: 0,
-                }
-            } else {
-                return item
-            }
-        })
-        console.log("cehek state12121", checkOptionid)
         if (comboID.id) {
-            setfirsts([...checkOptionid,
+            setfirsts([...props.comboStateData.comboProductDetail
             ])
         }
     }, [props.comboStateData.comboProductDetail])
-
-    console.log("cehek state", firsts)
-
-
 
     useEffect(() => {
         dispatch(fetchApiData(loginToken.userID))
@@ -76,11 +53,12 @@ function FormTable(props) {
 
     const changeHandler = (e, i) => {
         const { name, value } = e.target;
-        const onChangeValue = [...firsts]
-        onChangeValue[i][name] = parseInt(value);
-        setfirsts(onChangeValue)
-
-        props.comboTableData(onChangeValue)
+        setfirsts(prevFirsts => {
+            const onChangeValue = [...prevFirsts];
+            onChangeValue[i] = { ...onChangeValue[i], [name]: parseInt(value) };
+            props.comboTableData(onChangeValue)
+            return onChangeValue;
+        });
     }
 
     const addHandler = () => {
@@ -88,18 +66,26 @@ function FormTable(props) {
     }
 
     const removeHandler = (e, i) => {
+        const deleteVal = [...firsts];
+        let newArr;
 
-        const { name, checked } = e.target;
-        const onChangeValue = [...firsts]
-        onChangeValue[i][name] = checked;
-        console.log("check state", { name, checked })
-        // setfirsts(onChangeValue)
-    }
-
-
-
-
-
+        if (comboID.id) {
+            newArr = deleteVal.map((item, index) => {
+                if (index === i) {
+                    return {
+                        ...item,
+                        isDeleted: 1,
+                    };
+                }
+                return item;
+            });
+            newArr.splice(i, 1)
+        } else {
+            newArr = deleteVal.filter((item, index) => index !== i);
+        }
+        setfirsts(newArr);
+        props.comboTableData(newArr)
+    };
 
     return (
         <>
@@ -111,7 +97,6 @@ function FormTable(props) {
                             <span className='ps-2'>Add New</span>
                         </div>
                     </button>
-
                 </div >
                 <table className='table m-0 text-center'>
                     <thead >
@@ -142,31 +127,45 @@ function FormTable(props) {
                         {firsts?.map((item, index) => {
                             return <tr key={index}>
                                 <td  >
-
                                     <div className="addProduct__productName  ">
-                                        <select className=" inputForm__inputField " id="taxClass" name='optionalId' value={firsts[index].optionalId} onChange={(e) => changeHandler(e, index)} required >
+                                        <select className=" inputForm__inputField "
+                                            id="taxClass"
+                                            name='optionalId'
+                                            value={firsts[index].optionalId}
+                                            onChange={(e) => changeHandler(e, index)}
+                                            required >
                                             <option disabled selected value="">-- select an option --</option>
                                             <option value="1">And</option>
                                             <option value="2">Or</option>
                                         </select>
-
                                     </div>
                                 </td>
                                 <td  >
-                                    {firsts[index].optionalId == 1 && <div className="addProduct__productName ">
-                                        <select className=" inputForm__inputField" name="categoryID" id="cars" value={firsts[index].categoryID} required onChange={(e) => changeHandler(e, index)}>
-                                            <option disabled selected value="">-- select a Category --</option>
-                                            {categoryDatas?.map((category) => {
-                                                return <option key={category.categoryId}
-                                                    value={category.categoryId}>{category.categoryName}</option>
-                                            })}
-                                        </select>
-                                    </div>}
+                                    {firsts[index].optionalId == 1 &&
+                                        <div className="addProduct__productName ">
+                                            <select className=" inputForm__inputField"
+                                                name="categoryID"
+                                                id="cars"
+                                                required={firsts[index].optionalId == 1}
+                                                value={firsts[index].categoryID}
+                                                onChange={(e) => changeHandler(e, index)}>
+                                                <option disabled selected value={0}>-- select a Category --</option>
+                                                {categoryDatas?.map((category) => {
+                                                    return <option key={category.categoryId}
+                                                        value={category.categoryId}>{category.categoryName}</option>
+                                                })}
+                                            </select>
+                                        </div>
+                                    }
                                 </td>
                                 <td className='text-center'>
                                     <div className="addProduct__productName text-center" >
-                                        <select className="inputForm__inputField " name='productId' value={firsts[index].productId} onChange={(e) => changeHandler(e, index)} required>
-                                            <option disabled selected value="">-- select a Product --</option>
+                                        <select className="inputForm__inputField "
+                                            name='productId'
+                                            value={firsts[index].productId}
+                                            onChange={(e) => changeHandler(e, index)}
+                                            required>
+                                            <option disabled selected value={0}>-- select a Product --</option>
                                             {productDatas?.map((product) => {
                                                 return <option
                                                     key={product.productId}
@@ -180,8 +179,12 @@ function FormTable(props) {
                                 </td>
                                 <td className='text-center'>
                                     <div className="addProduct__productName text-center">
-                                        <select className="inputForm__inputField" name='variantID' value={firsts[index].variantID} onChange={(e) => changeHandler(e, index)} required >
-                                            <option disabled selected value="">-- select a Variant --</option>
+                                        <select className="inputForm__inputField"
+                                            name='variantID'
+                                            value={firsts[index].variantID}
+                                            onChange={(e) => changeHandler(e, index)}
+                                            required >
+                                            <option disabled selected value={0}>-- select a Variant --</option>
                                             {variantDatas && variantDatas.map((variant) => {
                                                 return <option
                                                     key={variant.variantId}
@@ -193,10 +196,8 @@ function FormTable(props) {
                                         </select>
                                     </div>
                                 </td>
-
                                 <td >
                                     <div className="addProduct__productName text-center">
-
                                         <input
                                             type="number"
                                             id="product-name"
@@ -219,7 +220,7 @@ function FormTable(props) {
                                             alt="Delete Icon"
                                             type="checkbox"
                                             name='isDeleted'
-                                            checked={true}
+                                            // checked={true}
                                             onClick={(e) => removeHandler(e, index)}
                                         />
                                     </span>

@@ -20,6 +20,7 @@ const ComboForm = (props) => {
         comboProductDetail: []
     })
 
+    
     useEffect(() => {
         if (comboID.id !== undefined) {
             dispatch(ComboGetById(comboID.id))
@@ -46,7 +47,6 @@ const ComboForm = (props) => {
         }
     }, [comboDatabyID])
 
-    console.log("check kro data", comboDatabyID)
 
     const comboTableData = (data) => {
         setComboData({ ...comboData, comboProductDetail: data })
