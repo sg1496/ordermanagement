@@ -25,7 +25,7 @@ function ProductsCoupons(props) {
             const selection = JSON.parse(JSON.stringify(productData));
             selection.map((item) => {
                 item.IsChecked = false;
-                const newdata = { ...item, select: { productId: item.productId } }
+                const newdata = { ...item, select: parseInt(item.productId) }
                 allda.push(newdata)
             })
         }
@@ -92,11 +92,6 @@ function ProductsCoupons(props) {
                 </div >
                 )}
                 <div className='ToppingSelect_table  ' style={{ width: "50%" }} >
-                    {/* <SelectedCoupns
-                        selectedCategory={categoryCoupons}
-                        categorySelectionHandler={categorySelectionHandlers}
-
-                    /> */}
                     {selectProduct?.filter(item => item.IsChecked) < 1 ? (
                         ""
                     ) : (<div className='coupons_table mt-3 mb-5 '>

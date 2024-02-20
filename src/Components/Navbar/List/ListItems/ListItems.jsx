@@ -78,7 +78,7 @@ function ListItems({ isActive }) {
             <li className="sidebar_listItems">
                 <div className= {`sidebar_listItemsInner d-flex align-items-center ${isActive? 'activeclass': ""}` }>
                     <img src={images.promotionManagment} alt="Promotion Management" loading='lazy' className='img-fluid' />
-                    <p>Promotion Management</p>
+                    <Link to="promotional_Table" style={{ textDecoration: "none" }}><p >Promotional Management</p></Link>
                 </div>
             </li>
             <li className="sidebar_listItems">

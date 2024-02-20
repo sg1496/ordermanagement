@@ -24,7 +24,7 @@ function CouponsTable(props) {
             const selection = JSON.parse(JSON.stringify(categorData));
             selection.map((item) => {
                 item.IsChecked = false;
-                const newdata = { ...item, select: { categoryId: item.categoryId} }
+                const newdata = { ...item, select: parseInt(item.categoryId) }
                 allda.push(newdata)
             })
         }

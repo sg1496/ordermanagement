@@ -8,7 +8,7 @@ import ProductsCoupons from './productsCouponsTable/ProductsCoupons';
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../Store/Slice/NavSlices';
 import verifyToken from '../../SignIn/verifyToken';
-import { fetchALLDiscountTypeCoupon, fetchLimitationCoupon } from '../../../Store/Slice/CouponSlices';
+import { fetchALLDiscountTypeCoupon, fetchLimitationCoupon, fetchSaveUpdateCoupon } from '../../../Store/Slice/CouponSlices';
 
 
 
@@ -98,7 +98,12 @@ const MainCouponsform = () => {
             numberTimeDiscount: parseInt(couponData.numberTimeDiscount),
             parentUserId: parseInt(loginToken.parentUserId),
             franchiseId: parseInt(loginToken.userID),
+            
         }
+
+        console.log("coupon data", couponDatas)
+        dispatch(fetchSaveUpdateCoupon(couponDatas))
+
     }
 
     const cancelHandler = () => { }

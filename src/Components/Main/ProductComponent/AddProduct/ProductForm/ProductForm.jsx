@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react'
+import React, { useState, createContext, useRef } from 'react'
 import Description from '../Description/Description'
 import Categories from '../Categories/Categories'
 import Variants from '../Variants/Variants'
@@ -13,17 +13,20 @@ import { fetchEditProduct, fetchSaveUpdateProduct } from '../../../../../Store/S
 import verifyToken from '../../../../SignIn/verifyToken'
 import { resetStates } from '../../../../../Store/Slice/CategorySlices'
 
- const productData = createContext();
+
+const productData = createContext();
 
 const ProductForm = (props) => {
+    console.log("ppppppppppprops.step", props.step)
+    const isDataLoaded = useRef(false)
     const loginToken = verifyToken()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const edit = useParams()
 
+
     const [ToppingDatafinal, setToppingDatafinal] = useState([])
     const [productFormData, setProductFormData] = useState({
-
         productName: "",
         isActive: false,
         isTaxable: false,
@@ -36,10 +39,9 @@ const ProductForm = (props) => {
         productVariantList: [],
         productToppingsList: [],
         productExtraToppingsList: []
-
     })
 
-    console.log("finalstate", productFormData)
+    const singleEditDataProduct = useSelector((product) => product.ProductSlices.singleData)
 
     useEffect(() => {
         if (edit.id != undefined) {
@@ -47,33 +49,46 @@ const ProductForm = (props) => {
         }
     }, [edit])
 
-    const singleEditDataProduct = useSelector((product) => product.ProductSlices.singleData)
-
-
     useEffect(() => {
-        !singleEditDataProduct ? setProductFormData({
-            ...productFormData
-        }) : setProductFormData({
-            productName: singleEditDataProduct.singleProductList[0].productName,
-            isActive: singleEditDataProduct.singleProductList[0].isActive,
-            isTaxable: singleEditDataProduct.singleProductList[0].isTaxable,
-            taxClassId: singleEditDataProduct.singleProductList[0].taxClassId,
-            foodTypeId: singleEditDataProduct.singleProductList[0].foodTypeId,
-            parentCategoryId: singleEditDataProduct.singleProductList[0].parentCategoryId,
-            showInKitchen: singleEditDataProduct.singleProductList[0].showInKitchen,
-            productDescription: singleEditDataProduct.productDescriptsionList[0].productDescription,
-            editProductCategory: singleEditDataProduct.editProductCategory,
-            productVariantList: singleEditDataProduct.productVariantList,
-            productToppingsList: singleEditDataProduct.productToppingsList,
-            productExtraToppingsList: singleEditDataProduct.productExtraToppingsList,
 
-        })
+        if (singleEditDataProduct && !isDataLoaded.current) {
+            !singleEditDataProduct ? setProductFormData({
+                ...productFormData
+            }) : setProductFormData({
+                productName: singleEditDataProduct.singleProductList[0].productName,
+                isActive: singleEditDataProduct.singleProductList[0].isActive,
+                isTaxable: singleEditDataProduct.singleProductList[0].isTaxable,
+                taxClassId: singleEditDataProduct.singleProductList[0].taxClassId,
+                foodTypeId: singleEditDataProduct.singleProductList[0].foodTypeId,
+                parentCategoryId: singleEditDataProduct.singleProductList[0].parentCategoryId,
+                showInKitchen: singleEditDataProduct.singleProductList[0].showInKitchen,
+                productDescription: singleEditDataProduct.productDescriptsionList[0].productDescription,
+                editProductCategory: singleEditDataProduct.editProductCategory,
+                productVariantList: singleEditDataProduct.productVariantList,
+                productToppingsList: singleEditDataProduct.productToppingsList,
+                productExtraToppingsList: singleEditDataProduct.productExtraToppingsList,
+
+            })
+            isDataLoaded.current = true;
+            if (!edit.id) {
+                setProductFormData({
+                    productName: "",
+                    isActive: false,
+                    isTaxable: false,
+                    taxClassId: '',
+                    foodTypeId: '',
+                    showInKitchen: false,
+                    parentCategoryId: 0,
+                    productDescription: "",
+                    editProductCategory: [],
+                    productVariantList: [],
+                    productToppingsList: [],
+                    productExtraToppingsList: []
+                })
+            }
+        }
 
     }, [singleEditDataProduct])
-
-
-
-
 
     const basicFormDataHandler = (data) => {
         setProductFormData({
@@ -85,7 +100,6 @@ const ProductForm = (props) => {
             taxClassId: data.taxClassId,
             showInKitchen: data.showInKitchen
         })
-
     }
 
     const handleDescriptionData = (data) => {
@@ -93,7 +107,6 @@ const ProductForm = (props) => {
     }
 
     const categoriesDataHandler = (data) => {
-        // console.log("check semi final data", data)
         const categoriesList = [];
         data?.map((catagory) => {
             categoriesList.push(catagory.selectcategory)
@@ -140,14 +153,12 @@ const ProductForm = (props) => {
         setProductFormData({ ...productFormData, productToppingsList: combinationDataList })
     }
 
-    const toppingnameData = (data) =>{
-        console.log("****************************",data)
+    const toppingnameData = (data) => {
         setToppingDatafinal([...data])
     }
 
     const onSubmit = (e) => {
         e.preventDefault()
-
         let variantFilterData = []
         productFormData.productVariantList.filter((variant) => {
             if (variant.toppingId) {
@@ -155,8 +166,6 @@ const ProductForm = (props) => {
                 variantFilterData.push(newArr)
             }
         })
-
-        console.log(variantFilterData)
 
         let finalProductData
         if (Object.keys(edit).length < 1) {
@@ -178,40 +187,79 @@ const ProductForm = (props) => {
                 parentUserId: loginToken.parentUserId
             }
         }
-        console.log("final product", finalProductData)
         dispatch(fetchSaveUpdateProduct(finalProductData))
         dispatch(resetStates())
+        navigate(`/product`)
+
+        setProductFormData({
+            productName: "",
+            isActive: false,
+            isTaxable: false,
+            taxClassId: '',
+            foodTypeId: '',
+            showInKitchen: false,
+            parentCategoryId: 0,
+            productDescription: "",
+            editProductCategory: [],
+            productVariantList: [],
+            productToppingsList: [],
+            productExtraToppingsList: []
+        })
+
     }
 
     const cancelHandler = () => {
+        setProductFormData({
+            productName: "",
+            isActive: false,
+            isTaxable: false,
+            taxClassId: '',
+            foodTypeId: '',
+            showInKitchen: false,
+            parentCategoryId: 0,
+            productDescription: "",
+            editProductCategory: [],
+            productVariantList: [],
+            productToppingsList: [],
+            productExtraToppingsList: []
+        })
         navigate(`/product`)
     }
+
+    const [nextBtn, setNextBtn] = useState(props.step)
+    const nextHandler = () => {
+
+        if (nextBtn < 6) {
+            setNextBtn(nextBtn + 1);
+        }
+    };
+
+    const prevHandler = () => {
+
+        if (nextBtn > 1) {
+            setNextBtn(nextBtn - 1)
+        }
+    }
+
+
+
 
     return (
         <>
             <form onSubmit={onSubmit}>
                 <div>
-                    {/* <Basic basicFormDataHandler={basicFormDataHandler} productFormState = {productFormData} />
-                    <Description descriptionDataHandler={handleDescriptionData} />
-                    <Categories categoriesDataHandler={categoriesDataHandler} />
-                    <Variants variantDataHandler={variantDataHandler} />
-                    <ProductToppingsNames
-                        combinationDataNameSend={combinationDataNameSend}
-                        combinationHandler={productFormData}
-                    />
-                    <ExtraTopping extraToppingDataHandler={extraToppingDataHandler} /> */}
                     <productData.Provider value={productFormData}>
-                        {props.step === 1 && <Basic basicFormDataHandler={basicFormDataHandler} productFormState={productFormData} setProductFormData={setProductFormData} />}
-                        {props.step === 2 && <Description descriptionDataHandler={handleDescriptionData} productFormState={productFormData} />}
-                        {props.step === 3 && <Categories categoriesDataHandler={categoriesDataHandler} parentCategoriesDataHandler={parentCategoriesDataHandler} productFormState={productFormData} />}
-                        {props.step === 4 && <Variants variantDataHandler={variantDataHandler} productFormState={productFormData} />}
-                        {props.step === 5 && <ProductToppingsNames
+                        {nextBtn === 1 && <Basic basicFormDataHandler={basicFormDataHandler} productFormState={productFormData} setProductFormData={setProductFormData} />}
+                        {nextBtn === 2 && <Description descriptionDataHandler={handleDescriptionData} productFormState={productFormData} />}
+                        {nextBtn === 3 && <Categories categoriesDataHandler={categoriesDataHandler} parentCategoriesDataHandler={parentCategoriesDataHandler} productFormState={productFormData} />}
+                        {nextBtn === 4 && <Variants variantDataHandler={variantDataHandler} productFormState={productFormData} />}
+                        {nextBtn === 5 && <ProductToppingsNames
                             combinationDataNameSend={combinationDataNameSend}
                             combinationHandler={productFormData}
                             toppingnameData={toppingnameData}
-                            topingname = {ToppingDatafinal}
+                            topingname={ToppingDatafinal}
                         />}
-                        {props.step === 6 && <ExtraTopping
+                        {nextBtn === 6 && <ExtraTopping
                             extraToppingDataHandler={extraToppingDataHandler}
                             productFormState={productFormData}
                             setProductFormData={setProductFormData}
@@ -221,9 +269,14 @@ const ProductForm = (props) => {
 
                 </div>
                 <div>
+                    <Buttons
 
-                    <Buttons fname="Save"
+                        Pname="prev"
                         Sname="Cancel"
+                        Ename={nextBtn < 6 && "Next"}
+                        fname={nextBtn == 6 && "Save"}
+                        prevHandler={prevHandler}
+                        nextHandler={nextHandler}
                         cancelHandler={cancelHandler}
                     />
                 </div>
@@ -233,4 +286,4 @@ const ProductForm = (props) => {
 }
 
 export default ProductForm
-export {productData}
+export { productData }

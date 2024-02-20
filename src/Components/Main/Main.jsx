@@ -34,6 +34,9 @@ import ProductForm from './ProductComponent/AddProduct/ProductForm/ProductForm';
 import Manage from './ManageRole/ManageRolecombine/Manage';
 import ManageRoleForm from './ManageRole/ManageRoleForm/ManageRoleForm';
 import ComboMainTable from './ComboComponent/ComboTableComponent/ComboMainTable/ComboMainTable';
+import PromotionalTable from './PromotionalComponent/PromotionalSearchTable/PromotionalTable/PromotionalTable';
+import PromotionalMain from './PromotionalComponent/PromotionalSearchTable/PromotionalMain';
+import PromotionalForm from './PromotionalComponent/PromotionalForm/PromotionalForm';
 
 
 
@@ -73,6 +76,9 @@ function Main() {
                         <Route path='combo_table' element={<ComboMainTable/>}/>
                         <Route path='combo_form' element={<ComboForm/>}/>
                         <Route path='combo_form/:id' element={<ComboForm/>}/>
+                        <Route path='promotional_Table' element={<PromotionalMain/>}/>
+                        <Route path='promotional_Form' element={<PromotionalForm/>}/>
+
 
 
                         <Route path='add-product' element={<AddProduct />}>
