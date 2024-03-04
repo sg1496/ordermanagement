@@ -270,7 +270,6 @@ const ProductForm = (props) => {
                 </div>
                 <div>
                     <Buttons
-
                         Pname="prev"
                         Sname="Cancel"
                         Ename={nextBtn < 6 && "Next"}

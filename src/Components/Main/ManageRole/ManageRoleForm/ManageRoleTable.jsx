@@ -17,6 +17,7 @@ const ManageRoleTable = (props) => {
         dispatch(fetchAllDataRolepage())
     }, [])
 
+
     useEffect(() => {
         const finalRole = []
         if (managePageRole && props.passManangeRoleData.multiList.length > 0) {

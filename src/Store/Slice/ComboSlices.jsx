@@ -1,4 +1,3 @@
-import { faL } from "@fortawesome/free-solid-svg-icons";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 let url = import.meta.env.VITE_APP_FOODS_API;

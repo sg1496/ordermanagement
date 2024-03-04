@@ -78,6 +78,7 @@ function Main() {
                         <Route path='combo_form/:id' element={<ComboForm/>}/>
                         <Route path='promotional_Table' element={<PromotionalMain/>}/>
                         <Route path='promotional_Form' element={<PromotionalForm/>}/>
+                        <Route path='promotional_Form/:id' element={<PromotionalForm/>}/>
 
 
 
