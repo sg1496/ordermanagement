@@ -125,7 +125,7 @@ function Categories(props) {
                         <div className="row ms-1">
                             {categoryData?.map((item, ind) => {
                                 console.log("check category", item)
-                                return <div className="addProduct__subcategoryCheckboxes d-flex align-items-center col-md-auto" key={ind}>
+                                return <div className="addProduct__subcategoryCheckboxes d-flex align-items-center col-md-2" key={ind}>
                                     <input
                                         className="form-check-input"
                                         type="checkbox"

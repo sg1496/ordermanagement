@@ -39,7 +39,7 @@
                     font-size: 16px;
                     line-height: 22px;
                     color: $black;
-
+                    
                     .productAction__buttons {
                         gap: 10px;
                     }
@@ -51,3 +51,9 @@
         }
     }
 }
+.common-design > tbody > tr:nth-child(odd) > td{
+    background:  #FDC886
+  }
+  .common-design > tbody > tr:nth-child(even) > td{
+    background: #EDAD83;
+  }

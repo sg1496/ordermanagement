@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import './ToppingPriceList.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiData } from "../../../../Store/Slice/VariantSlices"
 import { useState } from 'react';
@@ -61,7 +60,7 @@ function ToppingPriceList(props) {
     return (
         <>
             <div className='productSection__tables mt-3'>
-                <table className='table m-0 '>
+                <table className='table common-design m-0 '>
                     <thead>
                         <tr>
                             <th scope="col" style={{ width: "30%" }}>Type</th>

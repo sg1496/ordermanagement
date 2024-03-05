@@ -34,6 +34,8 @@ function FormTable(props) {
         }
     ])
 
+    console.log("chekc data", props)
+
     useEffect(() => {
         if (comboID.id) {
             setfirsts([...props.comboStateData.comboProductDetail
@@ -98,7 +100,7 @@ function FormTable(props) {
                         </div>
                     </button>
                 </div >
-                <table className='table m-0 text-center'>
+                <table className='table common-design m-0 text-center'>
                     <thead >
                         <tr style={{ width: "100%" }}>
                             <th style={{ border: "Transparent", width: "20%" }} >

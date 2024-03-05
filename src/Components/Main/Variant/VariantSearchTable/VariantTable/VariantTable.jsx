@@ -24,7 +24,7 @@ function VariantTable(props) {
     return (
         <>
             <div className='productSection__table mt-3'>
-                <table className='table m-0'>
+                <table className='table common-design m-0'>
                     <thead>
                         <tr>
                             <th scope="col">Variant Name</th>

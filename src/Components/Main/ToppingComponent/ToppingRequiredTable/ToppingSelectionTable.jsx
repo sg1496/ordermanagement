@@ -227,7 +227,7 @@ const ToppingSelectionTable = (props) =>{
         {toppingCheckName < 1 ? (
           ""
         ) : (
-          <table className="table m-0 text-center">
+          <table className="table common-design m-0 text-center">
             <thead>
               <tr>
                 <th scope="col" style={{ width: "30%" }}>

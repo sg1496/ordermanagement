@@ -73,7 +73,7 @@ function ProductsCoupons(props) {
                 {selectProduct?.filter((item) => !item.IsChecked) < 1 ? (
                     ""
                 ) : (<div className='coupons_table mt-3 mb-5 mx-2' style={{ width: "50%" }}>
-                    <table className='table '>
+                    <table className='table common-design '>
                         <thead>
                             <tr>
 
@@ -96,7 +96,7 @@ function ProductsCoupons(props) {
                         ""
                     ) : (<div className='coupons_table mt-3 mb-5 '>
 
-                        <table className='table m-0'>
+                        <table className='table common-design m-0'>
                             <thead>
 
                                 <tr>

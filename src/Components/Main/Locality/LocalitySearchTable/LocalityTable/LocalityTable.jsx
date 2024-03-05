@@ -27,7 +27,7 @@ const LocalityTable = () => {
     return (
         <>
             <div className='productSection__table mt-3'>
-                <table className=' table'>
+                <table className=' table common-design'>
                     <thead className='text-center' >
                         <tr>
                             <th scope="col" style={{ width: "50%" }} >Locality Names</th>

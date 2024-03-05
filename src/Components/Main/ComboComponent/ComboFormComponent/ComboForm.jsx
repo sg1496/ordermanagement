@@ -29,6 +29,8 @@ const ComboForm = (props) => {
 
     const comboDatabyID = useSelector((item) => item.ComboSlices.singleData)
 
+    console.log("check product id", comboDatabyID)
+
     useEffect(() => {
 
         !comboDatabyID ? setComboData({
@@ -36,7 +38,7 @@ const ComboForm = (props) => {
         }) : setComboData({
             comboName: comboDatabyID.singleComboProduct[0].comboName,
             comboPrice: comboDatabyID.singleComboProduct[0].comboPrice,
-            comboProductDetail: comboDatabyID.comboProductVariantList
+            comboProductDetail: comboDatabyID.comboProductDetail
         })
         if (!comboID.id) {
             setComboData({

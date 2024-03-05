@@ -84,7 +84,7 @@ function Variants(props) {
                 <form>
                     <div className="addProduct__variantsFormm">
                         <div className="addProduct__variants">
-                            <table className="table m-0">
+                            <table className="table common-design m-0">
                                 <thead>
                                     <tr>
                                         <th scope="col">Sr.No.</th>
@@ -99,7 +99,7 @@ function Variants(props) {
                                     {variantData?.map((item, index) => {console.log("check avtive", item)
 
                                         return <tr key={index}>
-                                            <th scope="row">{index + 1}</th>
+                                            <td scope="row">{index + 1}</td>
                                             <td>{item.variantName}</td>
                                             <td>
                                                 <div className="addProduct__Variant isActive form-check form-switch">

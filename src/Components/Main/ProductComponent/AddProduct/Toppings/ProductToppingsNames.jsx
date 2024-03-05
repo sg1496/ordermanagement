@@ -74,7 +74,7 @@ function ToppingNames(props) {
         <div className=' d-flex aligns-item-center w-100'>
             <div className='productSection__table mt-3' style={{ width: "30%" }}>
 
-                <table className='table m-0 '>
+                <table className='table common-design m-0 '>
                     <thead>
                         <tr>
                             <th></th>

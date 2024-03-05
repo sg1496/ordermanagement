@@ -10,7 +10,7 @@ const Products = () => {
     <>
       
       <div className='productSection__table mt-3'>
-        <table className='table m-0'>
+        <table className='table common-design m-0'>
           <thead>
             <tr>
               <th scope="col" style={{width:"50%"}}>sub Category Name</th>

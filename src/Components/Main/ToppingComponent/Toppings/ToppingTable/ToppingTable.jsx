@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import "./ToppingTable.scss";
 import images from '../../../../../assets/images';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings, fetchEditTopping, fetchDelApiDataToppings, resetStates } from '../../../../../Store/Slice/ToppingSlices';
@@ -37,7 +36,7 @@ function ToppingTable() {
             <div className='productSection__table mt-3 '>
 
 
-                <table className='table m-0'>
+                <table className='table common-design m-0'>
                     <thead>
                         <tr>
                             <th scope="col">Topping Name</th>
