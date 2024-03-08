@@ -8,11 +8,6 @@ import { NavLink, Outlet } from 'react-router-dom';
 
 
 const Category = () => {
-    const [showform, setshowform] = useState(true)
-
-    const clickfn = () => {
-        setshowform(!showform)
-    }
     return (
         <div>
 

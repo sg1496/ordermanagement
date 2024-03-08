@@ -1,0 +1,39 @@
+.menu-items-row {
+    padding-left: 12px !important;
+    
+}
+
+.menuContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    
+}
+
+.menu-item-button:active,
+.menu-item-button:focus {
+    background: #DC2B19;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 105px;
+    border-style: none;
+}
+
+.menu-item-button {
+    background: #244E36;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    height: 105px;
+    border-style: none;
+}
+
+.menu-item {
+    display: grid;
+}
+
+.order_productbox {
+    margin: 7px 0px;
+}

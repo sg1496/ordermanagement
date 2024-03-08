@@ -1,7 +1,7 @@
 import React from 'react';
 import "./Main.scss"
 
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 import Heading from './Heading/Heading';
 import AddProduct from './ProductComponent/AddProduct/AddProduct';
@@ -37,15 +37,18 @@ import ComboMainTable from './ComboComponent/ComboTableComponent/ComboMainTable/
 import PromotionalTable from './PromotionalComponent/PromotionalSearchTable/PromotionalTable/PromotionalTable';
 import PromotionalMain from './PromotionalComponent/PromotionalSearchTable/PromotionalMain';
 import PromotionalForm from './PromotionalComponent/PromotionalForm/PromotionalForm';
+import Orders from './Order/Orders';
+
 
 
 
 
 function Main() {
+    const location = useLocation()
     return (
         <div className='mainSection'>
             <Heading />
-            <div className="mainInner m-3">
+            <div className={`${location.pathname.startsWith('/order') ? "" : "mainInner m-3"}`}>
                 <div className="mainIneerSection m-3">
                     <Routes>
                         <Route index element={<Product />} />
@@ -67,48 +70,51 @@ function Main() {
                         <Route path='manageuserform/:id' element={<ManageuserForm />} />
                         <Route path='manageroleform' element={<ManageRoleForm />} />
                         <Route path='manageroleform/:id' element={<ManageRoleForm />} />
-                        <Route path='manageRoleTable' element={<Manage/>}/>
+                        <Route path='manageRoleTable' element={<Manage />} />
                         <Route path='combotable' element={<ComboTable />} />
                         <Route path='comboform' element={<ComboForm />} />
                         <Route path='variant_table' element={<VariantsMain />} />
                         <Route path='variant_form' element={<Variantform />} />
                         <Route path='variant_form/:id' element={<Variantform />} />
-                        <Route path='combo_table' element={<ComboMainTable/>}/>
-                        <Route path='combo_form' element={<ComboForm/>}/>
-                        <Route path='combo_form/:id' element={<ComboForm/>}/>
-                        <Route path='promotional_Table' element={<PromotionalMain/>}/>
-                        <Route path='promotional_Form' element={<PromotionalForm/>}/>
-                        <Route path='promotional_Form/:id' element={<PromotionalForm/>}/>
+                        <Route path='combo_table' element={<ComboMainTable />} />
+                        <Route path='combo_form' element={<ComboForm />} />
+                        <Route path='combo_form/:id' element={<ComboForm />} />
+                        <Route path='promotional_Table' element={<PromotionalMain />} />
+                        <Route path='promotional_Form' element={<PromotionalForm />} />
+                        <Route path='promotional_Form/:id' element={<PromotionalForm />} />
 
-
-
-                        <Route path='add-product' element={<AddProduct />}>
-                            <Route index element={<ProductForm />} />
-                            <Route path='productform' element={<ProductForm />} />
-                            <Route path='productform/:id' element={<ProductForm />} />
-
+                        
+                        <Route path='orders' element={<Orders/>}>                            
+                            
                         </Route>
 
+                    <Route path='add-product' element={<AddProduct />}>
+                        <Route index element={<ProductForm />} />
+                        <Route path='productform' element={<ProductForm />} />
+                        <Route path='productform/:id' element={<ProductForm />} />
 
-                        <Route path='settings' element={<Settings />}>
-                            <Route index element={<GeneralForm />} />
-                            <Route path='generalform' element={<GeneralForm />} />
-                            <Route path='storedetails' element={<StoreDetails />} />
-                            <Route path='receiptformat' element={<ReceiptFormat />} />
-                            <Route path='rewardprogram' element={<RewardProgram />} />
-                        </Route>
+                    </Route>
 
 
-                        <Route path='add-category/category' element={<Category />} />
-                        <Route path='add-category' element={<AddCategory />}>
-                            <Route index element={<Category />} />
-                            <Route path='category/:id' element={<Category />} />
-                            <Route path='products' element={<Products />} />
-                        </Route>
-                    </Routes>
-                </div>
+                    <Route path='settings' element={<Settings />}>
+                        <Route index element={<GeneralForm />} />
+                        <Route path='generalform' element={<GeneralForm />} />
+                        <Route path='storedetails' element={<StoreDetails />} />
+                        <Route path='receiptformat' element={<ReceiptFormat />} />
+                        <Route path='rewardprogram' element={<RewardProgram />} />
+                    </Route>
+
+
+                    <Route path='add-category/category' element={<Category />} />
+                    <Route path='add-category' element={<AddCategory />}>
+                        <Route index element={<Category />} />
+                        <Route path='category/:id' element={<Category />} />
+                        <Route path='products' element={<Products />} />
+                    </Route>
+                </Routes>
             </div>
         </div>
+        </div >
     )
 }
 

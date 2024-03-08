@@ -1,0 +1,24 @@
+.layout_head {
+    background-color: #C53705;
+    height: 40px;
+    color: white;
+
+    font-size: 25px;
+}
+
+.layout_menu {
+    background-color: #C53705;
+    height: 40px;
+    color: white;
+    font-size: 25px;
+}
+
+.menuContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+li.menu_li {
+    white-space: nowrap;
+}

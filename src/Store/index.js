@@ -16,6 +16,7 @@ import CouponSlices from "./Slice/CouponSlices";
 import ComboSlices from "./Slice/ComboSlices";
 import CommonSlices from "./Slice/CommonSlices";
 import PromotionalSlices, { Promotionaltype } from "./Slice/PromotionalSlices";
+import OrderSlices from "./Slice/OrderSlices";
 
 
 
@@ -37,7 +38,8 @@ const store = configureStore(
             CouponSlices: CouponSlices,
             ComboSlices: ComboSlices,
             CommonSlices: CommonSlices,
-            PromotionalSlices: PromotionalSlices
+            PromotionalSlices: PromotionalSlices,
+            OrderSlices : OrderSlices
         },
 
         // middleware: [sagaMiddleware]
