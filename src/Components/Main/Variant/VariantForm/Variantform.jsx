@@ -10,13 +10,10 @@ import { useEffect } from "react";
 import verifyToken from "../../../SignIn/verifyToken";
 
 
-function Variantform(props) {
+function Variantform({ setAlert }) {
 
     const selectordatas = useSelector((state) => state.variantSlices.singleData)
-    const message = useSelector((state) => console.log("store ", state.variantSlices.message))
     const loginToken = verifyToken()
-    console.log("//////////////////", selectordatas);
-
     const edit = useParams()
     const Navigate = useNavigate()
     const dispatch = useDispatch();
@@ -31,17 +28,14 @@ function Variantform(props) {
         franchiseID: ""
     })
 
-    console.log("svs sssss", Object.keys(edit), "*", typeof edit.id);
 
     useEffect(() => {
-
         if (edit.id != undefined) {
             dispatch(fetchSingleApiData(edit.id))
         }
     }, [edit])
 
     useEffect(() => {
-
         !selectordatas ? setData({
             ...data
         }) : setData({
@@ -50,12 +44,10 @@ function Variantform(props) {
             isActive: selectordatas.isActive
         })
         if (!edit.id) {
-            console.log("-------------------------------------------------");
             setData({
                 variantName: "",
                 variantLevel: "",
                 isActive: false,
-
             })
         }
     }, [selectordatas])
@@ -75,33 +67,35 @@ function Variantform(props) {
     }
     const onSubmit = (event) => {
         event.preventDefault();
-
-        let newdata
-        if (Object.keys(edit).length < 1) {
-            newdata = {
-                ...data,
-                variantLevel: parseInt(data.variantLevel),
-                parentUserId: loginToken.parentUserId,
-                franchiseID: loginToken.userID
+        try {
+            let newdata
+            if (Object.keys(edit).length < 1) {
+                newdata = {
+                    ...data,
+                    variantLevel: parseInt(data.variantLevel),
+                    parentUserId: loginToken.parentUserId,
+                    franchiseID: loginToken.userID
+                }
+            } else {
+                newdata = {
+                    ...data,
+                    variantLevel: parseInt(data.variantLevel),
+                    parentUserId: loginToken.parentUserId,
+                    franchiseID: loginToken.userID,
+                    variantId: parseInt(edit.id)
+                }
             }
-        } else {
-            newdata = {
-                ...data,
-                variantLevel: parseInt(data.variantLevel),
-                parentUserId: loginToken.parentUserId,
-                franchiseID: loginToken.userID,
-                variantId: parseInt(edit.id)
-            }
+            setAlert({ type: "success", message: !edit.id ? 'Variant added successfully' : 'Variant updated successfully' });
+            dispatch(saveUpdateVariant(newdata))
+            dispatch(resetStates())
+            Navigate(`/variant_table`)
+            setData({
+                variantName: "",
+                variantLevel: ""
+            })
+        } catch (error) {
+            console.log("check variant error", error);
         }
-        dispatch(saveUpdateVariant(newdata))
-        dispatch(resetStates())
-
-        Navigate(`/variant_table`)
-        setData({
-            variantName: "",
-            variantLevel: ""
-        })
-
     }
 
     const cancelHandler = () => {
@@ -113,12 +107,10 @@ function Variantform(props) {
             franchiseID: 0
         })
         Navigate(`/variant_table`)
-
     }
 
     return (
         <>
-
             <div className="addProduct__basicTabs">
                 <form onSubmit={onSubmit}>
                     <div className="addProduct__basicForm d-flex">
@@ -153,7 +145,6 @@ function Variantform(props) {
                                 name="variantLevel"
                                 value={data.variantLevel}
                                 onChange={changeHandler}
-
                                 required
                             />
                         </div>
@@ -170,13 +161,12 @@ function Variantform(props) {
                                 name="variantallowed"
                                 checked={data && data.isActive}
                                 onChange={toggleChange}
-
                             />
                         </div>
 
                     </div>
                     <div>
-                        <Buttons fname="Save"
+                        <Buttons fname={!edit.id ? "Save" : 'Update'}
                             Sname="Cancel"
                             cancelHandler={cancelHandler}
                         />

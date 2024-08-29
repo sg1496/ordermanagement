@@ -19,18 +19,18 @@ const Login = () => {
         password: ""
     });
 
-    console.log(textarr)
+    // console.log(textarr)
 
 
 
     useEffect(() => {
 
         if (localStorage.getItem('token')) {
-            navigate(`/localityTable`)
-        } else {
             navigate(`/`)
+        } else {
+            navigate(`/login`)
         }
-        console.log("ttt", localStorage.getItem('token'));
+        // console.log("ttt", localStorage.getItem('token'));
 
     }, [localStorage.getItem('token')])
 
@@ -59,7 +59,7 @@ const Login = () => {
 
 
         const data = { ...textarr }
-        console.log("loging save id", data)
+        // console.log("loging save id", data)
         dispatch(fetchLoginPage(data))
         navigate(`/localityTable`)
 

@@ -12,30 +12,21 @@ import verifyToken from '../../../../SignIn/verifyToken';
 const Categoryform = () => {
     const Navigate = useNavigate()
     const edit = useParams()
-    const loginToken= verifyToken()
-
-    console.log("check the verify token", loginToken)
+    const loginToken = verifyToken()
 
     const editData = useSelector((state) => state.categorySlices.singleData)
     const categoryDatas = useSelector(state => state.categorySlices.data)
-    const parentCategories = useSelector(state => state.categorySlices.parentCategories)
-
-
+    
     const [categoryData, setCategoryData] = useState({
         categoryName: "",
         parentCategoryId: 0,
         isActive: false,
         franchiseID: 0,
-        displayOrder: 0,
-        
+        displayOrder: 0
     })
 
-
-
-
     useEffect(() => {
-        dispatch(fetchParentCategory(loginToken.userID ))
-        // dropdowndata()
+        dispatch(fetchParentCategory(loginToken.userID))
         if (edit.id != undefined) {
             dispatch(fetchEditCategory(edit.id))
         }
@@ -70,8 +61,7 @@ const Categoryform = () => {
                 [e.target.name]: e.target.value
             }
         )
-    },
-        [categoryData],
+    }, [categoryData],
     )
 
     const cancelHandler = () => {
@@ -83,12 +73,6 @@ const Categoryform = () => {
     },
         [categoryData],
     )
-
-
-
-
-
-
 
     const submitHandler = useCallback(async (event) => {
         event.preventDefault();
@@ -121,12 +105,9 @@ const Categoryform = () => {
             parentCategoryId: "",
             isActive: false
         })
-
-
     },
         [categoryData],
     )
-
 
     const dispatch = useDispatch();
     dispatch(navTitle("Category"));
@@ -166,11 +147,11 @@ const Categoryform = () => {
                                 id="taxClass"
                             >
                                 <option defaultValue>Select Category</option>
-                                {parentCategories?.map((items) => {
+                                {categoryDatas?.map((items) => {
                                     return <option
-                                        key={items.parentCategoryId}
-                                        value={items.parentCategoryId}
-                                    >{items.parentCategoryName}</option>;
+                                        key={items.categoryId}
+                                        value={items.categoryId}
+                                    >{items.categoryName}</option>;
                                 })}
 
                             </select>

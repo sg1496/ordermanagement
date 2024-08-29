@@ -4,7 +4,7 @@ import VariantTable from './VariantTable/VariantTable';
 
 import { useDispatch } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
-const VariantsMain = () => {
+const VariantsMain = ({ setAlert }) => {
     const dispatch = useDispatch()
     dispatch(navTitle("Variant"))
 
@@ -12,7 +12,7 @@ const VariantsMain = () => {
         <>
             <div className="productOuter p-3">
                 <VariantSearch />
-                <VariantTable />
+                <VariantTable setAlert = {setAlert}/>
             </div>
         </>
     )

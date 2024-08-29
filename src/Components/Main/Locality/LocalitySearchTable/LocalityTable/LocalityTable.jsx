@@ -20,8 +20,8 @@ const LocalityTable = () => {
     const [first, setFirst] = useState(LocalityAllData);
 
     useEffect(() => {
-        dispatch(fetchLoginDataLocality(loginToken.userID))
-    }, [LocalityMessage,])
+        dispatch(fetchLoginDataLocality(loginToken?.userID))
+    }, [LocalityMessage])
 
     useEffect(() => {
         if (searchdata2 === "") {
@@ -34,10 +34,6 @@ const LocalityTable = () => {
         });
         setFirst(searchData)
     }, [searchdata2, LocalityAllData, LocalityMessage]);
-
-
-
-
 
     return (
         <>

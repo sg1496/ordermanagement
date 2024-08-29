@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchLoginDataRolepage } from '../../../../Store/Slice/ManageRoleSlices';
 import verifyToken from '../../../SignIn/verifyToken';
 
-const ManageuserForm = () => {
+const ManageuserForm = ({setAlert}) => {
     const dispatch = useDispatch();
     dispatch(navTitle("Manage User"));
     const navigate = useNavigate()
@@ -29,9 +29,12 @@ const ManageuserForm = () => {
         parentUserId: ""
     })
 
+
     const singleDataManageUser = useSelector((manageUser) => manageUser.ManageUserSlices.singleData)
     const roleData = useSelector((role) => role.ManageRoleSlices.loginData)
-    console.log("ddddddddddddddddddddddddddddddddddddddddddddddddddddddddda", roleData)
+
+
+
 
     useEffect(() => {
         dispatch(fetchLoginDataRolepage(loginToken.userID))
@@ -85,85 +88,136 @@ const ManageuserForm = () => {
     }
 
     const parentUserIDHandler = (loginTokenValue) => {
-        console.log("ddddddddddddddddddddddddd55------------------------", loginTokenValue)
-        
-       let parentUserIdCheck = 0
+
+        let parentUserIdCheck = 0
         if (loginTokenValue == 0) {
             return parentUserIdCheck = 1;
-          console.log("parnetUSerIDcheck",parentUserIdCheck)
-          
+            console.log("parnetUSerIDcheck", parentUserIdCheck)
+
         } else if (loginTokenValue == 1) {
-          parentUserIdCheck = 2;
+            parentUserIdCheck = 2;
         } else if (loginTokenValue == 2) {
-          parentUserIdCheck = 3;
+            parentUserIdCheck = 3;
         } else if (loginTokenValue == 3) {
-          parentUserIdCheck = 4;
+            parentUserIdCheck = 4;
         }
         return parentUserIdCheck;
-      };
-      
+    };
 
 
 
-    const onSubmit = (e) => {
-        e.preventDefault()
-        let parentUserIdCheck = parentUserIDHandler(loginToken.parentUserId);
-        // const parentUserIDHandler = (loginToken) => {
-        //     let parentUserIdCheck = 0
-        //     if (loginToken === 0) {
-        //         parentUserIdCheck = 1
-        //     } else if (loginToken === 1) {
-        //         parentUserIdCheck = 2
-        //     } else if (loginToken === 2) {
-        //         parentUserIdCheck = 3
-        //     } else if (loginToken === 3) {
-        //         parentUserIdCheck = 4
-        //     }
-        //     return parentUserIdCheck
-        // }
-        // parentUserIDHandler(loginToken.abcd)
 
-        let manageUserdata
-        if (checkPass) {
-            if (Object.keys(edit).length < 1) {
-                manageUserdata = {
-                    ...manageUser,
-                    roleId: parseInt(manageUser.roleId),
-                    franchiseId: parseInt(loginToken.userID),
-                    parentUserId: parentUserIdCheck
+    //    const onSubmit = async (e) => {
+    //         e.preventDefault()
+    //         try {
+    //             let parentUserIdCheck = parentUserIDHandler(loginToken.parentUserId);
+    //             let manageUserdata
+    //             if (checkPass) {
+    //                 if (Object.keys(edit).length < 1) {
+    //                     manageUserdata = {
+    //                         ...manageUser,
+    //                         roleId: parseInt(manageUser.roleId),
+    //                         franchiseId: parseInt(loginToken.userID),
+    //                         parentUserId: parentUserIdCheck
+    //                     }
+    //                 } else {
+    //                     manageUserdata = {
+    //                         ...manageUser,
+    //                         userId: parseInt(edit.id),
+    //                         roleId: parseInt(manageUser.roleId),
+    //                         franchiseId: parseInt(loginToken.userID),
+    //                         parentUserId: parentUserIdCheck
+
+    //                     }
+    //                 }
+
+    //             } else {
+    //                 setManageUser({
+    //                     ...manageUser,
+    //                     passKey: "",
+    //                     confirmPassword: "",
+    //                 })
+    //             }
+    //             const response = await dispatch(fetchSaveUpdateDataUser(manageUserdata))
+    //             dispatch(resetStates())
+    //             navigate(`/managetable`)
+    //             setManageUser({
+    //                 ...manageUser,
+    //                 email: "",
+    //                 userName: "",
+    //                 firstName: "",
+    //                 lastName: "",
+    //                 mobileNo: "",
+    //                 confirmPassword: "",
+    //                 passKey: ""
+    //             })
+    //         } catch (error) {
+    //             console.log("check user", error);
+
+    //         }
+
+    //     } 
+
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            let parentUserIdCheck = parentUserIDHandler(loginToken.parentUserId);
+            let manageUserdata;
+            if (checkPass) {
+                if (Object.keys(edit).length < 1) {
+                    manageUserdata = {
+                        ...manageUser,
+                        roleId: parseInt(manageUser.roleId),
+                        franchiseId: parseInt(loginToken.userID),
+                        parentUserId: parentUserIdCheck,
+                    };
+                } else {
+                    manageUserdata = {
+                        ...manageUser,
+                        userId: parseInt(edit.id),
+                        roleId: parseInt(manageUser.roleId),
+                        franchiseId: parseInt(loginToken.userID),
+                        parentUserId: parentUserIdCheck,
+                    };
+                }
+
+                // Check if the user already exists
+                const response = await dispatch(fetchSaveUpdateDataUser(manageUserdata));
+
+                console.log("check resp88888888888888888ppp", response.payload);
+
+                if (response.payload.status === 200) {
+                    dispatch(resetStates());
+                    navigate(`/managetable`);
+                    setManageUser({
+                        email: "",
+                        userName: "",
+                        firstName: "",
+                        lastName: "",
+                        mobileNo: "",
+                        confirmPassword: "",
+                        passKey: "",
+                    });
+
+
+                } else {
+                    console.log("User already exists or another error occurred");
+                    setAlert({ type: "secondry", message:  response.payload.message });
                 }
             } else {
-                manageUserdata = {
+                setManageUser({
                     ...manageUser,
-                    userId: parseInt(edit.id),
-                    roleId: parseInt(manageUser.roleId),
-                    franchiseId: parseInt(loginToken.userID),
-                    parentUserId:parentUserIdCheck
-
-                }
+                    passKey: "",
+                    confirmPassword: "",
+                });
             }
-
-        } else {
-            setManageUser({
-                ...manageUser,
-                passKey: "",
-                confirmPassword: "",
-            })
+        } catch (error) {
+            console.log("check user", error);
         }
-        dispatch(fetchSaveUpdateDataUser(manageUserdata))
-        dispatch(resetStates())
-        navigate(`/managetable`)
-        setManageUser({
-            ...manageUser,
-            email: "",
-            userName: "",
-            firstName: "",
-            lastName: "",
-            mobileNo: "",
-            confirmPassword: "",
-            passKey: ""
-        })
-    }
+    };
+
+    const messages = useSelector((manageUser) => manageUser.ManageUserSlices.message)
+    console.log("check messages658585", messages);
 
     const cancelHandler = () => {
         navigate(`/managetable`)

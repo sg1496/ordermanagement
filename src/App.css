@@ -4,3 +4,14 @@
 .form-check-input:checked {
   background-color: "#C53705"; 
 }
+
+.wrapper {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.wrapper .Mui-selected{
+  background: #c53705 !important;
+}
+

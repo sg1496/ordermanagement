@@ -6,26 +6,18 @@ import { useNavigate } from "react-router-dom"
 import verifyToken from '../../../SignIn/verifyToken';
 import { fetchApiDataCategory, fetchDelApiDataCategory, fetchEditCategory, resetStates } from "../../../../Store/Slice/CategorySlices";
 
-
-
-
 const TableCategory = () => {
   const Navigate = useNavigate()
   const dispatch = useDispatch();
   const loginToken = verifyToken()
 
-  const deleteMessage = useSelector((state) => state.categorySlices.message)
-
+  const deleteMessage = useSelector((state) => state.categorySlices.message);
 
   useEffect(() => {
     dispatch(fetchApiDataCategory(loginToken.userID))
   }, [deleteMessage]);
-  const categoryDatas1 = useSelector(state => state)
-  console.log("///////////////////////////",categoryDatas1);
 
-  // const [categoryDatas, setCategoryDatas]= useState(useSelector(state => state.categorySlices.data))
-  const categoryDatas = useSelector(state => state.categorySlices.data)
-  console.log(categoryDatas);
+  const categoryDatas = useSelector(state => state.categorySlices.data);
 
   return (
     <>
@@ -53,9 +45,8 @@ const TableCategory = () => {
                   </span>
 
                   <span ><img src={images.deleteIcon} alt="Delete Icon" onClick={() => (dispatch(fetchDelApiDataCategory(category.categoryId)), dispatch(resetStates()))} /></span>
-
-                </div></td>
-
+                </div>
+                </td>
               </tr>
             ))
             }

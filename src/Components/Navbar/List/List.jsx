@@ -1,21 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./List.scss"
 import ListItems from './ListItems/ListItems';
 import images from '../../../assets/images';
 import verifyToken from '../../SignIn/verifyToken';
+import { useNavigate } from "react-router-dom";
 
 
 function List(props) {
     const loginToken= verifyToken()
+    const navigate =useNavigate()
 
     const LogoutHandler = () => {
         localStorage.removeItem('token')
+        navigate(`/login`)
     }
-    // "sidebar_pannel sidebar__width"    
 
-    const [first, setfirst] = useState(false)
-    
-    console.log("ddddddddddddddddddddddddd", first)
+
     return (
         <>
        <div className={`${props.drawerData === true ? "sidebar__width" : 'sidebar_pannel'}`} onMouseLeave={()=>props.drawerHandlers()} onClick={()=>props.drawerClick()} >
@@ -25,7 +25,7 @@ function List(props) {
                         <img src={images.users} alt="users" loading='lazy' className='img-fluid ' />
                     </div>
                     <div className="user__name  ">
-                        <p >{loginToken.firstName  }</p>
+                        <p >{loginToken?.firstName  }</p>
                     </div>
                     <div className="user__logout text-center ">
                         <a href="" onClick={LogoutHandler}>
