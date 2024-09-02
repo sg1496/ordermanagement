@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchLoginDataRolepage } from '../../../../Store/Slice/ManageRoleSlices';
 import verifyToken from '../../../SignIn/verifyToken';
 
-const ManageuserForm = ({setAlert}) => {
+const ManageuserForm = ({ setAlert }) => {
     const dispatch = useDispatch();
     dispatch(navTitle("Manage User"));
     const navigate = useNavigate()
@@ -28,19 +28,12 @@ const ManageuserForm = ({setAlert}) => {
         passKey: "",
         parentUserId: ""
     })
-
-
     const singleDataManageUser = useSelector((manageUser) => manageUser.ManageUserSlices.singleData)
     const roleData = useSelector((role) => role.ManageRoleSlices.loginData)
-
-
-
 
     useEffect(() => {
         dispatch(fetchLoginDataRolepage(loginToken.userID))
     }, [])
-
-
 
     useEffect(() => {
         if (edit.id !== undefined) {
@@ -67,6 +60,8 @@ const ManageuserForm = ({setAlert}) => {
                 roleId: "",
                 userTypeID: "",
                 franchiseId: "",
+                passKey: "",
+                confirmPassword: ""
             })
         }
     }, [singleDataManageUser])
@@ -79,21 +74,27 @@ const ManageuserForm = ({setAlert}) => {
         })
     }
 
-    const blurHandler = (confirmPassword) => {
-        if (manageUser.passKey === confirmPassword) {
-            setcheckPass(true)
-        } else {
-            setcheckPass(false)
-        }
-    }
+    useEffect(() => {
+        const blurHandler = () => {
+            if (manageUser.passKey && manageUser.confirmPassword) {
+                if (manageUser.passKey   === manageUser.confirmPassword) {
+                    setcheckPass(false);
+                } else {
+                    setcheckPass(true);
+                }
+            } else {
+                setcheckPass(false); 
+            }
+        };
+    
+        blurHandler();
+    }, [manageUser.passKey, manageUser.confirmPassword]);
 
     const parentUserIDHandler = (loginTokenValue) => {
 
         let parentUserIdCheck = 0
         if (loginTokenValue == 0) {
             return parentUserIdCheck = 1;
-            console.log("parnetUSerIDcheck", parentUserIdCheck)
-
         } else if (loginTokenValue == 1) {
             parentUserIdCheck = 2;
         } else if (loginTokenValue == 2) {
@@ -104,123 +105,62 @@ const ManageuserForm = ({setAlert}) => {
         return parentUserIdCheck;
     };
 
-
-
-
-    //    const onSubmit = async (e) => {
-    //         e.preventDefault()
-    //         try {
-    //             let parentUserIdCheck = parentUserIDHandler(loginToken.parentUserId);
-    //             let manageUserdata
-    //             if (checkPass) {
-    //                 if (Object.keys(edit).length < 1) {
-    //                     manageUserdata = {
-    //                         ...manageUser,
-    //                         roleId: parseInt(manageUser.roleId),
-    //                         franchiseId: parseInt(loginToken.userID),
-    //                         parentUserId: parentUserIdCheck
-    //                     }
-    //                 } else {
-    //                     manageUserdata = {
-    //                         ...manageUser,
-    //                         userId: parseInt(edit.id),
-    //                         roleId: parseInt(manageUser.roleId),
-    //                         franchiseId: parseInt(loginToken.userID),
-    //                         parentUserId: parentUserIdCheck
-
-    //                     }
-    //                 }
-
-    //             } else {
-    //                 setManageUser({
-    //                     ...manageUser,
-    //                     passKey: "",
-    //                     confirmPassword: "",
-    //                 })
-    //             }
-    //             const response = await dispatch(fetchSaveUpdateDataUser(manageUserdata))
-    //             dispatch(resetStates())
-    //             navigate(`/managetable`)
-    //             setManageUser({
-    //                 ...manageUser,
-    //                 email: "",
-    //                 userName: "",
-    //                 firstName: "",
-    //                 lastName: "",
-    //                 mobileNo: "",
-    //                 confirmPassword: "",
-    //                 passKey: ""
-    //             })
-    //         } catch (error) {
-    //             console.log("check user", error);
-
-    //         }
-
-    //     } 
-
     const onSubmit = async (e) => {
         e.preventDefault();
-        try {
-            let parentUserIdCheck = parentUserIDHandler(loginToken.parentUserId);
-            let manageUserdata;
-            if (checkPass) {
-                if (Object.keys(edit).length < 1) {
-                    manageUserdata = {
-                        ...manageUser,
-                        roleId: parseInt(manageUser.roleId),
-                        franchiseId: parseInt(loginToken.userID),
-                        parentUserId: parentUserIdCheck,
-                    };
-                } else {
-                    manageUserdata = {
-                        ...manageUser,
-                        userId: parseInt(edit.id),
-                        roleId: parseInt(manageUser.roleId),
-                        franchiseId: parseInt(loginToken.userID),
-                        parentUserId: parentUserIdCheck,
-                    };
-                }
 
-                // Check if the user already exists
-                const response = await dispatch(fetchSaveUpdateDataUser(manageUserdata));
-
-                console.log("check resp88888888888888888ppp", response.payload);
-
-                if (response.payload.status === 200) {
-                    dispatch(resetStates());
-                    navigate(`/managetable`);
-                    setManageUser({
-                        email: "",
-                        userName: "",
-                        firstName: "",
-                        lastName: "",
-                        mobileNo: "",
-                        confirmPassword: "",
-                        passKey: "",
-                    });
-
-
-                } else {
-                    console.log("User already exists or another error occurred");
-                    setAlert({ type: "secondry", message:  response.payload.message });
-                }
+        let parentUserIdCheck = parentUserIDHandler(loginToken.parentUserId);
+        let manageUserdata;
+        if (checkPass) {
+            if (Object.keys(edit).length < 1) {
+                manageUserdata = {
+                    ...manageUser,
+                    roleId: parseInt(manageUser.roleId),
+                    franchiseId: parseInt(loginToken.userID),
+                    parentUserId: parentUserIdCheck,
+                };
             } else {
+                manageUserdata = {
+                    ...manageUser,
+                    userId: parseInt(edit.id),
+                    roleId: parseInt(manageUser.roleId),
+                    franchiseId: parseInt(loginToken.userID),
+                    parentUserId: parentUserIdCheck,
+                };
+            }
+
+            const response = await dispatch(fetchSaveUpdateDataUser(manageUserdata));
+            if (response.payload.status === 200) {
+                dispatch(resetStates());
+                navigate(`/dashboard/managetable`);
+                setManageUser({
+                    email: "",
+                    userName: "",
+                    firstName: "",
+                    lastName: "",
+                    mobileNo: "",
+                    confirmPassword: "",
+                    passKey: "",
+                });
+            } else {
+                setAlert({ type: "error", message: response.payload.message });
                 setManageUser({
                     ...manageUser,
                     passKey: "",
                     confirmPassword: "",
                 });
             }
-        } catch (error) {
-            console.log("check user", error);
+        } else {
+            setManageUser({
+                ...manageUser,
+                passKey: "",
+                confirmPassword: "",
+            });
         }
+
     };
 
-    const messages = useSelector((manageUser) => manageUser.ManageUserSlices.message)
-    console.log("check messages658585", messages);
-
     const cancelHandler = () => {
-        navigate(`/managetable`)
+        navigate(`/dashboard/managetable`)
         setManageUser({
             ...manageUser,
             email: "",
@@ -228,7 +168,6 @@ const ManageuserForm = ({setAlert}) => {
             firstName: "",
             lastName: "",
             mobileNo: "",
-
             confirmPassword: "",
             passKey: ""
         })
@@ -238,7 +177,7 @@ const ManageuserForm = ({setAlert}) => {
 
     return (
         <>
-            {!checkPass && <div style={{ backgroundColor: 'red', color: 'white', padding: "25px", fontSize: "20px" }}>password and confirm password in not match</div>}
+            {checkPass && <div style={{ backgroundColor: '#d32f2f96', color: 'white', padding: "10px", fontSize: "20px" }}>password and confirm password in not match</div>}
             <div className="addProduct__basicTabs  ">
                 <form onSubmit={onSubmit}>
 
@@ -376,7 +315,7 @@ const ManageuserForm = ({setAlert}) => {
                                 name='confirmPassword'
                                 value={confirmPassword}
                                 onChange={(e) => changeHandler(e)}
-                                onBlur={(e) => blurHandler(e.target.value)}
+                            // onBlur={(e) => blurHandler(e.target.value)}
                             // required
                             />
                         </div>
@@ -384,15 +323,11 @@ const ManageuserForm = ({setAlert}) => {
 
                     <div>
 
-                        <Buttons fname="Save"
+                        <Buttons fname={!edit.id ? "Save": "Update"}
                             Sname="Cancel"
                             cancelHandler={cancelHandler}
                         />
                     </div>
-
-
-
-
                 </form >
             </div >
         </>

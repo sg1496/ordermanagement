@@ -10,7 +10,7 @@ const ManageRoleAddBtn = () => {
         <div className='product_searchField d-flex justify-content-end'>
             
             <div className="product__innerAddnewButtons">
-                <Link to="/manageroleform">
+                <Link to="/dashboard/manageroleform">
                     <FontAwesomeIcon icon={faSquarePlus} />
                     <span className='ps-2'>Add New</span>
                 </Link>

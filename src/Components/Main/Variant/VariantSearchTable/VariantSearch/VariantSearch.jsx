@@ -15,7 +15,7 @@ function VariantSearch() {
 
 
                 <div className="product__innerAddnewButtons">
-                    <Link to="/variant_form">
+                    <Link to="/dashboard/variant_form">
                         <FontAwesomeIcon icon={faSquarePlus} />
                         <span className='ps-2'>Add New</span>
                     </Link>

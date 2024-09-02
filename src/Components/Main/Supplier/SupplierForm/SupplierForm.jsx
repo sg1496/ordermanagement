@@ -7,13 +7,12 @@ import { useNavigate, useParams } from "react-router-dom"
 import { fetchAllDataState, fetchSaveUpdateSupplier, fetchSingleDataSupplier, resetStates } from '../../../../Store/Slice/SupplierSlices';
 import verifyToken from '../../../SignIn/verifyToken';
 
-const SupplierForm = () => {
-    const Navigate = useNavigate()
+const SupplierForm = ({ setAlert }) => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     dispatch(navTitle("Supplier"))
     const edit = useParams()
     const loginToken = verifyToken()
-
 
     const [supplierData, setSupplierData] = useState({
         suppilerName: "",
@@ -30,14 +29,16 @@ const SupplierForm = () => {
     })
     const stateListData = useSelector((stateLiData) => stateLiData.SupplierSlices.statelistdata)
     const supplierSingleData = useSelector((singleData) => singleData.SupplierSlices.singleData)
-    console.log("**********************************", supplierSingleData)
-
 
     useEffect(() => {
         if (edit.id !== undefined) {
             dispatch(fetchSingleDataSupplier(edit.id))
         }
     }, [edit]);
+
+    useEffect(() => {
+        dispatch(fetchAllDataState())
+    }, [])
 
     useEffect(() => {
 
@@ -55,7 +56,6 @@ const SupplierForm = () => {
             gstin: supplierSingleData.gstin,
         })
         if (!edit.id) {
-            console.log("-------------------------------------------------");
             setSupplierData({
                 suppilerName: "",
                 addressLine1: "",
@@ -70,23 +70,14 @@ const SupplierForm = () => {
         }
     }, [supplierSingleData])
 
-
-
-
     const changeHandler = (e) => {
         setSupplierData({
             ...supplierData,
             [e.target.name]: e.target.value
         })
-
     }
 
-
-    useEffect(() => {
-        dispatch(fetchAllDataState())
-    }, [])
-
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault()
 
         let SupplierSetData
@@ -105,21 +96,26 @@ const SupplierForm = () => {
                 parentUserId: parseInt(loginToken.parentUserId),
             }
         }
-        dispatch(fetchSaveUpdateSupplier(SupplierSetData))
+        const response = await dispatch(fetchSaveUpdateSupplier(SupplierSetData))
         dispatch(resetStates())
-        Navigate(`/mainsuppliertable`)
-        setSupplierData({
-            suppilerName: "",
-            addressLine1: "",
-            addressLine2: "",
-            city: "",
-            stateID: "",
-            pinCode: "",
-            mobileNumber: "",
-            phoneNumber: "",
-            gstin: "",
 
-        })
+        if (response.payload.status === 200) {
+            navigate(`/dashboard/mainsuppliertable`)
+            setAlert({ type: "success", message: edit.id ? "Supplier Update Successfully" : "Supplier Create Successfully" })
+            setSupplierData({
+                suppilerName: "",
+                addressLine1: "",
+                addressLine2: "",
+                city: "",
+                stateID: "",
+                pinCode: "",
+                mobileNumber: "",
+                phoneNumber: "",
+                gstin: "",
+
+            })
+        }
+
     }
 
 
@@ -135,7 +131,7 @@ const SupplierForm = () => {
             phoneNumber: "",
             gstin: "",
         })
-        Navigate(`/mainsuppliertable`)
+        navigate(`/dashboard/mainsuppliertable`)
 
     }
 
@@ -318,18 +314,13 @@ const SupplierForm = () => {
                                 required
                             />
                         </div>
-
-
-
                     </div>
 
                     <div>
-
-                        <Buttons fname="Save"
+                        <Buttons fname={!edit.id ? "Save" : "Update"}
                             Sname="Cancel"
                             cancelHandler={cancelHandler}
                         />
-
                     </div>
                 </form>
             </div>

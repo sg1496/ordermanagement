@@ -6,14 +6,14 @@ import ManageRoleAddBtn from '../ManageUserTable/ManageRoleAddBtn';
 import ManageRoleDataTable from '../ManageUserTable/ManageRoleDataTable';
 
 
-const Manage =() => {
+const Manage =({setAlert}) => {
     const dispatch = useDispatch();
     dispatch(navTitle("Manage Role"));
     return (
         <>
             <div className="productOuter p-3">
                <ManageRoleAddBtn/>
-               <ManageRoleDataTable/>
+               <ManageRoleDataTable setAlert={setAlert}/>
                
                
             </div>

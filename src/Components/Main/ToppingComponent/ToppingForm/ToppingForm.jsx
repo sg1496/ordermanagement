@@ -11,11 +11,10 @@ import verifyToken from '../../../SignIn/verifyToken';
 
 
 
-const ToppingForm = (props) => {
-
+const ToppingForm = ({ setAlert }) => {
     const dispatch = useDispatch();
     dispatch(navTitle("Toppings"));
-    const Navigate = useNavigate();
+    const navigate = useNavigate();
     const edit = useParams();
     const loginToken = verifyToken()
 
@@ -195,28 +194,33 @@ const ToppingForm = (props) => {
                 orderTypes: newArr
             }
         }
-        dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
+        const response = await dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
         dispatch(resetStates())
 
-        setData({
-            toppingName: "",
-            toppingAbbr: "",
-            isActive: false,
-            isToppingAllowed: false,
-            foodTypeId: "",
-            measurementTypeId: "",
-            isCombination: false,
-            categoryId: 9,
-            orderTypes: [],
-            toppingsPrices: [],
-            toppingCombinatiomQuantityList: []
-        })
-        Navigate(`/toppings`)
+        if (response.payload.status === 200) {
+            navigate(`/dashboard/toppings`)
+            setAlert({ type: "success", message: edit.id ? "Topping Update Successfully" : "Topping Create Successfully" })
+            setData({
+                toppingName: "",
+                toppingAbbr: "",
+                isActive: false,
+                isToppingAllowed: false,
+                foodTypeId: "",
+                measurementTypeId: "",
+                isCombination: false,
+                categoryId: 9,
+                orderTypes: [],
+                toppingsPrices: [],
+                toppingCombinatiomQuantityList: []
+            })
+        } else {
+            setAlert({ type: "error", message: response.payload.message })
+        }
     }
 
 
     const cancelHandler = () => {
-        Navigate(`/toppings`)
+        navigate(`/dashboard/toppings`)
         setData({
             toppingName: "",
             toppingAbbr: "",
@@ -387,7 +391,7 @@ const ToppingForm = (props) => {
                     </div>}
 
                     <div>
-                        <Buttons fname="Save"
+                        <Buttons fname={!edit.id ? "Save" : "Update"}
                             Sname="Cancel"
                             cancelHandler={cancelHandler}
                         />

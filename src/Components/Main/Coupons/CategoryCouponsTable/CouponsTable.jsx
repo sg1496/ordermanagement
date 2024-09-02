@@ -15,57 +15,40 @@ function CouponsTable(props) {
     }, [])
 
     const categorData = useSelector((category) => category.categorySlices.data)
-    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", categorData)
-
     const [categoryCoupons, setCategoryCoupons] = useState([])
-
-    console.log("check my state 5555555555", categoryCoupons)
 
     useEffect(() => {
         const allda = []
 
-         if (categorData){
+        if (categorData) {
             const selection = JSON.parse(JSON.stringify(categorData));
             selection.map((item) => {
                 item.IsChecked = false;
-                const newdata = { ...item, select: { categoryId: item.categoryId} }
+                const newdata = { ...item, select: { categoryId: item.categoryId } }
                 allda.push(newdata)
             })
         }
-        // if (categorData) {
-        //     const ToppingDatafinaltemp = JSON.parse(JSON.stringify(categorData));
-        //     ToppingDatafinaltemp.map((e) => {
-        //         e.IsChecked = false;
-        //     }
-        //     )
-            setCategoryCoupons(allda)
-        // }
+        setCategoryCoupons(allda)
     }, [categorData])
 
 
 
     const categorySelectionHandler = (id, item) => {
-
         const itemselected = [...categoryCoupons];
-        console.log(itemselected)
         if (id) {
             item.IsChecked = true;
         }
         else {
             item.IsChecked = false;
         }
-        
+
         setCategoryCoupons(itemselected);
-        const newSelect = itemselected.filter((item)=>item.IsChecked)
-
+        const newSelect = itemselected.filter((item) => item.IsChecked)
         props.selectedHandler(newSelect)
-
-
     }
+
     const categorySelectionHandlers = (id, item) => {
-
         const itemselected = [...categoryCoupons];
-        console.log(itemselected)
         if (id) {
             item.IsChecked = false;
         }
@@ -73,16 +56,9 @@ function CouponsTable(props) {
             item.IsChecked = true;
         }
         setCategoryCoupons(itemselected);
-        const newSelect = itemselected.filter((item)=>item.IsChecked)
-
+        const newSelect = itemselected.filter((item) => item.IsChecked)
         props.selectedHandler(newSelect)
-
     }
-
-
-
-
-
 
     return (
         <>
@@ -110,15 +86,9 @@ function CouponsTable(props) {
                 </div >
                 )}
                 <div className='ToppingSelect_table  ' style={{ width: "50%" }} >
-                    {/* <SelectedCoupns
-                        selectedCategory={categoryCoupons}
-                        categorySelectionHandler={categorySelectionHandlers}
-
-                    /> */}
                     {categoryCoupons?.filter(item => item.IsChecked) < 1 ? (
                         ""
                     ) : (<div className='coupons_table mt-3 mb-5 '>
-
                         <table className='table m-0'>
                             <thead>
 
@@ -137,7 +107,6 @@ function CouponsTable(props) {
                                 }
                             </tbody>
                         </table>
-
                     </div >
                     )}
                 </div>
@@ -147,5 +116,4 @@ function CouponsTable(props) {
         </>
     )
 }
-
 export default CouponsTable;

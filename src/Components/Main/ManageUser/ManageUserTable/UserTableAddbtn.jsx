@@ -10,7 +10,7 @@ function UserTableAddbtn() {
         <div className='product_searchField d-flex justify-content-end'>
             
             <div className="product__innerAddnewButtons">
-                <Link to="/manageuserform">
+                <Link to="/dashboard/manageuserform">
                     <FontAwesomeIcon icon={faSquarePlus} />
                     <span className='ps-2'>Add New</span>
                 </Link>

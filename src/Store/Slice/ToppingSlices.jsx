@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from "axios"
 import { flushSync } from 'react-dom';
-import dummy from '../../dummy'; 
+import dummy from '../../dummy';
 let url = import.meta.env.VITE_APP_FOODS_API
 
 const initialState = {
@@ -13,7 +13,8 @@ const initialState = {
     singleData: null,
     foodType: null,
     orderTypes: null,
-   
+    search: ""
+
 }
 
 const ToppingSlices = createSlice({
@@ -25,6 +26,9 @@ const ToppingSlices = createSlice({
             state.error = null;
             state.message = null
         },
+        seachStates: (state, action) => {
+            state.search = action.payload
+        }
 
     },
     extraReducers: (builder) => {
@@ -221,7 +225,7 @@ export const fetchDelApiDataToppings = createAsyncThunk('api.fetchDelData', asyn
 
 export const fetchSaveUpdateToppings = createAsyncThunk('api.fetchUpdateSave', async (data) => {
     try {
-        
+
         data.loginUserID = 9;
         const response = await axios.post(`${url}/topping/SaveupdateTopping`, data);
         console.log("response saveupdate", response.data);
@@ -232,7 +236,7 @@ export const fetchSaveUpdateToppings = createAsyncThunk('api.fetchUpdateSave', a
 });
 
 export const fetchEditTopping = createAsyncThunk("api.fetchedit", async (id) => {
-    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiid",id);
+    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiid", id);
     try {
         const response = await axios.get(`${url}/topping/GetSingleTopping/${id}`)
         console.log(response.data);
@@ -276,5 +280,5 @@ export const ToppingCombinationDelete = createAsyncThunk('api/ToppingCombination
 
 
 export default ToppingSlices.reducer;
-export const { resetStates } = ToppingSlices.actions;
+export const { resetStates, seachStates } = ToppingSlices.actions;
 

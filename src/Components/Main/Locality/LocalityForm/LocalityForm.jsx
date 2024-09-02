@@ -10,14 +10,11 @@ import { fetchSaveUpdateLocality, fetchSingleDataLocality, resetStates } from ".
 
 
 
-function LocalityForm(props) {
+function LocalityForm({ setAlert }) {
     const Navigate = useNavigate()
     const dispatch = useDispatch();
-    dispatch(navTitle("Locality-Form"));
+    dispatch(navTitle("Locality"));
     const edit = useParams();
-
-    const loginUserId = useSelector(login => login.LoginSlices)
-    console.log("loginUserId", loginUserId)
 
     const [locatitySetData, setLocatitySetData] = useState({
         localityName: '',
@@ -30,8 +27,7 @@ function LocalityForm(props) {
         }
     }, [edit])
 
-    const localitySingleData = useSelector((locality) => locality.LocalitySlices.singleData)
-    console.log("first", localitySingleData)
+    const localitySingleData = useSelector((locality) => locality.LocalitySlices.singleData);
 
     useEffect(() => {
         !localitySingleData ? setLocatitySetData({
@@ -44,11 +40,7 @@ function LocalityForm(props) {
                 localityName: ''
             })
         }
-
-    }, [localitySingleData])
-
-
-
+    }, [localitySingleData]);
 
     const changeHandler = (e) => {
         setLocatitySetData({
@@ -56,9 +48,8 @@ function LocalityForm(props) {
             [e.target.name]: e.target.value
         })
     }
-// -------------------------------------------------Save------------------------------------------------------------
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
         const loginToken = verifyToken()
 
@@ -67,24 +58,32 @@ function LocalityForm(props) {
             localityData = {
                 ...locatitySetData,
                 franchiseID: loginToken.userID,
-                parentUserId:loginToken.parentUserId
+                parentUserId: loginToken.parentUserId
             }
         } else {
             localityData = {
                 ...locatitySetData,
                 localityID: parseInt(edit.id),
                 franchiseID: loginToken.userID,
-                parentUserId:loginToken.parentUserId
+                parentUserId: loginToken.parentUserId
             }
         }
 
-        dispatch(fetchSaveUpdateLocality(localityData))
+        const response = await dispatch(fetchSaveUpdateLocality(localityData));
         dispatch(resetStates())
 
-        setLocatitySetData({
-            localityName: ""
-        })
-        Navigate(`/localityTable`)
+        console.log("check response locality", response);
+        
+
+        if (response.payload.status === 200) {
+            setLocatitySetData({
+                localityName: ""
+            })
+            Navigate(`/dashboard/localityTable`)
+            setAlert({ type: "success", message: !edit.id ? response.payload.message : response.payload.message });
+        } else {
+            setAlert({ type: "error", message: response.payload.message })
+        };
     }
 
 
@@ -92,8 +91,7 @@ function LocalityForm(props) {
         setLocatitySetData({
             localityName: ""
         })
-        Navigate(`/localityTable`)
-
+        Navigate(`/dashboard/localityTable`)
     }
 
     const { localityName } = locatitySetData
@@ -123,7 +121,7 @@ function LocalityForm(props) {
 
                     </div>
                     <div>
-                        <Buttons fname="Save"
+                        <Buttons fname={!edit.id ? "Save" : "Update"}
                             Sname="Cancel"
                             cancelHandler={cancelHandler}
                         />

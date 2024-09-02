@@ -1,30 +1,54 @@
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import images from "../../../../assets/images"
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllDataUsers, fetchDelDataUser, fetchLoginDataUsers, fetchSingleEditDataUser, resetStates } from '../../../../Store/Slice/ManageUsers';
+import { fetchDelDataUser, fetchLoginDataUsers, fetchSingleEditDataUser, resetStates } from '../../../../Store/Slice/ManageUsers';
 import { useNavigate } from 'react-router-dom';
 import verifyToken from '../../../SignIn/verifyToken';
-function ManageUserTable() {
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
+import AlertDialog from '../../../utils/DeleteConfirmationAlert';
+
+function ManageUserTable({ setAlert }) {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const loginToken= verifyToken()
+    const loginToken = verifyToken()
+    const [page, setPage] = useState(1)
+    const [deleteModel, setDeleteModal] = useState({ check: false, id: null })
+    const pagePerItem = 10;
 
-    // const manageUserData = useSelector((manageuser) => manageuser.ManageUserSlices.data.loginData);
     const manageLoginUserData = useSelector((manageuser) => manageuser.ManageUserSlices.loginData);
     const manageUserMessage = useSelector((manageuser) => manageuser.ManageUserSlices.message);
 
-    console.log("save/edit---------", loginToken.serTypeId)
-
-
     useEffect(() => {
-        dispatch(fetchLoginDataUsers({id : loginToken.userID, pid: loginToken.parentUserId}))
+        dispatch(fetchLoginDataUsers({ id: loginToken.userID, pid: loginToken.parentUserId }))
     }, [manageUserMessage])
 
-    // console.log("first", manageUserData)
+    const changePageHandler = (event, newPage) => {
+        setPage(newPage)
+    }
+
+    const closeHandler = () => {
+        setDeleteModal({ check: false })
+    }
+
+    const deleteHandler = () => {
+        dispatch(fetchDelDataUser(deleteModel.id))
+        setDeleteModal({ check: false, id: null })
+        setAlert({ type: "success", message: "User delete successfully " })
+    }
+
 
     return (
         <>
+            <AlertDialog
+                open={deleteModel}
+                onClose={closeHandler}
+                title="Confirmation"
+                message="Are you sure you want to delete User"
+                onDelete={deleteHandler}
+            />
+
             <div className='productSection__table mt-3'>
                 <table className='table m-0'>
                     <thead >
@@ -36,34 +60,54 @@ function ManageUserTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {manageLoginUserData?.map((item, index) => {
-                            return <tr key={index}>
-                                <td scope="row" >{item.email}</td>
-                                <td className='text-center'>{item.mobileNo}</td>
-                                <td >
-                                    <div className="productAction__buttons d-flex justify-content-center">
-                                        <span>
-                                            <img
-                                                src={images.editIcon}
-                                                alt="Edit Icon"
-                                                onClick={()=>(dispatch(fetchSingleEditDataUser(item.userId), navigate(`/manageuserform/${item.userId}`)))}
-
-                                            />
-                                        </span>
-                                        <span>
-                                            <img
-                                                src={images.deleteIcon}
-                                                alt="Delete Icon"
-                                                onClick={() => (dispatch(fetchDelDataUser(item.userId)), dispatch(resetStates()))}
-                                            />
-                                        </span>
+                        {!manageLoginUserData ?
+                            <tr>
+                                <td colSpan={3}>
+                                    <div className='d-flex justify-content-center align-items-center'>
+                                        <Stack>
+                                            <CircularProgress />
+                                        </Stack>
                                     </div>
                                 </td>
                             </tr>
-                        })
+                            :
+                            manageLoginUserData?.slice((page - 1) * pagePerItem, page * pagePerItem)?.map((item, index) => {
+                                return <tr key={index}>
+                                    <td scope="row" >{item.email}</td>
+                                    <td className='text-center'>{item.mobileNo}</td>
+                                    <td >
+                                        <div className="productAction__buttons d-flex justify-content-center">
+                                            <span>
+                                                <img
+                                                    src={images.editIcon}
+                                                    alt="Edit Icon"
+                                                    onClick={() => (dispatch(fetchSingleEditDataUser(item.userId), navigate(`/dashboard/manageuserform/${item.userId}`)))}
+                                                />
+                                            </span>
+                                            <span>
+                                                <img
+                                                    src={images.deleteIcon}
+                                                    alt="Delete Icon"
+                                                    onClick={() => (setDeleteModal({ check: true, id: item.userId }), dispatch(resetStates()))}
+                                                />
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            })
                         }
                     </tbody>
                 </table>
+                <div className='wrapper'>
+                    {pagePerItem < manageLoginUserData?.length && <Stack>
+                        <Pagination
+                            color='primary'
+                            count={Math.ceil((manageLoginUserData && manageLoginUserData ? manageLoginUserData?.length : 0) / pagePerItem)}
+                            page={page}
+                            onChange={changePageHandler}
+                        />
+                    </Stack>}
+                </div>
             </div >
         </>
     )

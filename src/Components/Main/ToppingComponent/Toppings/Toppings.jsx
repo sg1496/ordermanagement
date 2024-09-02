@@ -4,7 +4,8 @@ import ToppingSearch from './ToppingSearch/ToppingSearch';
 import ToppingTable from './ToppingTable/ToppingTable';
 import { useDispatch } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
-const Toppings = () => {
+
+const Toppings = ({setAlert}) => {
 const dispatch = useDispatch()
 dispatch(navTitle("Toppings"))
 
@@ -12,7 +13,7 @@ dispatch(navTitle("Toppings"))
         <>
             <div className="productOuter p-3">
                 <ToppingSearch />
-                <ToppingTable />
+                <ToppingTable setAlert={setAlert} />
             </div>
         </>
     )

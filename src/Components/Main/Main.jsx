@@ -9,11 +9,11 @@ function Main() {
     const loginToken = verifyToken()
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (!loginToken) {
-            navigate('/login')
-        }
-    }, [loginToken])
+    // useEffect(() => {
+    //     if (!loginToken) {
+    //         navigate('/login')
+    //     }
+    // }, [loginToken])
 
     return (
         <>

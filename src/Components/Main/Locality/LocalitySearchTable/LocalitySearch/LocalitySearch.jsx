@@ -12,12 +12,6 @@ function LocalitySearch() {
         dispatch(searchStates(e.target.value))
     }
 
-    const searchdata = useSelector((ser)=>ser.LocalitySlices.search)
-
-    console.log("searcha",searchdata)
-
-
-
     return (
         <>
             <div className='product_searchField d-flex justify-content-end'>                
@@ -28,7 +22,7 @@ function LocalitySearch() {
 
 
                 <div className="product__innerAddnewButtons">
-                    <Link to="/locality_form">
+                    <Link to="/dashboard/locality_form">
                         <FontAwesomeIcon icon={faSquarePlus} />
                         <span className='ps-2'>Add New</span>
                     </Link>

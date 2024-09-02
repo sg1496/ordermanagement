@@ -9,9 +9,10 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
-    statelistdata:null
-    
-   
+    statelistdata: null,
+    search: ""
+
+
 }
 
 const SupplierSlices = createSlice({
@@ -24,6 +25,9 @@ const SupplierSlices = createSlice({
             state.message = null
         },
 
+        searchStates: (state, action) => {
+            state.search = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -119,7 +123,7 @@ const SupplierSlices = createSlice({
                 state.error = true;
                 state.msg = "some error";
             })
-           
+
     }
 
 });
@@ -134,8 +138,8 @@ export const fetchAllDataSupplier = createAsyncThunk('api/fetchDataSupplier', as
 });
 
 export const fetchDeleteDataSupplier = createAsyncThunk('api.fetchDeleteDataSupplier', async (id) => {
-    console.log("dafsafasfasd",id);
-   
+    console.log("dafsafasfasd", id);
+
     try {
         const response = await axios.delete(`${url}/api/Supplier/DeleteSuppiler/${id}`, {
             headers: {
@@ -162,7 +166,7 @@ export const fetchSaveUpdateSupplier = createAsyncThunk('api.fetchUpdateSaveSupp
 });
 
 export const fetchSingleDataSupplier = createAsyncThunk("api.fetchSingleDataSupplier", async (id) => {
-      
+
     try {
         const response = await axios.get(`${url}/api/Supplier/GetSingleSuppiler/${id}`)
         console.log(response.data);
@@ -184,4 +188,4 @@ export const fetchAllDataState = createAsyncThunk('api/fetchDataState', async ()
 
 
 export default SupplierSlices.reducer;
-export const { resetStates } = SupplierSlices.actions;
+export const { resetStates, searchStates } = SupplierSlices.actions;

@@ -6,14 +6,14 @@ import { useDispatch } from 'react-redux';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
 
 
-const Categorytable =() => {
+const Categorytable =({setAlert}) => {
     const dispatch = useDispatch()
     dispatch(navTitle("Categories"));
     return (
         <>
             <div className="productOuter p-3">
                 <Tablesearch/>
-                <TableCategory/>
+                <TableCategory setAlert={setAlert}/>
             </div>
         </>
     )

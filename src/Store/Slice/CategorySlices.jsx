@@ -8,7 +8,8 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
-    parentCategories:null,
+    parentCategories: null,
+    search: "",
     searchcategory: []
 }
 
@@ -21,7 +22,10 @@ const CategorySlices = createSlice({
             state.error = null;
             state.message = null
         },
-       
+        searchStates: (state, action) => {
+            state.search = action.payload
+        }
+
     },
     extraReducers: (builder) => {
         builder
@@ -184,4 +188,4 @@ export const fetchParentCategory = createAsyncThunk('fetchParentCategory', async
 
 
 export default CategorySlices.reducer;
-export const { resetStates, searchstates } = CategorySlices.actions;
+export const { resetStates, searchStates } = CategorySlices.actions;

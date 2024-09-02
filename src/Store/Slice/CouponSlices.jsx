@@ -10,7 +10,8 @@ const initialState = {
     singleData: null,
     discountType: null,
     limitation: null,
-    searchcategory: []
+    searchcategory: [],
+    search: ""
 }
 
 const CouponSlices = createSlice({
@@ -22,17 +23,21 @@ const CouponSlices = createSlice({
             state.error = null;
             state.message = null;
         },
+
+        searchState: (state, action) => {
+            state.search = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchLoginAllDataCoupon.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchLoginAllDataCoupon.fulfilled, (state, action) =>{
-                if(action.payload.status === 200){
+            .addCase(fetchLoginAllDataCoupon.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
                     state.loading = false;
                     state.data = action.payload.couponlst;
-                }else{
+                } else {
                     state.loading = false;
                     state.error = !action.payload.status;
                     state.msg = "some error";
@@ -46,11 +51,11 @@ const CouponSlices = createSlice({
             .addCase(fetchALLDiscountTypeCoupon.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchALLDiscountTypeCoupon.fulfilled, (state, action) =>{
-                if(action.payload.status === 200){
+            .addCase(fetchALLDiscountTypeCoupon.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
                     state.loading = false;
                     state.discountType = action.payload.discountTypeList;
-                }else{
+                } else {
                     state.loading = false;
                     state.error = !action.payload.status;
                     state.msg = "some error";
@@ -64,11 +69,11 @@ const CouponSlices = createSlice({
             .addCase(fetchLimitationCoupon.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchLimitationCoupon.fulfilled, (state, action) =>{
-                if(action.payload.status === 200){
+            .addCase(fetchLimitationCoupon.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
                     state.loading = false;
                     state.limitation = action.payload.discountLimitationList;
-                }else{
+                } else {
                     state.loading = false;
                     state.error = !action.payload.status;
                     state.msg = "some error";
@@ -79,56 +84,56 @@ const CouponSlices = createSlice({
                 state.error = true;
                 state.msg = "some Error";
             })
-            .addCase(fetchSaveUpdateCoupon.pending, (state)=>{
+            .addCase(fetchSaveUpdateCoupon.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchSaveUpdateCoupon.fulfilled, (state, action)=>{
-                if(action.payload.status === 200){
+            .addCase(fetchSaveUpdateCoupon.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
                     state.loading = false;
                     state.message = action.payload.message;
-                }else{
+                } else {
                     state.loading = false;
                     state.error = !action.payload.status;
                     state.message = "some Error"
                 }
             })
-            .addCase(fetchSaveUpdateCoupon.rejected, (state)=>{
+            .addCase(fetchSaveUpdateCoupon.rejected, (state) => {
                 state.loading = false;
                 state.error = true;
                 state.message = "someError"
             })
-            .addCase(fetchSingleDataCoupon.pending, (state) =>{
+            .addCase(fetchSingleDataCoupon.pending, (state) => {
                 state.loading = true
             })
-            .addCase(fetchSingleDataCoupon.fulfilled, (state, action)=>{
-                if(action.payload.status === 200){
+            .addCase(fetchSingleDataCoupon.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
                     state.loading = false;
                     state.singleData = action.payload
-                }else{
+                } else {
                     state.loading = false;
-                    state.error =  !action.payload.status;
-                    state.message =  "someError";
-                }
-            })
-            .addCase(fetchSingleDataCoupon.rejected, (state)=>{
-                state.loading =  false;
-                state.error = true;
-                state.message = "someError"
-            })
-            .addCase(fetchDeleteDataCoupon.pending, (state)=>{
-                state.loading = true;
-            })
-            .addCase(fetchDeleteDataCoupon.fulfilled, (state, action) =>{
-                if(action.payload.status === 200){
-                    state.loading = false;
-                    state.message = action.payload.message
-                }else{
-                    state.loading = false;
-                    state.error =  !action.payload.status;
+                    state.error = !action.payload.status;
                     state.message = "someError";
                 }
             })
-            .addCase(fetchDeleteDataCoupon.rejected, (state)=>{
+            .addCase(fetchSingleDataCoupon.rejected, (state) => {
+                state.loading = false;
+                state.error = true;
+                state.message = "someError"
+            })
+            .addCase(fetchDeleteDataCoupon.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchDeleteDataCoupon.fulfilled, (state, action) => {
+                if (action.payload.status === 200) {
+                    state.loading = false;
+                    state.message = action.payload.message
+                } else {
+                    state.loading = false;
+                    state.error = !action.payload.status;
+                    state.message = "someError";
+                }
+            })
+            .addCase(fetchDeleteDataCoupon.rejected, (state) => {
                 state.loading = false;
                 state.error = true;
                 state.message = "someError"
@@ -136,34 +141,34 @@ const CouponSlices = createSlice({
     }
 });
 
-export const fetchLoginAllDataCoupon = createAsyncThunk('apiAllDataCoupon', async (FranchiseId)=>{
+export const fetchLoginAllDataCoupon = createAsyncThunk('apiAllDataCoupon', async (FranchiseId) => {
     try {
-        const response = await axios.get(`${url}/Coupon/GetAllCoupons/${FranchiseId}`)  
-        return response.data       
+        const response = await axios.get(`${url}/Coupon/GetAllCoupons/${FranchiseId}`)
+        return response.data
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const fetchALLDiscountTypeCoupon = createAsyncThunk('apiAllDiscountCoupon', async ()=>{
+export const fetchALLDiscountTypeCoupon = createAsyncThunk('apiAllDiscountCoupon', async () => {
     try {
-        const response = await axios.get(`${url}/api/CommonApi/GetAllDiscount`)  
-        return response.data       
+        const response = await axios.get(`${url}/api/CommonApi/GetAllDiscount`)
+        return response.data
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const fetchLimitationCoupon = createAsyncThunk('apiAllLimimtationDataCoupon', async ()=>{
+export const fetchLimitationCoupon = createAsyncThunk('apiAllLimimtationDataCoupon', async () => {
     try {
-        const response = await axios.get(`${url}/api/CommonApi/GetAllDiscountLimitation`)  
-        return response.data       
+        const response = await axios.get(`${url}/api/CommonApi/GetAllDiscountLimitation`)
+        return response.data
     } catch (error) {
         throw new Error(error.message)
     }
 });
 
-export const fetchSaveUpdateCoupon = createAsyncThunk("fetchSaveUpdateCoupon", async (saveUpdateData)=>{
+export const fetchSaveUpdateCoupon = createAsyncThunk("fetchSaveUpdateCoupon", async (saveUpdateData) => {
     try {
         const response = await axios.post(`${url}/Coupon/SaveupdateCoupon`, saveUpdateData)
         return response.data
@@ -172,7 +177,7 @@ export const fetchSaveUpdateCoupon = createAsyncThunk("fetchSaveUpdateCoupon", a
     }
 });
 
-export const fetchSingleDataCoupon = createAsyncThunk("fetchSingleDataCoupon", async (CouponId)=>{
+export const fetchSingleDataCoupon = createAsyncThunk("fetchSingleDataCoupon", async (CouponId) => {
     try {
         const response = await axios.get(`${url}/Coupon/GetSingleCoupon/${CouponId}`)
         return response.data
@@ -181,16 +186,16 @@ export const fetchSingleDataCoupon = createAsyncThunk("fetchSingleDataCoupon", a
     }
 });
 
-export const fetchDeleteDataCoupon =  createAsyncThunk("fetchDeletedIDCoupon", async (id)=>{
+export const fetchDeleteDataCoupon = createAsyncThunk("fetchDeletedIDCoupon", async (id) => {
     let data = JSON.stringify({
-       "couponID": id
+        "couponID": id
     });
     try {
         const response = await axios.delete(`${url}/Coupon/DeleteCouponDetails`, {
-            headers:{
+            headers: {
                 'Content-Type': 'application/json',
             },
-            data : data
+            data: data
         })
         return response.data
     } catch (error) {
@@ -199,4 +204,4 @@ export const fetchDeleteDataCoupon =  createAsyncThunk("fetchDeletedIDCoupon", a
 });
 
 export default CouponSlices.reducer;
-export const {resetStates} = CouponSlices.actions;
+export const { resetStates, searchState } = CouponSlices.actions;

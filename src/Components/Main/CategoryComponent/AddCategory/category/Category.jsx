@@ -2,21 +2,24 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Buttons from '../../../ProductComponent/Buttons/NewButtons';
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../../Store/Slice/NavSlices';
-
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchSaveUpdateCategory, fetchEditCategory, fetchParentCategory, resetStates } from "../../../../../Store/Slice/CategorySlices";
+import { fetchSaveUpdateCategory, fetchEditCategory, resetStates, fetchApiDataCategory } from "../../../../../Store/Slice/CategorySlices";
 import verifyToken from '../../../../SignIn/verifyToken';
 
 
 
-const Categoryform = () => {
-    const Navigate = useNavigate()
+const Categoryform = ({ setAlert }) => {
+    const dispatch = useDispatch();
+    dispatch(navTitle("Category"));
+    const navigate = useNavigate()
     const edit = useParams()
     const loginToken = verifyToken()
-
     const editData = useSelector((state) => state.categorySlices.singleData)
     const categoryDatas = useSelector(state => state.categorySlices.data)
+
+    console.log("check message cate", categoryDatas);
     
+
     const [categoryData, setCategoryData] = useState({
         categoryName: "",
         parentCategoryId: 0,
@@ -26,7 +29,7 @@ const Categoryform = () => {
     })
 
     useEffect(() => {
-        dispatch(fetchParentCategory(loginToken.userID))
+        dispatch(fetchApiDataCategory(loginToken.userID))
         if (edit.id != undefined) {
             dispatch(fetchEditCategory(edit.id))
         }
@@ -51,9 +54,6 @@ const Categoryform = () => {
         }
     }, [editData])
 
-
-
-
     const changeHandler = useCallback((e) => {
         setCategoryData(
             {
@@ -65,7 +65,7 @@ const Categoryform = () => {
     )
 
     const cancelHandler = () => {
-        Navigate(`/categorytable`)
+        navigate(`/dashboard/categorytable`)
     }
 
     const toppingAllowedHandler = useCallback(() => {
@@ -74,7 +74,7 @@ const Categoryform = () => {
         [categoryData],
     )
 
-    const submitHandler = useCallback(async (event) => {
+    const submitHandler = async (event) => {
         event.preventDefault();
 
         let categorySaveUpdateData
@@ -95,22 +95,23 @@ const Categoryform = () => {
                 parentUserId: loginToken.parentUserId
             }
         }
-        dispatch(fetchSaveUpdateCategory(categorySaveUpdateData))
+        const response = await dispatch(fetchSaveUpdateCategory(categorySaveUpdateData));
         dispatch(resetStates())
 
-        Navigate(`/categorytable`)
+        if (response.payload.status === 200) {
+            navigate(`/dashboard/categorytable`)
+            setAlert({ type: "success", message: !edit.id ? "Category save successfully" : "Category update successfully"})
+            setCategoryData({
+                categoryName: "",
+                parentCategoryId: "",
+                isActive: false
+            })
+        } else {
+            setAlert({ type: "error", message: response.payload.message })
+        }
+    }
 
-        setCategoryData({
-            categoryName: "",
-            parentCategoryId: "",
-            isActive: false
-        })
-    },
-        [categoryData],
-    )
 
-    const dispatch = useDispatch();
-    dispatch(navTitle("Category"));
 
     const { categoryName, parentCategoryId } = categoryData
     return (
@@ -142,7 +143,7 @@ const Categoryform = () => {
                             <select
                                 className="form-select "
                                 name='parentCategoryId'
-                                value={parentCategoryId}
+                                value={categoryData.parentCategoryId}
                                 onChange={changeHandler}
                                 id="taxClass"
                             >
@@ -186,46 +187,3 @@ const Categoryform = () => {
     )
 }
 export default Categoryform;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const submitHandler = async (event) => {
-//     event.preventDefault();
-// const categoryiesdata = { ...categoryData };
-// console.log("cllllickkkkkkkk");
-
-// url = `${url}/category/SaveupdateCategory`
-// const datas = {
-//     categoryName: categoryiesdata.categoryName,
-//     parentCategoryId: parseInt(categoryiesdata.parentCategoryId),
-//     isActive: categoryiesdata.isActive,
-//     categoryId: Object.keys(edit).length < 1 ? 0 : parseInt(categoryiesdata.categoryId),
-//     franchiseID: 0,
-//     displayOrder: 0,
-//     franchiseID: 0
-// }
-
-// console.log("data ", datas);
-// const result = await axios.post(url, datas)
-// console.log(result);
-// Navigate(`/categorytable`)
-
-// setCategoryData({
-//     categoryName: "",
-//     parentCategoryId
-//         : "",
-//     isActive: false
-// })

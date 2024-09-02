@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import images from '../../../../../assets/images';
 import { useNavigate } from "react-router-dom"
-import Spinner from '../../../../Spinner';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchSingleApiData, deleteSingleApiData, resetStates } from '../../../../../Store/Slice/VariantSlices';
 import { fetchApiData } from '../../../../../Store/Slice/VariantSlices';
@@ -82,7 +81,7 @@ function VariantTable({ setAlert }) {
                                     <td>{item.isActive.toString()}</td>
                                     <td>
                                         <div className="productAction__buttons d-flex">
-                                            <span><img src={images.editIcon} alt="Edit Icon" onClick={() => (dispatch(fetchSingleApiData(item.variantId), navigate(`/variant_form/${item.variantId}`)))} /></span>
+                                            <span><img src={images.editIcon} alt="Edit Icon" onClick={() => (dispatch(fetchSingleApiData(item.variantId), navigate(`/dashboard/variant_form/${item.variantId}`)))} /></span>
                                             <span><img src={images.deleteIcon} alt="Delete Icon" onClick={() => (setDeleteModal({ check: true, id: item.variantId }), dispatch(resetStates()))} /></span>
                                         </div>
                                     </td>

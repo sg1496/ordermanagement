@@ -4,71 +4,39 @@ import { useDispatch } from 'react-redux';
 import { fetchLoginPage } from '../../Store/Slice/LoginSlices';
 import { useNavigate } from 'react-router-dom';
 
-// import { TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Typography, Button } from '@mui/material'
-// import {VisibilityIcon, VisibilityOffIcon} from '@mui/icons-material';
-// import { orange, grey } from '@mui/material/colors'
-// import Button from '@mui/material/Button';
-
-const Login = () => {
+const Login = ({ setAlert }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [showPassword, setShowPassword] = useState(false);
-    const [isValid, setIsValid] = useState(false);
     const [textarr, settextarr] = useState({
         userName: "",
         password: ""
     });
 
-    // console.log(textarr)
-
-
-
-    useEffect(() => {
-
-        if (localStorage.getItem('token')) {
-            navigate(`/`)
-        } else {
-            navigate(`/login`)
-        }
-        // console.log("ttt", localStorage.getItem('token'));
-
-    }, [localStorage.getItem('token')])
-
-
-
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    // const handleMouseDownPassword = (event) => {
-    //     event.preventDefault();
-    // };
-
-
 
     const ChangeHandler = (e) => {
         const name = e.target.name;
         const value = e.target.value;
         settextarr({ ...textarr, [name]: value })
-
-
-
     }
 
-    const submitHandler = (e) => {
+    const submitHandler = async (e) => {
         e.preventDefault();
-        // console.log("loging save id")
-
-
         const data = { ...textarr }
-        // console.log("loging save id", data)
-        dispatch(fetchLoginPage(data))
-        navigate(`/localityTable`)
+        const response = await dispatch(fetchLoginPage(data));
+
+        if (response.payload.token) {
+            setAlert({ type: "success", message: "Login successfully" })
+            navigate(`/dashboard`)
+        } else {
+            navigate(`/login`)
+            setAlert({ type: "error", message: "please try Again" })
+        }
 
     }
 
-
-    const { userName, password } = textarr
-
-
+    const { userName, password } = textarr;
     return (
         <div>
             <form onSubmit={submitHandler}>

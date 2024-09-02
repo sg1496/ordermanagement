@@ -35,6 +35,7 @@ import Main from './Components/Main/Main';
 import Loginimg from './Components/SignIn/Loginimg';
 import Alerts from './Components/utils/alertMessage';
 import { useSelector } from 'react-redux';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
   const [alert, setAlert] = useState(null);
@@ -43,57 +44,59 @@ function App() {
   return (
     <div className='mainDiv'>
       <Routes>
-        <Route path='login' element={<Loginimg />} />
-        <Route path='/' element={<Main />}>
-          <Route index element={<LocalityMain  setAlert={setAlert}/>} />
-          <Route path='localityTable' element={<LocalityMain setAlert={setAlert} />} />
-          <Route path='locality_form' element={<LocalityForm  setAlert={setAlert}/>} />
-          <Route path='locality_form/:id' element={<LocalityForm setAlert={setAlert} />} />
-          <Route path='product' element={<Product setAlert={setAlert}/>} />
-          <Route path="toppingform" element={<ToppingForm setAlert={setAlert}/>} />
-          <Route path='toppingform/:id' element={<ToppingForm setAlert={setAlert}/>} />
-          <Route path="toppings" element={<Toppings setAlert={setAlert}/>} />
-          <Route path="categories" element={<Categories setAlert={setAlert}/>} />
-          <Route path='categorytable' element={<Categorytable setAlert={setAlert}/>} />
-          <Route path='supplierform' element={<SupplierForm setAlert={setAlert}/>} />
-          <Route path='supplierform/:id' element={<SupplierForm setAlert={setAlert}/>} />
-          <Route path='mainsuppliertable' element={<Mainsuppliertable setAlert={setAlert}/>} />
-          <Route path='maincouponsform' element={<MainCouponsform setAlert={setAlert}/>} />
-
-          <Route path='managetable' element={<ManageTable setAlert={setAlert}/>} />
-          <Route path='manageuserform' element={<ManageuserForm setAlert={setAlert} />} />
-          <Route path='manageuserform/:id' element={<ManageuserForm setAlert={setAlert} />} />
-          <Route path='manageroleform' element={<ManageRoleForm setAlert={setAlert}/>} />
-          <Route path='manageroleform/:id' element={<ManageRoleForm setAlert={setAlert}/>} />
-          <Route path='manageRoleTable' element={<Manage setAlert={setAlert}/>} />
-          <Route path='combotable' element={<ComboTable setAlert={setAlert}/>} />
-          <Route path='comboform' element={<ComboForm setAlert={setAlert}/>} />
-          <Route path='variant_table' element={<VariantsMain setAlert={setAlert} />} />
-          <Route path='variant_form' element={<Variantform setAlert={setAlert} />} />
-          <Route path='variant_form/:id' element={<Variantform setAlert={setAlert} />} />
-
-
-          <Route path='add-product' element={<AddProduct setAlert={setAlert}/>}>
-            <Route index element={<ProductForm setAlert={setAlert}/>} />
-            <Route path='productform' element={<ProductForm setAlert={setAlert}/>} />
-            <Route path='productform/:id' element={<ProductForm setAlert={setAlert}/>} />
-          </Route>
+        <Route index element={<Loginimg setAlert={setAlert} />} />
+        <Route path='login' element={<Loginimg setAlert={setAlert} />} />
+        <Route path='/dashboard' element={<ProtectedRoute />}>
+          <Route path='' element={<Main />}>
+            <Route index element={<LocalityMain setAlert={setAlert} />} />
+            <Route path='localityTable' element={<LocalityMain setAlert={setAlert} />} />
+            <Route path='locality_form' element={<LocalityForm setAlert={setAlert} />} />
+            <Route path='locality_form/:id' element={<LocalityForm setAlert={setAlert} />} />
+            <Route path='product' element={<Product setAlert={setAlert} />} />
+            <Route path="toppingform" element={<ToppingForm setAlert={setAlert} />} />
+            <Route path='toppingform/:id' element={<ToppingForm setAlert={setAlert} />} />
+            <Route path="toppings" element={<Toppings setAlert={setAlert} />} />
+            <Route path="categories" element={<Categories setAlert={setAlert} />} />
+            <Route path='categorytable' element={<Categorytable setAlert={setAlert} />} />
+            <Route path='supplierform' element={<SupplierForm setAlert={setAlert} />} />
+            <Route path='supplierform/:id' element={<SupplierForm setAlert={setAlert} />} />
+            <Route path='mainsuppliertable' element={<Mainsuppliertable setAlert={setAlert} />} />
+            <Route path='maincouponsform' element={<MainCouponsform setAlert={setAlert} />} />
+            <Route path='managetable' element={<ManageTable setAlert={setAlert} />} />
+            <Route path='manageuserform' element={<ManageuserForm setAlert={setAlert} />} />
+            <Route path='manageuserform/:id' element={<ManageuserForm setAlert={setAlert} />} />
+            <Route path='manageroleform' element={<ManageRoleForm setAlert={setAlert} />} />
+            <Route path='manageroleform/:id' element={<ManageRoleForm setAlert={setAlert} />} />
+            <Route path='manageRoleTable' element={<Manage setAlert={setAlert} />} />
+            <Route path='combotable' element={<ComboTable setAlert={setAlert} />} />
+            <Route path='comboform' element={<ComboForm setAlert={setAlert} />} />
+            <Route path='variant_table' element={<VariantsMain setAlert={setAlert} />} />
+            <Route path='variant_form' element={<Variantform setAlert={setAlert} />} />
+            <Route path='variant_form/:id' element={<Variantform setAlert={setAlert} />} />
 
 
-          <Route path='settings' element={<Settings setAlert={setAlert}/>}>
-            <Route index element={<GeneralForm setAlert={setAlert}/>} />
-            <Route path='generalform' element={<GeneralForm setAlert={setAlert}/>} />
-            <Route path='storedetails' element={<StoreDetails setAlert={setAlert}/>} />
-            <Route path='receiptformat' element={<ReceiptFormat setAlert={setAlert}/>} />
-            <Route path='rewardprogram' element={<RewardProgram setAlert={setAlert}/>} />
-          </Route>
+            <Route path='add-product' element={<AddProduct setAlert={setAlert} />}>
+              <Route index element={<ProductForm setAlert={setAlert} />} />
+              <Route path='productform' element={<ProductForm setAlert={setAlert} />} />
+              <Route path='productform/:id' element={<ProductForm setAlert={setAlert} />} />
+            </Route>
 
 
-          <Route path='add-category/category' element={<Category setAlert={setAlert}/>} />
-          <Route path='add-category' element={<AddCategory setAlert={setAlert}/>}>
-            <Route index element={<Category setAlert={setAlert}/>} />
-            <Route path='category/:id' element={<Category setAlert={setAlert}/>} />
-            <Route path='products' element={<Products setAlert={setAlert}/>} />
+            <Route path='settings' element={<Settings setAlert={setAlert} />}>
+              <Route index element={<GeneralForm setAlert={setAlert} />} />
+              <Route path='generalform' element={<GeneralForm setAlert={setAlert} />} />
+              <Route path='storedetails' element={<StoreDetails setAlert={setAlert} />} />
+              <Route path='receiptformat' element={<ReceiptFormat setAlert={setAlert} />} />
+              <Route path='rewardprogram' element={<RewardProgram setAlert={setAlert} />} />
+            </Route>
+
+
+            <Route path='add-category/category' element={<Category setAlert={setAlert} />} />
+            <Route path='add-category' element={<AddCategory setAlert={setAlert} />}>
+              <Route index element={<Category setAlert={setAlert} />} />
+              <Route path='category/:id' element={<Category setAlert={setAlert} />} />
+              <Route path='products' element={<Products setAlert={setAlert} />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

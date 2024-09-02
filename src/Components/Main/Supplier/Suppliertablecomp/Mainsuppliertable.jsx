@@ -5,14 +5,14 @@ import SupplierTable from '../SupplierTable/Suppliertable';
 import { useDispatch } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
 
-const Mainsuppliertable = () => {
+const Mainsuppliertable = ({setAlert}) => {
     const dispatch = useDispatch()
     dispatch(navTitle("Suppliers"))
     return (
         <>
             <div className="productOuter p-3">
                 <SupplierTablesearch />
-                <SupplierTable />
+                <SupplierTable setAlert={setAlert} />
             </div>
         </>
     )

@@ -3,7 +3,7 @@ import LocalitySearch from './LocalitySearch/LocalitySearch';
 import LocalityTable from './LocalityTable/LocalityTable';
 import { useDispatch } from 'react-redux';
 // import { navTitle } from '../../../../Store/Slice/NavSlices';
-const LocalityMain= () => {
+const LocalityMain= ({setAlert}) => {
     // const dispatch = useDispatch()
     // dispatch(navTitle("Locality"))
 
@@ -11,7 +11,7 @@ const LocalityMain= () => {
         <>
             <div className="productOuter p-3">
                 <LocalitySearch />
-                <LocalityTable />
+                <LocalityTable setAlert={setAlert}/>
             </div>
         </>
     )

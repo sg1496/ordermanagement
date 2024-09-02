@@ -4,43 +4,32 @@ import ManageRoleTable from './ManageRoleTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
 import Buttons from '../../ProductComponent/Buttons/NewButtons';
-// import { fetchParentCategory } from '../../../../Store/Slice/CategorySlices';
 import { useNavigate, useParams } from 'react-router-dom';
-import { fetchSaveUpdateDataRole, fetchSingleEditDataRole,resetStates  } from '../../../../Store/Slice/ManageRoleSlices';
+import { fetchSaveUpdateDataRole, fetchSingleEditDataRole, resetStates } from '../../../../Store/Slice/ManageRoleSlices';
 import verifyToken from '../../../SignIn/verifyToken';
 
-const ManageRoleForm = (props) => {
-    const Navigate = useNavigate();
+const ManageRoleForm = ({ setAlert }) => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     dispatch(navTitle("Manage Role Form"));
     const edit = useParams();
     const loginToken = verifyToken()
- 
-    const loginUser = useSelector(login=>login.LoginSlices.data)
-    // console.log(" first ddddddddddddddddddta", loginUser)
- 
+    const loginUser = useSelector(login => login.LoginSlices.data)
+
     const [manageRoleData, setManageRoleData] = useState({
         roleName: "",
         roleLevel: "",
-        franchiseId:"",
-        isAdmin:false,
+        franchiseId: "",
+        isAdmin: false,
         multiList: [],
     })
 
-    // const parentCategory = useSelector((parent) => parent.categorySlices.parentCategories)
     const manageRoleSingleData = useSelector((roleSingleData) => roleSingleData.ManageRoleSlices.singleData)
-    // console.log("firstddddddddddddddddddddddddddddddddddddmmmm", manageRoleSingleData)
-
-    // useEffect(() => {
-    //     dispatch(fetchParentCategory(loginToken.userID))
-
-    // }, [])
 
     useEffect(() => {
         if (edit.id != undefined) {
             dispatch(fetchSingleEditDataRole(edit.id))
         }
-
     }, [edit])
 
     useEffect(() => {
@@ -49,22 +38,18 @@ const ManageRoleForm = (props) => {
         }) : setManageRoleData({
             roleName: manageRoleSingleData.roleSingleList[0].roleName,
             roleLevel: manageRoleSingleData.roleSingleList[0].roleLevel,
-            isAdmin:  manageRoleSingleData.roleSingleList[0].isAdmin,
-            multiList:  manageRoleSingleData.multiList,
+            isAdmin: manageRoleSingleData.roleSingleList[0].isAdmin,
+            multiList: manageRoleSingleData.multiList,
         })
         if (!edit.id) {
             setManageRoleData({
                 roleName: "",
                 roleLevel: "",
                 isAdmin: false,
-                multiList:[]
+                multiList: []
             })
         }
     }, [manageRoleSingleData])
-
-
-// console.log("check the state code in role function", manageRoleData )
-
 
     const changeHandler = (e) => {
         setManageRoleData({
@@ -77,26 +62,23 @@ const ManageRoleForm = (props) => {
         setManageRoleData({ ...manageRoleData, isAdmin: !manageRoleData.isAdmin })
     }
 
-    const manageRoleSendHandler =(data)=>{ 
-        // console.log( "dddddddddddddata role", data)
-        const datahandel =[]
-        data?.map((item)=> { 
+    const manageRoleSendHandler = (data) => {
+        const datahandel = []
+        data?.map((item) => {
             datahandel.push(item.select)
         })
         setManageRoleData({ ...manageRoleData, multiList: datahandel })
     }
 
-// -----------------------------------------------------Submit---------------------------------------------------------------
+    const onSubmit = async (e) => {
+        e.preventDefault()
 
-    const onSubmit = (e) => {
-        e.preventDefault()                  
-        
         let roleData;
         if (Object.keys(edit).length < 1) {
             roleData = {
                 ...manageRoleData,
                 isAdmin: Number(manageRoleData.isAdmin),
-                franchiseId:loginUser?.userDetails?.userID || loginToken.userID,
+                franchiseId: loginUser?.userDetails?.userID || loginToken.userID,
                 parentUserId: loginToken.parentUserId,
             }
         }
@@ -105,18 +87,29 @@ const ManageRoleForm = (props) => {
                 ...manageRoleData,
                 roleID: parseInt(edit.id),
                 isAdmin: Number(manageRoleData.isAdmin),
-                franchiseId:loginUser?.userDetails?.userID || loginToken.userID,
-                parentUserId:loginToken.parentUserId,
+                franchiseId: loginUser?.userDetails?.userID || loginToken.userID,
+                parentUserId: loginToken.parentUserId,
             }
         }
-        // console.log("ssssset data", roleData)
-        dispatch(fetchSaveUpdateDataRole(roleData))
+        const response = await dispatch(fetchSaveUpdateDataRole(roleData))
         dispatch(resetStates())
-        Navigate(`/manageRoleTable`)
+
+        if (response.payload.status === 200) {
+            setAlert({ type: "success", message: !edit.id ? "Manage Role save successfully" : "Manage Role Update successfully" })
+            navigate(`/dashboard/manageRoleTable`)
+            setManageRoleData({
+                roleName: "",
+                roleLevel: "",
+                isAdmin: false,
+                multiList: []
+            })
+        }else{
+            setAlert({type:"error", message: "some issue"})
+        }
     }
 
-    const cancelHandler = () => {
-        Navigate(`/manageRoleTable`)
+    const cancelHandler = () => {        
+        navigate(`/dashboard/manageRoleTable`)
     }
 
 
@@ -155,7 +148,7 @@ const ManageRoleForm = (props) => {
                                 className="form-control"
                                 placeholder="Level"
                                 name='roleLevel'
-                                value={roleLevel && roleLevel }
+                                value={roleLevel && roleLevel}
                                 onChange={changeHandler}
                                 required
                             />
@@ -176,13 +169,13 @@ const ManageRoleForm = (props) => {
                         </div>
 
                     </div>
-                    <ManageRoleTable                    
+                    <ManageRoleTable
                         manageRoleSendHandler={manageRoleSendHandler}
                         passManangeRoleData={manageRoleData}
                     />
                     <div>
 
-                        <Buttons fname="Save"
+                        <Buttons fname={!edit.id ?"Save" : "Update"}
                             Sname="Cancel"
                             cancelHandler={cancelHandler}
                         />

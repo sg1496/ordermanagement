@@ -15,7 +15,7 @@ function Variantform({ setAlert }) {
     const selectordatas = useSelector((state) => state.variantSlices.singleData)
     const loginToken = verifyToken()
     const edit = useParams()
-    const Navigate = useNavigate()
+    const navigate = useNavigate()
     const dispatch = useDispatch();
 
     dispatch(navTitle("Variant-Details"));
@@ -65,36 +65,39 @@ function Variantform({ setAlert }) {
     const toggleChange = (e) => {
         setData({ ...data, isActive: !data.isActive })
     }
-    const onSubmit = (event) => {
+
+    const onSubmit = async (event) => {
         event.preventDefault();
-        try {
-            let newdata
-            if (Object.keys(edit).length < 1) {
-                newdata = {
-                    ...data,
-                    variantLevel: parseInt(data.variantLevel),
-                    parentUserId: loginToken.parentUserId,
-                    franchiseID: loginToken.userID
-                }
-            } else {
-                newdata = {
-                    ...data,
-                    variantLevel: parseInt(data.variantLevel),
-                    parentUserId: loginToken.parentUserId,
-                    franchiseID: loginToken.userID,
-                    variantId: parseInt(edit.id)
-                }
+
+        let newdata
+        if (Object.keys(edit).length < 1) {
+            newdata = {
+                ...data,
+                variantLevel: parseInt(data.variantLevel),
+                parentUserId: loginToken.parentUserId,
+                franchiseID: loginToken.userID
             }
+        } else {
+            newdata = {
+                ...data,
+                variantLevel: parseInt(data.variantLevel),
+                parentUserId: loginToken.parentUserId,
+                franchiseID: loginToken.userID,
+                variantId: parseInt(edit.id)
+            }
+        }
+        const response = await dispatch(saveUpdateVariant(newdata))
+        dispatch(resetStates())
+
+        if (response.payload.status === 200) {
             setAlert({ type: "success", message: !edit.id ? 'Variant added successfully' : 'Variant updated successfully' });
-            dispatch(saveUpdateVariant(newdata))
-            dispatch(resetStates())
-            Navigate(`/variant_table`)
+            navigate(`/dashboard/variant_table`)
             setData({
                 variantName: "",
                 variantLevel: ""
             })
-        } catch (error) {
-            console.log("check variant error", error);
+        } else {
+            setAlert({ type: "error", message: response.payload.message });
         }
     }
 
@@ -106,7 +109,7 @@ function Variantform({ setAlert }) {
             loginUserID: 0,
             franchiseID: 0
         })
-        Navigate(`/variant_table`)
+        navigate(`/dashboard/variant_table`)
     }
 
     return (
