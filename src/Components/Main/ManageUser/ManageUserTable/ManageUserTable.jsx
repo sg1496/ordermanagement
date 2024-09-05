@@ -60,17 +60,7 @@ function ManageUserTable({ setAlert }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {!manageLoginUserData ?
-                            <tr>
-                                <td colSpan={3}>
-                                    <div className='d-flex justify-content-center align-items-center'>
-                                        <Stack>
-                                            <CircularProgress />
-                                        </Stack>
-                                    </div>
-                                </td>
-                            </tr>
-                            :
+                        {manageLoginUserData?.length > 0 ? (
                             manageLoginUserData?.slice((page - 1) * pagePerItem, page * pagePerItem)?.map((item, index) => {
                                 return <tr key={index}>
                                     <td scope="row" >{item.email}</td>
@@ -94,7 +84,21 @@ function ManageUserTable({ setAlert }) {
                                         </div>
                                     </td>
                                 </tr>
-                            })
+                            })) : (
+                            <tr>
+                                <td colSpan={3}>
+                                    <div className='d-flex justify-content-center align-items-center'>
+                                        {manageLoginUserData?.length ? (
+                                            <p className='empty_message'>Your User list is currently empty</p>
+                                        ) : (
+                                            <Stack>
+                                                <CircularProgress />
+                                            </Stack>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        )
                         }
                     </tbody>
                 </table>

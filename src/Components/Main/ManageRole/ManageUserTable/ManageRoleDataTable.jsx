@@ -9,7 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { fetchDelDataRole, fetchLoginDataRolepage, fetchSingleEditDataRole, resetStates } from '../../../../Store/Slice/ManageRoleSlices';
 import AlertDialog from '../../../utils/DeleteConfirmationAlert';
 
-const ManageRoleDataTable = ({setAlert}) => {
+const ManageRoleDataTable = ({ setAlert }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const loginToken = verifyToken();
@@ -32,10 +32,10 @@ const ManageRoleDataTable = ({setAlert}) => {
         setDeleteModal({ check: false })
     }
 
-    const deleteHandler = () =>{
+    const deleteHandler = () => {
         dispatch(fetchDelDataRole(deleteModal.id))
         setDeleteModal({ check: false, id: null });
-        setAlert({type: "success", message: "ManageRole Delete Successfully"})
+        setAlert({ type: "success", message: "ManageRole Delete Successfully" })
     }
 
     return (
@@ -58,17 +58,7 @@ const ManageRoleDataTable = ({setAlert}) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {!manageLoginRoleData ?
-                            <tr>
-                                <td colSpan={2}>
-                                    <div className='d-flex justify-content-center align-items-center'>
-                                        <Stack>
-                                            <CircularProgress color="secondary" />
-                                        </Stack>
-                                    </div>
-                                </td>
-                            </tr>
-                            :
+                        {manageLoginRoleData?.length > 0 ? (
                             manageLoginRoleData?.slice((page - 1) * pagePerItem, page * pagePerItem)?.map((item, index) => {
                                 return <tr key={index}>
                                     <td scope="row" >{item.roleName}</td>
@@ -86,13 +76,27 @@ const ManageRoleDataTable = ({setAlert}) => {
                                                 <img
                                                     src={images.deleteIcon}
                                                     alt="Delete Icon"
-                                                    onClick={() => (setDeleteModal({check: true , id: item.roleID}), dispatch(resetStates()))}
+                                                    onClick={() => (setDeleteModal({ check: true, id: item.roleID }), dispatch(resetStates()))}
                                                 />
                                             </span>
                                         </div>
                                     </td>
                                 </tr>
-                            })
+                            })) : (
+                            <tr>
+                                <td colSpan={2}>
+                                    <div className='d-flex justify-content-center align-items-center'>
+                                        {manageLoginRoleData?.length >= 0 ? (
+                                            <p className='empty_message'>Your Role list is currently empty</p>
+                                        ) : (
+                                            <Stack>
+                                                <CircularProgress color="secondary" />
+                                            </Stack>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        )
                         }
                     </tbody>
                 </table>

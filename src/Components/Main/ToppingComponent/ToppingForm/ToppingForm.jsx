@@ -20,6 +20,7 @@ const ToppingForm = ({ setAlert }) => {
 
     // Send Data Api state
     const [orderType, setOrderTypeData] = useState([])
+    const [checktrue, setchecktrue] = useState(false)
 
     const [data, setData] = useState({
         toppingName: "",
@@ -160,7 +161,7 @@ const ToppingForm = ({ setAlert }) => {
 
         setOrderTypeData(updatedOrderType);
     };
-
+    
     const submitHandler = async (event) => {
         event.preventDefault();
 
@@ -173,51 +174,55 @@ const ToppingForm = ({ setAlert }) => {
 
         let ToppingSaveUpdateData
 
-        if (Object.keys(edit).length < 1) {
-            ToppingSaveUpdateData = {
-                ...data,
-                parentUserId: loginToken.parentUserId,
-                franchiseId: loginToken.userID,
-                foodTypeId: parseInt(data.foodTypeId),
-                measurementTypeId: parseInt(data.measurementTypeId),
-                orderTypes: newArr
-            }
+        if (data.measurementTypeId == "" || null) {
+            setchecktrue(true)
+            setAlert({ type: "error", message: "No Select Measurement" });
         } else {
 
-            ToppingSaveUpdateData = {
-                ...data,
-                parentUserId: loginToken.parentUserId,
-                franchiseId: loginToken.userID,
-                toppingId: parseInt(edit.id),
-                foodTypeId: parseInt(data.foodTypeId),
-                measurementTypeId: parseInt(data.measurementTypeId),
-                orderTypes: newArr
-            }
-        }
-        const response = await dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
-        dispatch(resetStates())
+            if (Object.keys(edit).length < 1) {
+                ToppingSaveUpdateData = {
+                    ...data,
+                    parentUserId: loginToken.parentUserId,
+                    franchiseId: loginToken.userID,
+                    foodTypeId: parseInt(data.foodTypeId),
+                    measurementTypeId: parseInt(data.measurementTypeId),
+                    orderTypes: newArr
+                }
+            } else {
 
-        if (response.payload.status === 200) {
-            navigate(`/dashboard/toppings`)
-            setAlert({ type: "success", message: edit.id ? "Topping Update Successfully" : "Topping Create Successfully" })
-            setData({
-                toppingName: "",
-                toppingAbbr: "",
-                isActive: false,
-                isToppingAllowed: false,
-                foodTypeId: "",
-                measurementTypeId: "",
-                isCombination: false,
-                categoryId: 9,
-                orderTypes: [],
-                toppingsPrices: [],
-                toppingCombinatiomQuantityList: []
-            })
-        } else {
-            setAlert({ type: "error", message: response.payload.message })
+                ToppingSaveUpdateData = {
+                    ...data,
+                    parentUserId: loginToken.parentUserId,
+                    franchiseId: loginToken.userID,
+                    toppingId: parseInt(edit.id),
+                    foodTypeId: parseInt(data.foodTypeId),
+                    measurementTypeId: parseInt(data.measurementTypeId),
+                    orderTypes: newArr
+                }
+            }
+            const response = await dispatch(fetchSaveUpdateToppings(ToppingSaveUpdateData))
+            dispatch(resetStates())
+            if (response.payload.status === 200) {
+                navigate(`/dashboard/toppings`)
+                setAlert({ type: "success", message: edit.id ? "Topping Update Successfully" : "Topping Create Successfully" })
+                setData({
+                    toppingName: "",
+                    toppingAbbr: "",
+                    isActive: false,
+                    isToppingAllowed: false,
+                    foodTypeId: "",
+                    measurementTypeId: "",
+                    isCombination: false,
+                    categoryId: 9,
+                    orderTypes: [],
+                    toppingsPrices: [],
+                    toppingCombinatiomQuantityList: []
+                })
+            } else {
+                setAlert({ type: "error", message: response.payload.message })
+            }
         }
     }
-
 
     const cancelHandler = () => {
         navigate(`/dashboard/toppings`)
@@ -330,17 +335,18 @@ const ToppingForm = ({ setAlert }) => {
 
                     <div className="addProduct__basicForm mb-4 d-flex">
                         <div className="field_width">
+
                             <label htmlFor="taxClass" className="form-label inputForm__label" >
                                 Measurement Type:
                                 <span className="formRequired">*</span>
                             </label>
-                            <select className="form-select "
+                            <select className={`form-select ${checktrue ? "error-red-border" : ""}`}
                                 id="taxClass"
                                 name='measurementTypeId'
                                 value={measurementTypeId}
                                 onChange={(e) => changeHandler(e)}
                             >
-                                <option defaultValue>Select Category</option>
+                                <option value={""}>Select Category</option>
                                 {measurementList && measurementList.map(item => {
                                     return <option
                                         key={item.measurementTypeId}
@@ -350,6 +356,7 @@ const ToppingForm = ({ setAlert }) => {
 
                                 })}
                             </select>
+                            {checktrue ? <p style={{color:"red"}}>Measurement is required</p> : ""}
                         </div>
                     </div>
 

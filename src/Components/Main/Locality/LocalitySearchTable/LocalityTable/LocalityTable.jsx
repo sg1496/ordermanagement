@@ -11,19 +11,19 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import AlertDialog from '../../../../utils/DeleteConfirmationAlert';
 
-const LocalityTable = ({setAlert}) => {
+const LocalityTable = ({ setAlert }) => {
     const dispatch = useDispatch();
     dispatch(navTitle("Locality"))
     const navigate = useNavigate()
     const loginToken = verifyToken()
     const pagePerItem = 10;
 
-    
+
     const localityMessage = useSelector((locality) => locality.LocalitySlices.message);
     const localityAllData = useSelector((locality) => locality.LocalitySlices.loginData);
     const searchdata = useSelector((ser) => ser.LocalitySlices.search)
-    
-    
+
+
 
     const [localityData, setLocalityData] = useState(null);
     const [deleteModal, setDeleteModal] = useState({ check: false, id: null });
@@ -40,7 +40,7 @@ const LocalityTable = ({setAlert}) => {
     };
 
     useEffect(() => {
-        if(!loginToken?.userID) return
+        if (!loginToken?.userID) return
         dispatch(fetchLoginDataLocality(loginToken?.userID))
     }, [localityMessage]);
 
@@ -82,28 +82,32 @@ const LocalityTable = ({setAlert}) => {
                         </tr>
                     </thead>
                     <tbody >
-                        {!localityData ?
-                            <tr>
-                                <td colSpan={2}>
-                                    <div className='d-flex justify-content-center align-items-center'>
-                                        <Stack>
-                                            <CircularProgress color="secondary" />
-                                        </Stack>
-                                    </div>
-
-                                </td>
-                            </tr>
-                            :
+                        {localityData?.length > 0 ? (
                             localityData?.slice((page - 1) * pagePerItem, page * pagePerItem)?.map((item, index) => {
                                 return <tr key={index}>
                                     <td scope="row" >{item.localityName}</td>
                                     <td scope="row"> <div className="productAction__buttons d-flex justify-content-center" >
                                         <span><img src={images.editIcon} alt="Edit Icon" onClick={() => (dispatch(fetchSingleDataLocality(item.localityID)), navigate(`/dashboard/locality_form/${item.localityID}`))} /></span>
-                                        <span><img src={images.deleteIcon} alt="Delete Icon" onClick={() => (setDeleteModal({ check: true, id: item.localityID}), dispatch(resetStates()))} /></span>
+                                        <span><img src={images.deleteIcon} alt="Delete Icon" onClick={() => (setDeleteModal({ check: true, id: item.localityID }), dispatch(resetStates()))} /></span>
                                     </div></td>
 
                                 </tr>
-                            })
+                            })) : (
+                            <tr>
+                                <td colSpan={2}>
+                                    <div className='d-flex justify-content-center align-items-center'>
+                                        {localityData?.length >= 0 ? (
+                                            <p className='empty_message'>Your Locality list is currently empty</p>
+                                        ) : (
+                                            <Stack>
+                                                <CircularProgress color="secondary" />
+                                            </Stack>
+                                        )}
+                                    </div>
+
+                                </td>
+                            </tr>
+                        )
                         }
 
                     </tbody>

@@ -53,6 +53,9 @@ const TableCategory = ({ setAlert }) => {
     setAlert({ type: "success", message: "Category deleted successfully" })
   }
 
+  console.log("check category", categoryDatas);
+  
+
   return (
     <>
       <AlertDialog
@@ -74,33 +77,36 @@ const TableCategory = ({ setAlert }) => {
           </thead>
           <tbody>
 
-            {!categoryData ?
-              <tr>
-                <td colSpan={3}>
-                  <div className='d-flex justify-content-center align-items-center'>
-                    <Stack>
-                      <CircularProgress color="secondary" />
-                    </Stack>
-                  </div>
-                </td>
-              </tr>
-              :
-              categoryData?.slice((page - 1) * pagePerItem, page * pagePerItem)?.map((category, index) => (
-                <tr key={index}>
-                  <td>{category.categoryName}</td>
-                  <td>{category.displayOrder}</td>
-                  <td> <div className="productAction__buttons d-flex">
-                    <span>
-                      <img src={images.editIcon} alt="Edit Icon"
-                        onClick={() => (dispatch(fetchEditCategory(category.categoryId)), navigate(`/dashboard/add-category/category/${category.categoryId}`))}
-                      />
-                    </span>
-                    <span ><img src={images.deleteIcon} alt="Delete Icon" onClick={() => (setDeleteModel({ check: true, id: category.categoryId }), dispatch(resetStates()))} /></span>
-                  </div>
+            {categoryData?.length > 0 ?
+              (
+                categoryData?.slice((page - 1) * pagePerItem, page * pagePerItem)?.map((category, index) => (
+                  <tr key={index}>
+                    <td>{category.categoryName}</td>
+                    <td>{category.displayOrder}</td>
+                    <td> <div className="productAction__buttons d-flex">
+                      <span>
+                        <img src={images.editIcon} alt="Edit Icon"
+                          onClick={() => (dispatch(fetchEditCategory(category.categoryId)), navigate(`/dashboard/add-category/category/${category.categoryId}`))}
+                        />
+                      </span>
+                      <span ><img src={images.deleteIcon} alt="Delete Icon" onClick={() => (setDeleteModel({ check: true, id: category.categoryId }), dispatch(resetStates()))} /></span>
+                    </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3}>
+                    <div className='d-flex justify-content-center align-items-center'>
+                      {categoryData?.length >= 0 ? (
+                        <p className='empty_message'>Your Category list is currently empty</p>
+                      ) : (<Stack>
+                        <CircularProgress color="secondary" />
+                      </Stack>)}
+                    </div>
                   </td>
                 </tr>
-              ))
-            }
+              )}
           </tbody>
         </table>
         <div className='wrapper'>

@@ -63,17 +63,7 @@ function VariantTable({ setAlert }) {
                     </thead>
                     <tbody>
 
-                        {!variantsList ?
-                            <tr>
-                                <td colSpan={4}>
-                                    <div className="d-flex justify-content-center align-items-center">
-                                        <Stack>
-                                            <CircularProgress color="secondary" />
-                                        </Stack>
-                                    </div>
-                                </td>
-                            </tr>
-                            :
+                        {variantsList?.length > 0 ? (
                             variantsList?.slice((page - 1) * pagePerItem, page * pagePerItem)?.map((item, index) => {
                                 return <tr key={index}>
                                     <td scope="row">{item.variantName}</td>
@@ -86,7 +76,21 @@ function VariantTable({ setAlert }) {
                                         </div>
                                     </td>
                                 </tr>
-                            })
+                            })) : (
+                            <tr>
+                                <td colSpan={4}>
+                                    <div className="d-flex justify-content-center align-items-center">
+                                        {variantsList?.length >= 0 ? (
+                                            <p className='empty_message'>Your variant list is currently empty</p>
+                                        ) : (
+                                            <Stack>
+                                                <CircularProgress color="secondary" />
+                                            </Stack>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        )
                         }
                     </tbody>
                 </table>

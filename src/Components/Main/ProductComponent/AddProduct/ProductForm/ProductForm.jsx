@@ -36,8 +36,6 @@ const ProductForm = (props) => {
 
     })
 
-    console.log("finalstate", productFormData)
-
     useEffect(() => {
         if (edit.id != undefined) {
             dispatch(fetchEditProduct(edit.id))
@@ -90,7 +88,6 @@ const ProductForm = (props) => {
     }
 
     const categoriesDataHandler = (data) => {
-        // console.log("check semi final data", data)
         const categoriesList = [];
         data?.map((catagory) => {
             categoriesList.push(catagory.selectcategory)

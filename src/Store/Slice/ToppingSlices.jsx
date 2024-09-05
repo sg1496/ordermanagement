@@ -93,7 +93,6 @@ const ToppingSlices = createSlice({
             })
             .addCase(fetchEditTopping.fulfilled, (state, action) => {
                 if (action.payload.status === 200) {
-                    console.log("======================================================================================", action.payload)
                     state.loading = false;
                     state.singleData = action.payload;
                 }
@@ -205,7 +204,6 @@ export const fetchFoodTypeTopping = createAsyncThunk('api/fetchFoodTypeToppings'
 });
 
 export const fetchDelApiDataToppings = createAsyncThunk('api.fetchDelData', async (id) => {
-    console.log(id);
     let data = JSON.stringify({
         "ToppingId": id
     });
@@ -228,7 +226,6 @@ export const fetchSaveUpdateToppings = createAsyncThunk('api.fetchUpdateSave', a
 
         data.loginUserID = 9;
         const response = await axios.post(`${url}/topping/SaveupdateTopping`, data);
-        console.log("response saveupdate", response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
@@ -236,10 +233,8 @@ export const fetchSaveUpdateToppings = createAsyncThunk('api.fetchUpdateSave', a
 });
 
 export const fetchEditTopping = createAsyncThunk("api.fetchedit", async (id) => {
-    console.log("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiid", id);
     try {
         const response = await axios.get(`${url}/topping/GetSingleTopping/${id}`)
-        console.log(response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)
@@ -269,7 +264,6 @@ export const GetAllOrderType = createAsyncThunk('api/fetchorderTypes', async () 
 export const ToppingCombinationDelete = createAsyncThunk('api/ToppingCombinationDelete', async (id) => {
     try {
         const response = await axios.get(`${url}/topping/DeleteCombinationTopping/${id}`)
-        console.log(response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)

@@ -9,6 +9,7 @@ const initialState = {
     error: null,
     message: null,
     singleData: null,
+    search:""
    
 }
 
@@ -21,10 +22,8 @@ const ProductSlices = createSlice({
             state.error = null;
             state.message = null
         },
-        searchstates(state, action) {
-            state.searchcategory = []
-            const data = state.searchcategory.push(action.payload)
-            console.log("data", data);
+        searchstate: (state, action) => {
+            state.search = action.payload
         },
     },
     extraReducers: (builder) => {
@@ -165,7 +164,6 @@ export const fetchSaveUpdateProduct = createAsyncThunk('api.fetchUpdateSave', as
 });
 
 export const fetchEditProduct = createAsyncThunk("api.fetchedit", async (id) => {
-    console.log(id);
     try {
         const response = await axios.get(`${url}/product/GetSingleProduct/${id}`)
         return response.data
@@ -192,4 +190,4 @@ export const fetchCombinationDelApiDataProduct = createAsyncThunk('api.fetchComb
 
 
 export default ProductSlices.reducer;
-export const { resetStates, searchstates } = ProductSlices.actions;
+export const { resetStates, searchstate } = ProductSlices.actions;

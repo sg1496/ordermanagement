@@ -21,7 +21,7 @@ function Categories(props) {
 
     useEffect(() => {
         // categoryId
-        let subCategoryDataSort = categoryList?.filter(item => item.parentCategoryId == categoryId)
+        let subCategoryDataSort = categoryList?.filter(item => item.categoryId == categoryId)
         console.log("check filter", subCategoryDataSort);
         
         setSubCategoryData(subCategoryDataSort)        

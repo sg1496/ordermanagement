@@ -73,17 +73,7 @@ function SupplierTable({ setAlert }) {
             </tr>
           </thead>
           <tbody>
-            {!supplierData ?
-              <tr>
-                <td colSpan={2}>
-                  <div className='d-flex justify-content-center align-items-center'>
-                    <Stack>
-                      <CircularProgress color="secondary" />
-                    </Stack>
-                  </div>
-                </td>
-              </tr>
-              :
+            {supplierData?.length > 0 ? (
               supplierData?.slice((page - 1) * pagePerItem, page * pagePerItem)?.map((item, index) => {
                 return <tr key={index}>
                   <td scope="row">{item.suppilerName}</td>
@@ -94,7 +84,21 @@ function SupplierTable({ setAlert }) {
                     </div>
                   </td>
                 </tr>
-              })
+              })) : (
+              <tr>
+                <td colSpan={2}>
+                  <div className='d-flex justify-content-center align-items-center'>
+                    {supplierData?.length >= 0 ? (
+                      <p className='empty_message'>Your Supplier list is currently empty</p>
+                    ) : (
+                      <Stack>
+                        <CircularProgress color="secondary" />
+                      </Stack>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            )
             }
           </tbody>
         </table>

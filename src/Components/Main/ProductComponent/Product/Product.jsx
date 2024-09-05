@@ -5,14 +5,14 @@ import ProductTable from './ProductTable/ProductTable';
 import { useDispatch } from 'react-redux';
 import { navTitle } from '../../../../Store/Slice/NavSlices';
 
-function Product() {
+function Product({setAlert}) {
     const dispatch = useDispatch();
     dispatch(navTitle("Products"));
     return (
         <>
             <div className="productOuter p-3">
                 <ProductSearch />
-                <ProductTable />
+                <ProductTable setAlert={setAlert} />
             </div>
         </>
     )

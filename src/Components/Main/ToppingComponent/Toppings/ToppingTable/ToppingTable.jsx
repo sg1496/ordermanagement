@@ -11,7 +11,7 @@ import verifyToken from '../../../../SignIn/verifyToken';
 import AlertDialog from '../../../../utils/DeleteConfirmationAlert';
 
 
-function ToppingTable({setAlert}) {
+function ToppingTable({ setAlert }) {
 
     const navigate = useNavigate()
     const dispatch = useDispatch();
@@ -54,8 +54,8 @@ function ToppingTable({setAlert}) {
 
     const deleteHandler = () => {
         dispatch(fetchDelApiDataToppings(deleteModel.id))
-        setDeleteModel({check: false, id:null})
-        setAlert({type: "success", message: "Topping delete successfully"})    
+        setDeleteModel({ check: false, id: null })
+        setAlert({ type: "success", message: "Topping delete successfully" })
     }
 
     return (
@@ -81,17 +81,7 @@ function ToppingTable({setAlert}) {
                         </tr>
                     </thead>
                     <tbody>
-                        {!filterData ?
-                            <tr>
-                                <td colSpan={6}>
-                                    <div className='d-flex justify-content-center align-items-center'>
-                                        <Stack>
-                                            <CircularProgress color='secondary' />
-                                        </Stack>
-                                    </div>
-                                </td>
-                            </tr>
-                            :
+                        {filterData?.length > 0 ? (
                             filterData?.slice((page - 1) * perPageItem, page * perPageItem)?.map((item, id) => {
                                 return <tr key={id}>
                                     <td scope="row">{item.toppingName}</td>
@@ -110,7 +100,21 @@ function ToppingTable({setAlert}) {
                                         </div>
                                     </td>
                                 </tr>
-                            })
+                            })) : (
+                            <tr>
+                                <td colSpan={6}>
+                                    <div className='d-flex justify-content-center align-items-center'>
+                                        {filterData?.length >= 0 ? (
+                                            <p className='empty_message'>Your topping list is currently empty</p>
+                                        ) : (
+                                            <Stack>
+                                                <CircularProgress color='secondary' />
+                                            </Stack>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        )
                         }
                     </tbody>
                 </table>
