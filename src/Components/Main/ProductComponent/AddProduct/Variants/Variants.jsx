@@ -23,34 +23,47 @@ function Variants(props) {
         dispatch(fetchApiDataToppings(loginToken.userID))
     }, [])
 
+    const [first, setfirst] = useState([])
+
     useEffect(() => {
         const varntdata = []
-        if (variantList && props.productFormState.productVariantList.length > 0) {
+        if (variantList) {
             variantList?.map((item) => {
-                let newItem
+                const newItem = { ...item, selectvariant: { price: 0, variantId: item.variantId, salePrice: 0, toppingId: "", isActive: false } }
+                varntdata.push(newItem)
+            })
+        }
+        setfirst(varntdata)
+    }, [variantList])
+
+
+
+    useEffect(() => {
+        const varntdata = []
+        if (first && props.productFormState.productVariantList.length > 0) {
+            first?.map((item) => {
                 props.productFormState.productVariantList.filter((selectvariant) => {
                     if (selectvariant.variantId === item.variantId) {
-                        newItem = { ...item, selectvariant }
-                        // varntdata.push(newItem)
-                    } 
-                    // else {
-                    //     newItem = { ...item, selectvariant: { price: 0, variantId: item.variantId, salePrice: 0, toppingId: "", isActive: false } }
-                    // }
-                    varntdata.push(newItem)
+                        const newItem = { ...item, selectvariant }
+                        varntdata.push(newItem)
+                    }
                 })
             })
-            console.log("check variant list", varntdata);
 
-            setVariantData(varntdata)
+            const map = new Map([...first, ...varntdata]
+                .map(obj => [obj.variantId, obj]));
+                
+            const mergedArray = Array.from(map.values());
+            setVariantData(mergedArray)
         }
-        else if (variantList) {
-            variantList?.map((item) => {
+        else if (first) {
+            first?.map((item) => {
                 const newItem = { ...item, selectvariant: { price: 0, variantId: item.variantId, salePrice: 0, toppingId: "", isActive: false } }
                 varntdata.push(newItem)
             })
             setVariantData(varntdata)
         }
-    }, [variantList])
+    }, [first])
 
     const changeHandler = (e, id) => {
         let newArr = variantData?.map((item) => {
@@ -75,6 +88,12 @@ function Variants(props) {
 
         props.variantDataHandler(finalVariantData)
     }
+
+
+
+
+
+
 
     return (
         <>
