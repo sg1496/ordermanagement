@@ -13,7 +13,7 @@ function Variants(props) {
     dispatch(navTitle("Add Products"));
 
     const [variantData, setVariantData] = useState([])
-    
+
 
     const variantList = useSelector((variant) => variant.variantSlices.data)
     const toppingList = useSelector((topping) => topping.ToppingSlices.data)
@@ -27,15 +27,20 @@ function Variants(props) {
         const varntdata = []
         if (variantList && props.productFormState.productVariantList.length > 0) {
             variantList?.map((item) => {
-                
+                let newItem
                 props.productFormState.productVariantList.filter((selectvariant) => {
-                    
                     if (selectvariant.variantId === item.variantId) {
-                        const newItem = { ...item, selectvariant }
-                        varntdata.push(newItem)
-                    }
+                        newItem = { ...item, selectvariant }
+                        // varntdata.push(newItem)
+                    } 
+                    // else {
+                    //     newItem = { ...item, selectvariant: { price: 0, variantId: item.variantId, salePrice: 0, toppingId: "", isActive: false } }
+                    // }
+                    varntdata.push(newItem)
                 })
             })
+            console.log("check variant list", varntdata);
+
             setVariantData(varntdata)
         }
         else if (variantList) {
@@ -49,7 +54,7 @@ function Variants(props) {
 
     const changeHandler = (e, id) => {
         let newArr = variantData?.map((item) => {
-           
+
             if (item.variantId === id) {
                 return {
                     ...item,
@@ -67,16 +72,10 @@ function Variants(props) {
         })
         const finalVariantData = newArr.filter((x) => x.selectvariant.toppingId !== "")
         setVariantData(newArr)
-        
+
         props.variantDataHandler(finalVariantData)
     }
 
-
-
-
-
-
-    
     return (
         <>
             <div className='addProduct__variantsTab'>

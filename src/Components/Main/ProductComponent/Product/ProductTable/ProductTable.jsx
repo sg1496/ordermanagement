@@ -15,7 +15,7 @@ const ProductTable = ({ setAlert }) => {
 
     const [page, setPage] = useState(1);
     const [deleteModel, setDeleteModel] = useState({ check: false, id: null });
-    const perPageItem = 1;
+    const perPageItem = 10;
 
     const { data: productList = [], message: productMessage, search: searchtext } = useSelector((state) => state.ProductSlices);
 

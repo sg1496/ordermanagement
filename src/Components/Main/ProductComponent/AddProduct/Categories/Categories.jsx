@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "./Categories.scss";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchApiDataCategory, fetchParentCategory } from '../../../../../Store/Slice/CategorySlices';
+import { fetchApiDataCategory } from '../../../../../Store/Slice/CategorySlices';
 import verifyToken from '../../../../SignIn/verifyToken';
 
 function Categories(props) {
@@ -14,18 +14,8 @@ function Categories(props) {
     }, [])
 
     const [categoryData, setCategoryData] = useState([]);
-    
-    const [categoryId, setCategoryId] = useState('')
-    const [subCategoryData, setSubCategoryData] = useState([])
-    console.log("check data id", categoryId);
+    const [categoryId, setCategoryId] = useState(-1);
 
-    useEffect(() => {
-        // categoryId
-        let subCategoryDataSort = categoryList?.filter(item => item.categoryId == categoryId)
-        console.log("check filter", subCategoryDataSort);
-        
-        setSubCategoryData(subCategoryDataSort)        
-    }, [categoryList, categoryId])
 
 
 
@@ -33,8 +23,10 @@ function Categories(props) {
         const newdata = [];
 
         if (categoryList && props.productFormState.editProductCategory.length > 0) {
-            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(categoryList));
+            let subCategoryDataSort = categoryList?.filter(item => item.parentCategoryId == props?.productFormState?.parentCategoryId)
 
+            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(subCategoryDataSort));
+            console.log("check filter", ToppingDatafinaltemp);
             ToppingDatafinaltemp?.map((item) => {
                 item.IsChecked = false;
                 let dataas;
@@ -47,14 +39,13 @@ function Categories(props) {
                         dataas = { ...item, selectcategory: { categoryId: item.categoryId } };
                     }
                 });
-
                 dataas = { ...dataas };
                 newdata.push(dataas);
             });
             setCategoryData(newdata);
         } else if (categoryList) {
-            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(categoryList));
-
+            let filteredCategory = categoryList?.filter(item => item.parentCategoryId == categoryId)
+            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(filteredCategory));
             ToppingDatafinaltemp?.map((item) => {
                 item.IsChecked = false;
                 let dataas = { ...item, selectcategory: { categoryId: item.categoryId } };
@@ -62,7 +53,7 @@ function Categories(props) {
             });
             setCategoryData(newdata);
         }
-    }, [categoryList, props.productFormState.editProductCategory]);
+    }, [categoryList, props.productFormState.editProductCategory, categoryId]);
 
     // chang for checkbox
     const categoryChangeHandler = (check, categoryId, items) => {
@@ -92,7 +83,7 @@ function Categories(props) {
             ...props.productFormState,
             [e.target.name]: e.target.value
         }
-                
+
         setCategoryId(newArr.parentCategoryId)
         props.parentCategoriesDataHandler(newArr)
     }
@@ -127,7 +118,7 @@ function Categories(props) {
 
                     <div className="col-12 mt-4 mb-4">
                         <div className="row ms-1">
-                            {subCategoryData?.map((item, ind) => (
+                            {categoryData?.map((item, ind) => (
                                 <div className="addProduct__subcategoryCheckboxes d-flex align-items-center col-md-auto" key={ind}>
                                     <input
                                         className="form-check-input"

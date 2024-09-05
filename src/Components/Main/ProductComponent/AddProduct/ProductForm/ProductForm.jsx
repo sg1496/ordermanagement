@@ -157,7 +157,7 @@ const ProductForm = (props) => {
     }
 
     const cancelHandler = () => {
-        navigate(`/product`)
+        navigate(`/dashboard/product`)
     }
 
     return (
