@@ -10,11 +10,9 @@ function Variants(props) {
 
     const loginToken = verifyToken()
     const dispatch = useDispatch();
-    dispatch(navTitle("Add Products"));
+    dispatch(navTitle("Add Products"));   
 
     const [variantData, setVariantData] = useState([])
-
-
     const variantList = useSelector((variant) => variant.variantSlices.data)
     const toppingList = useSelector((topping) => topping.ToppingSlices.data)
 
@@ -23,7 +21,7 @@ function Variants(props) {
         dispatch(fetchApiDataToppings(loginToken.userID))
     }, [])
 
-    const [first, setfirst] = useState([])
+    const [variantSelectData, setVariantSelectData] = useState([])
 
     useEffect(() => {
         const varntdata = []
@@ -33,15 +31,15 @@ function Variants(props) {
                 varntdata.push(newItem)
             })
         }
-        setfirst(varntdata)
+        setVariantSelectData(varntdata)
     }, [variantList])
 
 
 
     useEffect(() => {
         const varntdata = []
-        if (first && props.productFormState.productVariantList.length > 0) {
-            first?.map((item) => {
+        if (variantSelectData && props.productFormState.productVariantList.length > 0) {
+            variantSelectData?.map((item) => {
                 props.productFormState.productVariantList.filter((selectvariant) => {
                     if (selectvariant.variantId === item.variantId) {
                         const newItem = { ...item, selectvariant }
@@ -50,20 +48,20 @@ function Variants(props) {
                 })
             })
 
-            const map = new Map([...first, ...varntdata]
+            const map = new Map([...variantSelectData, ...varntdata]
                 .map(obj => [obj.variantId, obj]));
-                
-            const mergedArray = Array.from(map.values());
+
+                const mergedArray = Array.from(map.values());
             setVariantData(mergedArray)
         }
-        else if (first) {
-            first?.map((item) => {
+        else if (variantSelectData) {
+            variantSelectData?.map((item) => {
                 const newItem = { ...item, selectvariant: { price: 0, variantId: item.variantId, salePrice: 0, toppingId: "", isActive: false } }
                 varntdata.push(newItem)
             })
             setVariantData(varntdata)
         }
-    }, [first])
+    }, [variantSelectData])
 
     const changeHandler = (e, id) => {
         let newArr = variantData?.map((item) => {
@@ -85,16 +83,8 @@ function Variants(props) {
         })
         const finalVariantData = newArr.filter((x) => x.selectvariant.toppingId !== "")
         setVariantData(newArr)
-
-        props.variantDataHandler(finalVariantData)
+        props.variantDataHandler(newArr)
     }
-
-
-
-
-
-
-
     return (
         <>
             <div className='addProduct__variantsTab'>
@@ -158,7 +148,7 @@ function Variants(props) {
                                                         value={item.selectvariant.toppingId}
                                                         onChange={(e) => changeHandler(e, item.variantId)}
                                                     >
-                                                        <option defaultValue>Select Toppings</option>
+                                                        <option value={""}>Select Toppings</option>
                                                         {toppingList?.map((item, index) => {
                                                             return <option
                                                                 key={index}
@@ -185,4 +175,4 @@ function Variants(props) {
     )
 }
 
-export default Variants
+export default React.memo(Variants);

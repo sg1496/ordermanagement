@@ -5,41 +5,32 @@ import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
 import { fetchApiData } from '../../../../../Store/Slice/VariantSlices';
 import verifyToken from '../../../../SignIn/verifyToken';
 
-
-
-
-
-
 const ExtraTopping = (props) => {
-   const loginToken = verifyToken()
+    const loginToken = verifyToken()
     const Navigate = useNavigate()
     const dispatch = useDispatch();
 
     const toppingList = useSelector((topping) => topping.ToppingSlices.data)
     const variantList = useSelector((variant) => variant.variantSlices.data)
 
-
     useEffect(() => {
         dispatch(fetchApiDataToppings(loginToken.userID))
         dispatch(fetchApiData(loginToken.userID))
     }, [])
 
-
     const [extraToppingData, setExtraToppingData] = useState([]);
-
 
     useEffect(() => {
         const newdata = []
         if (toppingList && variantList && props.productFormState.productExtraToppingsList.length > 0) {
             const ToppingDatafinaltemp = JSON.parse(JSON.stringify(variantList));
             toppingList?.map((item) => {
-                
                 var a = []
                 var newData
 
                 let idExist = props.productFormState.productExtraToppingsList.filter(
                     (element) => {
-                        
+
                         if (element.combinationExtraToppingId === item.toppingId) {
                             newData = {
                                 ...item
@@ -51,16 +42,16 @@ const ExtraTopping = (props) => {
 
                 if (idExist.length > 0) {
                     ToppingDatafinaltemp.map((item1) => {
-                        
+
                         item1.IsChecked = false;
                         props.productFormState.productExtraToppingsList.filter((selectedData) => {
-                            
+
                             if (selectedData.variantId === item1.variantId && selectedData.combinationExtraToppingId === item.toppingId) {
                                 item1.IsChecked = true;
                                 let dataas = {
                                     ...item1,
                                     selection: {
-                                        combinationToppingId: item.toppingId,
+                                        combinationExtraToppingId: item.toppingId,
                                         variantId: item1.variantId,
                                     },
                                 };
@@ -77,7 +68,7 @@ const ExtraTopping = (props) => {
                         let dataas = {
                             ...item1,
                             selection: {
-                                combinationToppingId: item.toppingId,
+                                combinationExtraToppingId: item.toppingId,
                                 variantId: item1.variantId,
                             },
                         };
@@ -87,6 +78,8 @@ const ExtraTopping = (props) => {
                 newData = { ...newData, allTrailData: a };
                 newdata.push(newData);
             });
+            console.log("extra topping state", newdata);
+
             setExtraToppingData(newdata)
         }
         else if (toppingList && variantList) {
@@ -102,7 +95,7 @@ const ExtraTopping = (props) => {
                     let dataas = {
                         ...item1,
                         selection: {
-                            combinationToppingId: item.toppingId,
+                            combinationExtraToppingId: item.toppingId,
                             variantId: item1.variantId,
                         },
                     };
@@ -146,9 +139,9 @@ const ExtraTopping = (props) => {
         const selectedData = updatedExtraToppingData.flatMap((topping) => {
             return topping.allTrailData.filter((variant) => variant.IsChecked)
                 .map((variant) => ({
-                    combinationToppingId: topping.toppingId,
+                    combinationExtraToppingId: topping.toppingId,
                     variantId: variant.variantId,
-                }));              
+                }));
         });
 
         // Send the selected data to a handler
@@ -206,4 +199,4 @@ const ExtraTopping = (props) => {
     )
 }
 
-export default ExtraTopping;
+export default React.memo(ExtraTopping);

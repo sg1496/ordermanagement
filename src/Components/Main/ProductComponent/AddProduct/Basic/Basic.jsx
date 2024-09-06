@@ -164,4 +164,4 @@ const Basic = (props) => {
     );
 }
 
-export default Basic;
+export default React.memo(Basic);

@@ -141,7 +141,7 @@ function Categories(props) {
     )
 }
 
-export default Categories
+export default React.memo(Categories)
 
 
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchApiDataToppings } from '../../../../../Store/Slice/ToppingSlices';
 import ToppingSelectionTable from '../../../ToppingComponent/ToppingRequiredTable/ToppingSelectionTable';
@@ -120,4 +120,4 @@ const toppingNameChangeHandler = (check, id, item) => {
     )
 }
 
-export default ToppingNames;
+export default React.memo(ToppingNames);
