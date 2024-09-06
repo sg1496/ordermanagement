@@ -14,7 +14,6 @@ function Categories(props) {
     }, [])
 
     const [categoryData, setCategoryData] = useState([]);
-    const [categoryId, setCategoryId] = useState(-1);
 
 
 
@@ -41,10 +40,12 @@ function Categories(props) {
                 });
                 dataas = { ...dataas };
                 newdata.push(dataas);
+                console.log("check newdata category", newdata);
+                
             });
             setCategoryData(newdata);
         } else if (categoryList) {
-            let filteredCategory = categoryList?.filter(item => item.parentCategoryId == categoryId)
+            let filteredCategory = categoryList?.filter(item => item.parentCategoryId == props.productFormState.parentCategoryId)
             const ToppingDatafinaltemp = JSON.parse(JSON.stringify(filteredCategory));
             ToppingDatafinaltemp?.map((item) => {
                 item.IsChecked = false;
@@ -53,7 +54,7 @@ function Categories(props) {
             });
             setCategoryData(newdata);
         }
-    }, [categoryList, props.productFormState.editProductCategory, categoryId]);
+    }, [categoryList, props.productFormState.editProductCategory, props.productFormState.parentCategoryId]);
 
     // chang for checkbox
     const categoryChangeHandler = (check, categoryId, items) => {
@@ -83,8 +84,6 @@ function Categories(props) {
             ...props.productFormState,
             [e.target.name]: e.target.value
         }
-
-        setCategoryId(newArr.parentCategoryId)
         props.parentCategoriesDataHandler(newArr)
     }
 
@@ -141,7 +140,7 @@ function Categories(props) {
     )
 }
 
-export default React.memo(Categories)
+export default Categories
 
 
 

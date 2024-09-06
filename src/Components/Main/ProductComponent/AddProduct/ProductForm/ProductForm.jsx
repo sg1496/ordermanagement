@@ -27,7 +27,7 @@ const ProductForm = (props) => {
         taxClassId: '',
         foodTypeId: '',
         showInKitchen: false,
-        parentCategoryId: 0,
+        parentCategoryId: -1,
         productDescription: "",
         editProductCategory: [],
         productVariantList: [],
