@@ -143,8 +143,6 @@ const ExtraTopping = (props) => {
                     variantId: variant.variantId,
                 }));
         });
-
-        // Send the selected data to a handler
         props.extraToppingDataHandler(selectedData);
     };
 

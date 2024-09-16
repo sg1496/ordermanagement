@@ -9,15 +9,15 @@ import { useState } from "react";
 import verifyToken from "../../../../SignIn/verifyToken";
 
 function ProductToppingSelectionTable(props) {
-    
-const loginToken = verifyToken()
+
+    const loginToken = verifyToken()
     const dispatch = useDispatch();
     const { id } = useParams();
 
     // useState
     const [toppingCheckName, setToppingCheckName] = useState("");
     const [trial, setTrial] = useState([]);
-    
+
 
     // useEffect
     useEffect(() => {
@@ -48,10 +48,7 @@ const loginToken = verifyToken()
                     (element) => {
                         if (element.combinationProductId === item2.toppingId) {
                             newData = {
-                                // mainToppingId: item2.toppingId,
-                                // mainToppingName: item2.toppingName,
                                 ...item2, selectionD: { toppingId: item2.toppingId, isRemoved: element.isRemoved, isDeleted: element.isDeleted }
-                                
                             };
                             return newData
                         }
@@ -85,8 +82,8 @@ const loginToken = verifyToken()
                     newData = {
                         // mainToppingId: item2.toppingId,
                         // mainToppingName: item2.toppingName,
-                        ...item2, selectionD: { toppingId: item2.toppingId, isRemoved: false, isDeleted: 0  }
-                        
+                        ...item2, selectionD: { toppingId: item2.toppingId, isRemoved: false, isDeleted: 0 }
+
                     };
                     variantSelectionTable.map((item1) => {
                         let dataas = {
@@ -97,7 +94,7 @@ const loginToken = verifyToken()
                                 quantity: 0,
                                 variantId: item1.variantId,
                                 isRemoved: false,
-                                
+
                             },
                         };
                         c.push(dataas);
@@ -111,11 +108,10 @@ const loginToken = verifyToken()
             if (variantSelectionTable && toppingCheckName) {
                 const addKeyCheck = JSON.parse(JSON.stringify(toppingCheckName));
                 addKeyCheck.map((item1) => {
-                   
+
                     item1.isRemoved = false
                     item1.isDeleted = false
                     var c = [];
-                    
 
                     var newData = {
                         ...item1, selectionD: { toppingId: item1.toppingId, isRemoved: false, isDeleted: 0 }
@@ -129,113 +125,19 @@ const loginToken = verifyToken()
                                 quantity: 0,
                                 variantId: item.variantId,
                                 isRemoved: false,
-                               
-
-
                             },
                         };
                         c.push(dataas);
                         // allda.push(dataas)
                     });
-                    
+
                     newData = { ...newData, allTrailData: c };
                     allda.push(newData);
                 });
 
                 setTrial(allda);
-
             }
     }, [variantSelectionTable, toppingCheckName]);
-
-
-    // useEffect(() => {
-
-    //     const allda = [];
-    //     if (variantSelectionTable && toppingCheckName && props.selectedToppingName.length > 0
-    //     ) {
-    //         toppingCheckName.map((item2) => {
-    //             let c = [];
-
-    //             let newData = {
-    //                 // mainToppingId: item2.toppingId,
-    //                 // mainToppingName: item2.toppingName,
-    //                 ...item2
-    //             };
-    //             let idExist = props.selectedToppingName.filter(
-    //                 (element) => element.combinationProductId === item2.toppingId
-    //             );
-
-    //             if (idExist.length > 0) {
-    //                 variantSelectionTable.map((item1) => {
-    //                     props.selectedToppingName.map((selectedData) => {
-    //                         if (
-    //                             selectedData.variantId === item1.variantId &&
-    //                             selectedData.combinationProductId === item2.toppingId
-    //                         ) {
-    //                             let dataas = {
-    //                                 ...item1,
-    //                                 selection: {
-    //                                     productCombinationId: selectedData.productCombinationId,
-    //                                     combinationProductId: item2.toppingId,
-    //                                     quantity: selectedData.quantity,
-    //                                     variantId: item1.variantId,
-    //                                 },
-    //                             };
-    //                             c.push(dataas);
-
-    //                         }
-    //                     });
-    //                 });
-    //             } else {
-    //                 variantSelectionTable.map((item1) => {
-    //                     let dataas = {
-    //                         ...item1,
-    //                         selection: {
-    //                             productCombinationId: -1,
-    //                             combinationProductId: item2.toppingId,
-    //                             quantity: 0,
-    //                             variantId: item1.variantId,
-
-    //                         },
-    //                     };
-    //                     c.push(dataas);
-
-    //                 });
-    //             }
-    //             newData = { ...newData, allTrailData: c };
-    //             allda.push(newData);
-    //         });
-    //         setTrial(allda);
-    //     } else if (variantSelectionTable && toppingCheckName) {
-    //         toppingCheckName.map((item1) => {
-    //             var c = [];
-
-    //             var newData = {
-    //                 // mainToppingId: item1.toppingId,
-    //                 // mainToppingName: item1.toppingName,
-    //                 ...item1
-    //             };
-    //             variantSelectionTable.map((item) => {
-    //                 let dataas = {
-    //                     ...item,
-    //                     selection: {
-    //                         combinationProductId: item1.toppingId,
-    //                         quantity: 0,
-    //                         variantId: item.variantId,
-
-    //                     },
-    //                 };
-    //                 c.push(dataas);
-    //                 // allda.push(dataas)
-    //             });
-    //             newData = { ...newData, allTrailData: c };
-    //             allda.push(newData);
-    //         });
-
-    //         setTrial(allda);
-    //         
-    //     }
-    // }, [variantSelectionTable, toppingCheckName]);
 
     const combinationChangeHandler = (e, variantId, toppingId) => {
         let newArr = trial.map((item, i) => {
@@ -284,18 +186,6 @@ const loginToken = verifyToken()
                             },
                         };
                         c.push(t);
-                    } else {
-                        var t = {
-                            ...traildata,
-                            selection: {
-                                productCombinationId: 0,
-                                combinationProductId: toppingId,
-                                quantity: traildata.selection.quantity,
-                                variantId: traildata.variantId,
-
-                            },
-                        };
-                        c.push(t);
                     }
                 });
                 return { ...item, allTrailData: c };
@@ -309,10 +199,10 @@ const loginToken = verifyToken()
         props.combinationDataSendParent(newArr);
     };
 
-   
+
     const toppingNameChangeHandler = (id, e, item) => {
-       
-    
+
+
         let newArr = trial.map((topping) => {
             if (topping.toppingId === id) {
                 return {
@@ -326,13 +216,13 @@ const loginToken = verifyToken()
             }
             return topping;
         });
-    
-        
+
+
         setTrial(newArr);
         props.combinationDataSendParent(newArr);
     };
 
-   
+
 
     return (
         <>
@@ -405,7 +295,7 @@ const loginToken = verifyToken()
                                                     className="form-check-input p-2 toggle_btn"
                                                     name="isRemoved"
                                                     checked={item.selectionD.isRemoved}
-                                                    onChange={(e) => toppingNameChangeHandler(item.toppingId,e, item)}
+                                                    onChange={(e) => toppingNameChangeHandler(item.toppingId, e, item)}
                                                 />
                                             </div>
                                         </td>
@@ -413,7 +303,7 @@ const loginToken = verifyToken()
                                             <img
                                                 src={tablebin}
                                                 alt="Delete Icon"
-                                                onClick={(e) =>( toppingNameChangeHandler(item.toppingId,e, null, ),props.unCheckHandler(item.toppingId))}
+                                                onClick={(e) => (toppingNameChangeHandler(item.toppingId, e, null,), props.unCheckHandler(item.toppingId))}
                                             />
                                         </td>
                                     </tr>
@@ -482,7 +372,7 @@ export default ProductToppingSelectionTable;
 //     // useState
 //     const [toppingCheckName, setToppingCheckName] = useState("");
 //     const [trial, setTrial] = useState([]);
-//     
+//
 
 //     // useEffect
 //     useEffect(() => {
@@ -618,16 +508,16 @@ export default ProductToppingSelectionTable;
 //                 });
 
 //                 setTrial(allda);
-//                 
+//
 //             }
 //     }, [variantSelectionTable, toppingCheckName]);
 
 
 
 //     const combinationChangeHandler = (e, variantId, toppingId) => {
-//         
+//
 //         let newArr = trial.map((item, i) => {
-//            
+//
 //             if (id && item.toppingId === toppingId) {
 
 //                 var c = [];
@@ -743,7 +633,7 @@ export default ProductToppingSelectionTable;
 //                         </thead>
 //                         <tbody>
 //                             {trial?.map((item, index) => {
-//                                 
+//
 //                                 return (
 //                                     <tr key={index}>
 //                                         <td className="pt-4">

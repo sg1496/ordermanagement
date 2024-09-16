@@ -77,8 +77,6 @@ function Categories(props) {
         props.categoriesDataHandler(abc)
     }
 
-
-
     const changeHandler = (e) => {
         let newArr = {
             ...props.productFormState,

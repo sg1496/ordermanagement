@@ -7,51 +7,45 @@ import ProductToppingSelectionTable from './ProductToppingSelectionTable';
 import verifyToken from '../../../../SignIn/verifyToken';
 
 function ToppingNames(props) {
-   
-const loginToken = verifyToken()
-    
+    const loginToken = verifyToken()
     const dispatch = useDispatch()
     const combinationPropsData = props.combinationHandler
     const { id } = useParams();
 
-
     useEffect(() => {
         dispatch(fetchApiDataToppings(loginToken.userID))
     }, [])
-   
-    
+
     const ToppingData = useSelector((state) => state.ToppingSlices.data)
-
-
     const [ToppingDatafinal, setToppingDatafinal] = useState([])
-   
 
     useEffect(() => {
-    if (ToppingData) {
-        const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
-        ToppingDatafinaltemp.map((e) => {
-            e.IsChecked = false;
-            // props.combinationHandler.toppingCombinatiomQuantityList
-            var tempmatch = props.combinationHandler.productToppingsList.filter(x => x.combinationProductId === e.toppingId);
-            if (tempmatch.length > 0 && id > 0) {
-                e.IsChecked = true;
-            }
-        });
-        setToppingDatafinal(ToppingDatafinaltemp);
-    }
-}, [ToppingData])
+        if (ToppingData) {
+            const ToppingDatafinaltemp = JSON.parse(JSON.stringify(ToppingData));
+            ToppingDatafinaltemp.map((e) => {
+                e.IsChecked = false;
+                var tempmatch = props.combinationHandler.productToppingsList.filter(x => x.combinationProductId === e.toppingId);
+                if (tempmatch.length > 0 && id > 0) {
+                    e.IsChecked = true;
+                } else if (tempmatch.length > 0) {
+                    e.IsChecked = true;
+                }
+            });
+            setToppingDatafinal(ToppingDatafinaltemp);
+        }
+    }, [ToppingData])
 
-const toppingNameChangeHandler = (check, id, item) => {
-    const itemselected = [...ToppingDatafinal];
-    if (check) {
-        item.IsChecked = true;
+    const toppingNameChangeHandler = (check, id, item) => {
+        const itemselected = [...ToppingDatafinal];
+        if (check) {
+            item.IsChecked = true;
+        }
+        else {
+            item.IsChecked = false;
+        }
+        itemselected.filter(x => x.toppingId === id).IsChecked = check;
+        setToppingDatafinal(itemselected);
     }
-    else {
-        item.IsChecked = false;
-    }
-    itemselected.filter(x => x.toppingId === id).IsChecked = check;
-    setToppingDatafinal(itemselected);
-}
 
     const unCheckHandler = (id) => {
         const updatedData = ToppingDatafinal.map(item => {
@@ -60,15 +54,14 @@ const toppingNameChangeHandler = (check, id, item) => {
             }
             return item;
         });
-        
+
         setToppingDatafinal(updatedData);
     }
 
-   
+
     const combinationDataSendParent = (data) => {
         props.combinationDataNameSend(data)
     }
-
 
     return (
         <div className=' d-flex aligns-item-center w-100'>
@@ -85,7 +78,7 @@ const toppingNameChangeHandler = (check, id, item) => {
 
                     <tbody>
                         {ToppingDatafinal.map((item, index) => {
-                           
+
                             return <tr key={index}>
                                 <td className='text-center addProduct__subcategoryCheckboxes'>
                                     <input className="form-check-input"
