@@ -36,6 +36,7 @@ import Loginimg from './Components/SignIn/Loginimg';
 import Alerts from './Components/utils/alertMessage';
 import { useSelector } from 'react-redux';
 import ProtectedRoute from './ProtectedRoute';
+import CouponMain from './Components/Main/Coupons/CouponTable/CouponMain';
 
 function App() {
   const [alert, setAlert] = useState(null);
@@ -62,6 +63,8 @@ function App() {
             <Route path='supplierform/:id' element={<SupplierForm setAlert={setAlert} />} />
             <Route path='mainsuppliertable' element={<Mainsuppliertable setAlert={setAlert} />} />
             <Route path='maincouponsform' element={<MainCouponsform setAlert={setAlert} />} />
+            <Route path='maincouponsform/:id' element={<MainCouponsform setAlert={setAlert} />} />
+            <Route path='couponTable' element={<CouponMain setAlert={setAlert} />} />
             <Route path='managetable' element={<ManageTable setAlert={setAlert} />} />
             <Route path='manageuserform' element={<ManageuserForm setAlert={setAlert} />} />
             <Route path='manageuserform/:id' element={<ManageuserForm setAlert={setAlert} />} />

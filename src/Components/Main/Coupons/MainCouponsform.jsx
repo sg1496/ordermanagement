@@ -9,12 +9,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../Store/Slice/NavSlices';
 import verifyToken from '../../SignIn/verifyToken';
 import { fetchALLDiscountTypeCoupon, fetchLimitationCoupon } from '../../../Store/Slice/CouponSlices';
-
-
-
+import { useNavigate } from 'react-router-dom';
 
 const MainCouponsform = () => {
     const loginToken = verifyToken()
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     dispatch(navTitle("Coupons"));
 
@@ -108,11 +107,9 @@ const MainCouponsform = () => {
         console.log("check my data state", couponDatas)
     }
 
-    const cancelHandler = () => { }
-
-
-
-
+    const cancelHandler = () => {
+        navigate('/dashboard/couponTable')
+     }
 
     const { couponCode, couponName, discountTypeId, discountPercentage, discountStartDate, discountEndDate, discountLimitationId, minimumTotalValue, numberTimeDiscount } = couponData
     return (
@@ -343,7 +340,7 @@ const MainCouponsform = () => {
                         <div className='d-flex justify-content-between align-items-center '>
                             <div className='d-flex align-items-center '>
                                 <div className='tag_content'> <img src={couponData.isMinimumSubTotal ? subtract : plus} alt="plus" />  </div>
-                                <div><p>Product</p></div>
+                                <div><p>Minimum Sub Total</p></div>
                             </div>
                             <div className='d-flex align-items-center  '>
                                 <div><p>Enable minimum cart subtotal requirement</p></div>

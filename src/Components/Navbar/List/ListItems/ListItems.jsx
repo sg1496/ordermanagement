@@ -51,7 +51,7 @@ function ListItems({ isActive }) {
                                     <Link to="mainsuppliertable" >Supplier</Link>
                                 </li>
                                 <li className="sidebarInner__SUblist">
-                                    <Link to="maincouponsform" >Coupons</Link>
+                                    <Link to="couponTable" >Coupons</Link>
                                 </li>
                                 {/* <li className="sidebarInner__SUblist">
                                     <Link to="managetable" >Manage User</Link>
