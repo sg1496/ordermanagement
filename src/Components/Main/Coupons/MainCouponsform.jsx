@@ -8,7 +8,7 @@ import ProductsCoupons from './productsCouponsTable/ProductsCoupons';
 import { useDispatch, useSelector } from 'react-redux';
 import { navTitle } from '../../../Store/Slice/NavSlices';
 import verifyToken from '../../SignIn/verifyToken';
-import { fetchALLDiscountTypeCoupon, fetchLimitationCoupon } from '../../../Store/Slice/CouponSlices';
+import { fetchALLDiscountTypeCoupon, fetchLimitationCoupon, fetchSaveUpdateCoupon, resetStates } from '../../../Store/Slice/CouponSlices';
 import { useNavigate } from 'react-router-dom';
 
 const MainCouponsform = () => {
@@ -63,19 +63,17 @@ const MainCouponsform = () => {
     }
 
     const categoryselectedHandler = (data) => {
-        console.log("check select valuedddddddddddddddddddddddddddddddddddddddddddddddd", data)
         const selection = []
         data.map((item) => {
-            selection.push(item.select)
+            selection.push(item.select.categoryId)
         })
         setCouponData({ ...couponData, couponCategories: selection })
     }
 
     const productSelectedHandler = (data) => {
-        console.log("check select valuedddddddddddddddddddddddddddddddddddddddddddddddd", data)
         const selection = []
         data.map((item) => {
-            selection.push(item.select)
+            selection.push(item.select.productId)
         })
         setCouponData({ ...couponData, couponProducts: selection })
     }
@@ -103,13 +101,16 @@ const MainCouponsform = () => {
             franchiseId: parseInt(loginToken.userID),
         }
 
-
-        console.log("check my data state", couponDatas)
+        dispatch(fetchSaveUpdateCoupon(couponDatas))
+        dispatch(resetStates())
+        navigate('/dashboard/couponTable')
+        console.log("save coupon", couponData);
+        
     }
 
     const cancelHandler = () => {
         navigate('/dashboard/couponTable')
-     }
+    }
 
     const { couponCode, couponName, discountTypeId, discountPercentage, discountStartDate, discountEndDate, discountLimitationId, minimumTotalValue, numberTimeDiscount } = couponData
     return (
@@ -229,9 +230,6 @@ const MainCouponsform = () => {
                                 required
                             />
                         </div>
-
-
-
 
                     </div>
                     <div className=" addProduct__basicForm d-flex mb-5">

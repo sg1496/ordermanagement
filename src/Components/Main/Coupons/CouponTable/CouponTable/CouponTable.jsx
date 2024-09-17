@@ -18,7 +18,7 @@ function CouponTable({ setAlert }) {
     const [page, setPage] = useState(1)
     const pagePerItem = 10;
 
-    const message = useSelector((state) => state.variantSlices.message)
+    const message = useSelector((state) => state.CouponSlices.message)
     const couponList = useSelector(state => state.CouponSlices.data)
 
     console.log("check coupon data", couponList);
