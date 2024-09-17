@@ -153,10 +153,10 @@ export const fetchDelApiDataProduct = createAsyncThunk('api.fetchDelData', async
 });
 
 export const fetchSaveUpdateProduct = createAsyncThunk('api.fetchUpdateSave', async (data) => {
-    console.log("daata", data);
+    console.log("fetchSaveUpdateProduct------", data);
     try {
         const response = await axios.post(`${url}/product/SaveupdateProduct`, data);
-        console.log("response saveupdate", response.data);
+        console.log("fetchSaveUpdateProduct saveupdate", response.data);
         return response.data
     } catch (error) {
         throw new Error(error.message)

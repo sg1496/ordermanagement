@@ -7,24 +7,24 @@ import ProductForm from './ProductForm/ProductForm';
 
 
 
-function AddProduct() {
-    const [first, setfirst] = React.useState(1)
+function AddProduct({setAlert}) {
+    const [step, setStep] = React.useState(1)
+    
+
     return (
         <>
-        
+
             <div className='addProduct__navtab d-flex'>
-                <NavLink onClick={()=>setfirst(1)}>Basic</NavLink>
-                <NavLink onClick={()=>setfirst(2)}>Description</NavLink>
-                <NavLink onClick={()=>setfirst(3)}>Categories</NavLink>
-                <NavLink onClick={()=>setfirst(4)}>Variants</NavLink>
-                <NavLink onClick={()=>setfirst(5)}>Toppings</NavLink>
-                <NavLink onClick={()=>setfirst(6)}> Extra Toppings</NavLink>
-
-
+                <NavLink  className={`"tab-links" ${step == 1 ? "active-new": ""}`} onClick={() => setStep(1)}>Basic</NavLink>
+                <NavLink className={`"tab-links" ${step == 2 ? "active-new": ""}`} onClick={() => setStep(2)}>Description</NavLink>
+                <NavLink className={`"tab-links" ${step == 3 ? "active-new": ""}`} onClick={() => setStep(3)}>Categories</NavLink>
+                <NavLink className={`"tab-links" ${step == 4 ? "active-new": ""}`} onClick={() => setStep(4)}>Variants</NavLink>
+                <NavLink className={`"tab-links" ${step == 5 ? "active-new": ""}`} onClick={() =>setStep(5)}>Toppings</NavLink>
+                <NavLink className={`"tab-links" ${step == 6 ? "active-new": ""}`} onClick={() => setStep(6)}> Extra Toppings</NavLink>
             </div>
             <div className='navTabs__content p-3'>
-                <ProductForm step={first} />
-              
+                <ProductForm step={step} setStep = {setStep} setAlert = {setAlert} />
+
             </div>
         </>
     )

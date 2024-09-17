@@ -97,8 +97,8 @@ function Variants(props) {
                                         <th scope="col">Sr.No.</th>
                                         <th scope="col">Variant Name</th>
                                         <th scope="col">Is Active?</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Sale Price</th>
+                                        <th scope="col">Price*</th>
+                                        <th scope="col">Sale Price*</th>
                                         <th scope="col">Select Topping</th>
                                     </tr>
                                 </thead>

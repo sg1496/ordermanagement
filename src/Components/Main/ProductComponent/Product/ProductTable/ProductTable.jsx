@@ -19,6 +19,9 @@ const ProductTable = ({ setAlert }) => {
 
     const { data: productList = [], message: productMessage, search: searchtext } = useSelector((state) => state.ProductSlices);
 
+    console.log("check message", productMessage );
+    
+
     useEffect(() => {
         if (loginToken?.userID) {
             dispatch(fetchApiDataProduct(loginToken.userID));

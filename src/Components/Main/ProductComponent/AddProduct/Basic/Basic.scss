@@ -17,9 +17,18 @@
             border-right: 1px solid $white;
         }
 
+        // &.active {
+        //     background: $primaryColor;
+        //     color: $white;
+        //     -webkit-backdrop-filter: blur( 2.5px );
+        // }
         &.active {
-            background: $primaryColor;
-            color: $white;
+           
+                background: #C53705;
+                color: #FFFFFF;
+                
+                background: #c1512a;
+            
         }
     }
 

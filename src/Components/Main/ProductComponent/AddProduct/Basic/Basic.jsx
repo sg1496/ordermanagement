@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./Basic.scss";
 import { useDispatch } from "react-redux";
 import { navTitle } from "../../../../../Store/Slice/NavSlices";
-import { fetchSaveUpdateProduct } from "../../../../../Store/Slice/ProductSlices"
 import { useNavigate, useParams } from "react-router-dom";
 import Buttons from "../../Buttons/NewButtons";
 

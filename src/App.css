@@ -24,3 +24,30 @@
   border: 1px solid red;
   box-shadow: 0 0 5px red;
 }
+/* .active-new{
+  background: #222222;
+  font-weight: 600;
+  transform: translate(0px, 2px);
+} */
+
+.active-new {
+  font-weight: 600 !important;
+  transform: translate(0px, 2px);
+  background: #C53705 !important;
+  /* -webkit-backdrop-filter: blur( 2.5px ); */
+  animation: linear alternate;
+  animation-name: run;
+  animation-duration: 0.2s;
+}
+@keyframes run {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  50% {
+    transform: translate(0px, 1px);
+  }
+  100% {
+    transform: translate(0px, 2px);
+ 
+  }
+}
